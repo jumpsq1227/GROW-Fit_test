@@ -6,6 +6,30 @@ const status = {
   leg: 1
 };
 
+// モンスター一覧
+const monsterList = [
+  {
+    name: "スライム",
+    level: 3,
+    image: "images/monster/slime.png"
+  },
+  {
+    name: "がいこつ戦士",
+    level: 6,
+    image: "images/monster/skeleton.png"
+  },
+  {
+    name: "ドラゴン",
+    level: 12,
+    image: "images/monster/dragon.png"
+  },
+  {
+    name: "魔王",
+    level: 20,
+    image: "images/monster/maou.png"
+  }
+];
+
 // 表示更新
 function updateStatusView() {
   document.getElementById("HPLv").textContent = status.run;
@@ -72,6 +96,7 @@ function backToMain() {
   // メイン画面を表示
   document.getElementById("main-screen").classList.remove('hidden');
 }
+
 
 
 
