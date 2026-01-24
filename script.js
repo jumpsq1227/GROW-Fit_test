@@ -41,7 +41,24 @@ function runTraining() {
   }
   updateStatusView();
   avatar.src = `images/${training}.png`;
+
+    // 画面切り替え
+  document.getElementById("main-screen").classList.add("hidden");
+  document.getElementById("result-screen").classList.remove("hidden");
+
+  // リザルト表示
+  const textMap = {
+    chest: "胸筋力 Lv UP！",
+    back: "背筋力 Lv UP！",
+    leg: "脚力 Lv UP！"
+  };
+
+  const resultText = document.getElementById("resultText");
+  resultText.textContent = textMap[type];
+  resultText.className = "level-up";
+  
 }
+
 
 
 
