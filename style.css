@@ -153,15 +153,12 @@ button:active {
 
 /* ===== クエスト画面 ===== */
 #quest-screen {
-  position: relative;
-  height: 100%;
-  padding: 16px;
-  color: white;
-  text-shadow: 2px 2px 0 #000;
   background-image: url("images/monster/slime.png");
   background-size: cover;
   background-position: center;
-
+  background-repeat: no-repeat;
+  border: 6px solid #2b4c2b;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
 }
 
 /* ===== モンスター別背景 ===== */
@@ -197,6 +194,7 @@ button:active {
 .hidden {
   display: none;
 }
+
 
 
 
