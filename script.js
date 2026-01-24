@@ -8,11 +8,10 @@ const status = {
 
 // ===== モンスター一覧 =====
 const monsterList = [
-  { name: "スライム", level: 3, image: "images/monster_slime.png" },
-  { name: "がいこつ戦士", level: 6, image: "images/monster_skeleton.png" },
-  { name: "ドラゴン", level: 12, image: "images/monster_dragon.png" },
-  { name: "暗黒魔法使い", level: 15, image: "images/monster_darkmage.png" },
-  { name: "魔王", level: 20, image: "images/monster_maou.png" }
+  { name: "スライム", level: 3, image: "images/monster/slime.png" },
+  { name: "がいこつ戦士", level: 6, image: "images/monster/skeleton.png" },
+  { name: "ドラゴン", level: 12, image: "images/monster/dragon.png" },
+  { name: "魔王", level: 20, image: "images/monster/maou.png" }
 ];
 
 let currentMonsterIndex = 0;
@@ -52,12 +51,12 @@ function battle() {
   const heroLv = status.run + status.chest + status.back + status.leg;
 
   if (heroLv >= currentMonster.level) {
-    showResult(`勝利！🎉 ${currentMonster.name}を倒した！`);
+    showResult(`やったー！🎉 ${currentMonster.name}を倒した！`);
     if (currentMonsterIndex < monsterList.length - 1) {
       currentMonsterIndex++;
     }
   } else {
-    showResult(`敗北…😵 もっと鍛えよう`);
+    showResult(`負けてしまった…😵 もっと鍛えよう`);
   }
 }
 
@@ -80,3 +79,4 @@ function switchScreen(screenId) {
 
 // 初期化
 updateStatusView();
+
