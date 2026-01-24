@@ -1,178 +1,61 @@
-/* ===== リセット ===== */
-* {
-  box-sizing: border-box;
-}
-
-/* ===== 全体背景（世界観） ===== */
 body {
   margin: 0;
-  font-family: "DotGothic16", "Segoe UI", sans-serif;
-  background: linear-gradient(
-    to bottom,
-    #7cc4ff 0%,
-    #b7e3a1 60%,
-    #5fa05a 100%
-  );
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-/* ===== アプリ枠（石板UI） ===== */
-.app {
-  width: 360px;
-  height: 640px;
-  background: #f6f1e7;
-  border: 6px solid #8b7a5e;
-  box-shadow:
-    inset 0 0 0 3px #d6c9a3,
-    0 20px 40px rgba(0,0,0,0.4);
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-/* ===== タイトル ===== */
-h1 {
+  font-family: "PixelMplus10", monospace;
+  background: linear-gradient(#1b2735, #090a0f);
+  color: white;
   text-align: center;
-  font-size: 26px;
-  color: #ffd700;
-  letter-spacing: 2px;
-  text-shadow:
-    2px 2px 0 #000,
-    4px 4px 0 #5a2d0c;
-  margin: 4px 0 8px;
 }
 
-h1::before,
-h1::after {
-  content: "⚔";
-  margin: 0 6px;
+.screen {
+  padding: 20px;
+  min-height: 100vh;
 }
 
-/* ===== 入力 ===== */
-input, select {
-  width: 100%;
-  padding: 12px;
-  font-size: 14px;
-  border: 3px solid #8b7a5e;
-  background: #fffbe6;
-  outline: none;
+.hidden {
+  display: none;
 }
 
-input::placeholder {
-  color: #aaa;
+.title {
+  font-size: 32px;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px #000;
 }
 
-/* ===== ステータス（羊皮紙） ===== */
-.status {
-  background: #fbf6e8;
-  border: 3px solid #b79b6c;
+.status-box {
+  border: 2px solid #fff;
   padding: 10px;
-  margin: 8px 0;
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+  margin: 10px auto;
+  width: 200px;
+  background: rgba(0,0,0,0.5);
 }
 
-.status h2 {
-  font-size: 13px;
-  margin: 0 0 6px;
-  border-bottom: 2px solid #b79b6c;
-}
-
-.status ul {
-  padding: 0;
-  margin: 0;
-}
-
-.status li {
-  list-style: none;
-  font-size: 13px;
-  margin: 4px 0;
-}
-
-/* ===== アバター表示 ===== */
 .avatar {
-  margin: 8px 0;
-  padding: 8px;
-  background: linear-gradient(to top, #3b6fb6, #7aa9e8);
-  border: 4px solid #2b4c7e;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.avatar img {
-  width: 140px;
+  width: 96px;
   image-rendering: pixelated;
-}
-
-/* ===== ボタン共通 ===== */
-button {
-  width: 100%;
-  padding: 14px;
-  margin-top: 8px;
-  font-size: 14px;
-  font-weight: bold;
-  color: #fff;
-  border: 3px solid #5c1a00;
-  background: linear-gradient(#ffb347, #ff5f00);
-  box-shadow: inset 0 0 0 2px #ffd18b;
-  cursor: pointer;
-}
-
-button:active {
-  transform: translateY(2px);
-}
-
-/* ===== モンスター討伐ボタン ===== */
-.quest-btn {
-  background: linear-gradient(#7ed957, #2f8f2f);
-  border-color: #1f5f1f;
-  box-shadow: inset 0 0 0 2px #b6f2a3;
-}
-
-/* ===== リザルト画面 ===== */
-#result-screen {
-  text-align: center;
-}
-
-.level-up {
-  color: #ffd700;
-  font-size: 18px;
-  margin: 12px 0;
-  text-shadow: 2px 2px 0 #000;
-  animation: pop 0.4s ease;
-}
-
-/* ===== クエスト画面 ===== */
-#quest-screen {
-  text-align: center;
+  margin: 10px 0;
 }
 
 .monster {
-  margin: 12px 0;
-}
-
-.monster img {
-  width: 120px;
+  width: 128px;
   image-rendering: pixelated;
+  margin: 20px 0;
 }
 
-/* ===== アニメーション ===== */
-@keyframes pop {
-  0% {
-    transform: scale(0.6);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
+select, button {
+  font-size: 16px;
+  padding: 8px 12px;
+  margin: 6px;
+  background: #222;
+  color: white;
+  border: 2px solid white;
+  cursor: pointer;
 }
 
-/* ===== 画面切り替え ===== */
-.hidden {
-  display: none;
+button:hover {
+  background: #444;
+}
+
+.result {
+  font-size: 20px;
+  margin: 20px 0;
 }
