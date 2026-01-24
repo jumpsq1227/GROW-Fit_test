@@ -1,26 +1,34 @@
-/* ===== 全体設定 ===== */
+/* ===== リセット ===== */
 * {
   box-sizing: border-box;
 }
 
+/* ===== 全体背景（世界観） ===== */
 body {
   margin: 0;
-  font-family: "Segoe UI", "Hiragino Kaku Gothic ProN", sans-serif;
-  background: linear-gradient(180deg, #1e1e2f, #121212);
+  font-family: "DotGothic16", "Segoe UI", sans-serif;
+  background: linear-gradient(
+    to bottom,
+    #7cc4ff 0%,
+    #b7e3a1 60%,
+    #5fa05a 100%
+  );
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
 }
 
-/* ===== メイン画面 ===== */
+/* ===== アプリ枠（石板UI） ===== */
 .app {
   width: 360px;
   height: 640px;
-  background: #ffffff;
-  border-radius: 24px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.35);
-  padding: 20px;
+  background: #f6f1e7;
+  border: 6px solid #8b7a5e;
+  box-shadow:
+    inset 0 0 0 3px #d6c9a3,
+    0 20px 40px rgba(0,0,0,0.4);
+  padding: 16px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -29,95 +37,112 @@ body {
 /* ===== タイトル ===== */
 h1 {
   text-align: center;
-  margin: 0;
-  color: #ff0000;
+  font-size: 26px;
+  color: #ffd700;
   letter-spacing: 2px;
+  text-shadow:
+    2px 2px 0 #000,
+    4px 4px 0 #5a2d0c;
+  margin: 4px 0 8px;
 }
 
-/* ===== 入力エリア ===== */
+h1::before,
+h1::after {
+  content: "⚔";
+  margin: 0 6px;
+}
+
+/* ===== 入力 ===== */
 input, select {
   width: 100%;
-  padding: 14px;
-  margin-top: 12px;
-  border-radius: 14px;
-  border: 1px solid #ddd;
-  font-size: 16px;
+  padding: 12px;
+  font-size: 14px;
+  border: 3px solid #8b7a5e;
+  background: #fffbe6;
   outline: none;
 }
 
-input:focus, select:focus {
-  border-color: #3b5bfd;
+input::placeholder {
+  color: #aaa;
 }
 
-/* ===== トレーニング実行ボタン ===== */
-button {
-  margin-top: 12px;
-  padding: 16px;
-  border-radius: 18px;
-  border: none;
-  background: linear-gradient(135deg, #ff8a00, #ff5f6d);
-  color: white;
-  font-size: 17px;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 8px 16px rgba(255,95,109,0.4);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+/* ===== ステータス（羊皮紙） ===== */
+.status {
+  background: #fbf6e8;
+  border: 3px solid #b79b6c;
+  padding: 10px;
+  margin: 8px 0;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
 }
 
-button:active {
-  transform: translateY(2px);
-  box-shadow: 0 4px 8px rgba(255,95,109,0.3);
+.status h2 {
+  font-size: 13px;
+  margin: 0 0 6px;
+  border-bottom: 2px solid #b79b6c;
+}
+
+.status ul {
+  padding: 0;
+  margin: 0;
+}
+
+.status li {
+  list-style: none;
+  font-size: 13px;
+  margin: 4px 0;
 }
 
 /* ===== アバター表示 ===== */
 .avatar {
-  margin-top: 16px;
-  flex-grow: 1;
-  background: linear-gradient(to top,#1c1f3a,#2d3a6e,#5a7fdc);
-  border-radius: 22px;
+  margin: 8px 0;
+  padding: 8px;
+  background: linear-gradient(to top, #3b6fb6, #7aa9e8);
+  border: 4px solid #2b4c7e;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .avatar img {
-  width: 160px;
-  transition: transform 0.3s ease;
+  width: 140px;
+  image-rendering: pixelated;
 }
 
-.avatar img:hover {
-  transform: scale(1.05);
-}
-
-/* ===== ステータス ===== */
-.status h2 {
-  font-size: 14px;
-}
-
-.status {
-  margin-top: 12px;
-  background: #f9fafc;
-  border-radius: 18px;
+/* ===== ボタン共通 ===== */
+button {
+  width: 100%;
   padding: 14px;
+  margin-top: 8px;
   font-size: 14px;
-  color: #444;
+  font-weight: bold;
+  color: #fff;
+  border: 3px solid #5c1a00;
+  background: linear-gradient(#ffb347, #ff5f00);
+  box-shadow: inset 0 0 0 2px #ffd18b;
+  cursor: pointer;
 }
 
-.status p {
-  margin: 4px 0;
+button:active {
+  transform: translateY(2px);
+}
+
+/* ===== モンスター討伐ボタン ===== */
+.quest-btn {
+  background: linear-gradient(#7ed957, #2f8f2f);
+  border-color: #1f5f1f;
+  box-shadow: inset 0 0 0 2px #b6f2a3;
 }
 
 /* ===== リザルト画面 ===== */
-.hidden {
-  display: none;
-}
 #result-screen {
   text-align: center;
 }
 
 .level-up {
-  color: #ff3b3b;
-  font-size: 20px;
+  color: #ffd700;
+  font-size: 18px;
+  margin: 12px 0;
+  text-shadow: 2px 2px 0 #000;
   animation: pop 0.4s ease;
 }
 
@@ -126,19 +151,19 @@ button:active {
   text-align: center;
 }
 
+.monster {
+  margin: 12px 0;
+}
+
 .monster img {
   width: 120px;
-  margin: 16px 0;
+  image-rendering: pixelated;
 }
 
-.quest-btn {
-  background: linear-gradient(135deg, #4caf50, #2e7d32);
-}
-
-
+/* ===== アニメーション ===== */
 @keyframes pop {
   0% {
-    transform: scale(0.5);
+    transform: scale(0.6);
     opacity: 0;
   }
   100% {
@@ -147,15 +172,7 @@ button:active {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
+/* ===== 画面切り替え ===== */
+.hidden {
+  display: none;
+}
