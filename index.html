@@ -37,6 +37,7 @@
         <option value="leg">脚トレ</option>
       </select>
       <button onclick="runTraining()">トレーニング実行</button>
+      <button class="quest-btn" onclick="goToQuest()">モンスター討伐</button>
     </div>
 
   <!-- ===== リザルト画面 ===== -->
@@ -47,11 +48,26 @@
     <button onclick="backToMain()">戻る</button>
   </div>
 
+  <!-- ===== クエスト画面 ===== -->
+  <div id="quest-screen" class="hidden">
+    <h2>QUEST</h2>
+  
+    <p>モンスターが現れた！</p>
+  
+    <div class="monster">
+      <img src="images/monster1.png" alt="monster">
+      <p>スライム Lv 3</p>
+    </div>
+  
+    <button onclick="backToMain()">戻る</button>
+  </div>
+
 </div>
 
 <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
