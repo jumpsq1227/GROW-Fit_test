@@ -160,10 +160,11 @@ button:active {
   text-shadow: 2px 2px 0 #000;
   background-size: cover;
   background-position: center;
+  background-image: url("images/monster/slime.png");
 }
 
 /* ===== モンスター別背景 ===== */
-.quest.slime {
+/* .quest.slime {
   background-image: url("images/monster/slime.png");
 }
 
@@ -177,7 +178,7 @@ button:active {
 
 .quest.maou {
   background-image: url("images/monster_bg_maou.png");
-}
+} */
 
 /* ===== アニメーション ===== */
 @keyframes pop {
@@ -195,6 +196,7 @@ button:active {
 .hidden {
   display: none;
 }
+
 
 
 
