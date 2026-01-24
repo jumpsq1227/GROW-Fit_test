@@ -116,7 +116,7 @@ button:active {
 }
 
 .level-up {
-  color: #ffeb3b;
+  color: #ff3b3b;
   font-size: 20px;
   animation: pop 0.4s ease;
 }
@@ -131,6 +131,7 @@ button:active {
     opacity: 1;
   }
 }
+
 
 
 
