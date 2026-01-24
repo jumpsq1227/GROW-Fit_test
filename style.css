@@ -39,7 +39,7 @@ body {
   text-align: left;
 }
 .avatar {
-  width: 72px;
+  width: 140px;
   image-rendering: pixelated;
   filter: drop-shadow(2px 2px 0 #000);
 }
@@ -68,5 +68,6 @@ button:hover {
   font-size: 20px;
   margin: 20px 0;
 }
+
 
 
