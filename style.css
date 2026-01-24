@@ -1,0 +1,132 @@
+/* ===== 全体設定 ===== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", "Hiragino Kaku Gothic ProN", sans-serif;
+  background: linear-gradient(180deg, #1e1e2f, #121212);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* ===== アプリ本体 ===== */
+.container {
+  width: 360px;
+  height: 640px;
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* ===== タイトル ===== */
+h1 {
+  text-align: center;
+  margin: 0;
+  color: #ff0000;
+  letter-spacing: 2px;
+}
+
+/* ===== 入力エリア ===== */
+input, select {
+  width: 100%;
+  padding: 14px;
+  margin-top: 12px;
+  border-radius: 14px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+  outline: none;
+}
+
+input:focus, select:focus {
+  border-color: #3b5bfd;
+}
+
+/* ===== 実行ボタン ===== */
+button {
+  margin-top: 12px;
+  padding: 16px;
+  border-radius: 18px;
+  border: none;
+  background: linear-gradient(135deg, #ff8a00, #ff5f6d);
+  color: white;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 8px 16px rgba(255,95,109,0.4);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+button:active {
+  transform: translateY(2px);
+  box-shadow: 0 4px 8px rgba(255,95,109,0.3);
+}
+
+/* ===== アバター表示 ===== */
+.avatar {
+  margin-top: 16px;
+  flex-grow: 1;
+  background: linear-gradient(to top,#1c1f3a,#2d3a6e,#5a7fdc);
+  border-radius: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar img {
+  width: 160px;
+  transition: transform 0.3s ease;
+}
+
+.avatar img:hover {
+  transform: scale(1.05);
+}
+
+/* ===== ステータス ===== */
+.status h2 {
+  font-size: 14px;
+}
+
+.status {
+  margin-top: 12px;
+  background: #f9fafc;
+  border-radius: 18px;
+  padding: 14px;
+  font-size: 14px;
+  color: #444;
+}
+
+.status p {
+  margin: 4px 0;
+}
+
+/* ===== 成功メッセージ ===== */
+.success {
+  text-align: center;
+  color: #2ecc71;
+  font-weight: bold;
+  margin-top: 6px;
+}
+
+/* ===== フッター（将来拡張用） ===== */
+.footer {
+  text-align: center;
+  font-size: 12px;
+  color: #aaa;
+}
+
+
+
+
+
+
+
+
+
