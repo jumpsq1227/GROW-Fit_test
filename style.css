@@ -108,6 +108,9 @@ button:active {
 }
 
 /* ===== リザルト演出 ===== */
+.hidden {
+  display: none;
+}
 #result-screen {
   text-align: center;
 }
@@ -128,6 +131,7 @@ button:active {
     opacity: 1;
   }
 }
+
 
 
 
