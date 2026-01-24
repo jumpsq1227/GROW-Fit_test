@@ -60,6 +60,13 @@ function runTraining() {
   
 }
 
+function backToMain() {
+  // リザルト画面を非表示
+  document.getElementById('result-screen').classList.add('hidden');
+
+  // メイン画面を表示
+  document.querySelector('.main-screen').classList.remove('hidden');
+}
 
 
 
