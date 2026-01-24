@@ -153,16 +153,30 @@ button:active {
 
 /* ===== クエスト画面 ===== */
 #quest-screen {
-  text-align: center;
+  position: relative;
+  height: 100%;
+  padding: 16px;
+  color: white;
+  text-shadow: 2px 2px 0 #000;
+  background-size: cover;
+  background-position: center;
 }
 
-.monster {
-  margin: 12px 0;
+/* ===== モンスター別背景 ===== */
+.quest.slime {
+  background-image: url("images/monster/slime.png");
 }
 
-.monster img {
-  width: 120px;
-  image-rendering: pixelated;
+.quest.skeleton {
+  background-image: url("images/monster/skeleton.png");
+}
+
+.quest.dragon {
+  background-image: url("images/monster/dragon.png");
+}
+
+.quest.maou {
+  background-image: url("images/monster_bg_maou.png");
 }
 
 /* ===== アニメーション ===== */
@@ -181,5 +195,6 @@ button:active {
 .hidden {
   display: none;
 }
+
 
 
