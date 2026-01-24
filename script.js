@@ -63,6 +63,7 @@ function runTraining() {
 function goToQuest() {
   document.getElementById("main-screen").classList.add("hidden");
   document.getElementById("quest-screen").classList.remove("hidden");
+}
 
 function backToMain() {
   // リザルト画面、クエスト画面を非表示
@@ -71,6 +72,7 @@ function backToMain() {
   // メイン画面を表示
   document.getElementById("main-screen").classList.remove('hidden');
 }
+
 
 
 
