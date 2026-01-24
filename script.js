@@ -19,16 +19,21 @@ let currentMonster = monsterList[0];
 
 // ===== 表示更新 =====
 function updateStatusView() {
-  HPLv.textContent = status.run;
-  chestLv.textContent = status.chest;
-  backLv.textContent = status.back;
-  legLv.textContent = status.leg;
+  document.getElementById("HPLv").textContent = status.run;
+  document.getElementById("chestLv").textContent = status.chest;
+  document.getElementById("backLv").textContent = status.back;
+  document.getElementById("legLv").textContent = status.leg;
 }
 
 // ===== トレーニング =====
 function runTraining() {
-  const training = trainingSelect.value;
-  if (!training) return alert("トレーニングを選択してください");
+  const training = document.getElementById("training").value;
+  const avatarImage = document.getElementById("avatarImage");
+
+  if (!training) {
+    alert("トレーニングを選択してください");
+    return;
+  }
 
   status[training]++;
   avatarImage.src = `images/${training}.png`;
@@ -79,3 +84,4 @@ function switchScreen(screenId) {
 
 // 初期化
 updateStatusView();
+
