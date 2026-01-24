@@ -60,12 +60,18 @@ function runTraining() {
   
 }
 
+function goToQuest() {
+  document.getElementById("main-screen").classList.add("hidden");
+  document.getElementById("quest-screen").classList.remove("hidden");
+
 function backToMain() {
-  // リザルト画面を非表示
+  // リザルト画面、クエスト画面を非表示
   document.getElementById('result-screen').classList.add('hidden');
+  document.getElementById("quest-screen").classList.add("hidden");
   // メイン画面を表示
   document.getElementById("main-screen").classList.remove('hidden');
 }
+
 
 
 
