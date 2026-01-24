@@ -2,93 +2,51 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>Muscle RPG_test</title>
+  <title>Muscle RPG</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="app">
+<!-- ===== メイン画面 ===== -->
+<div id="main-screen" class="screen">
+  <h1 class="title">Muscle RPG</h1>
 
-  <!-- ===== トップ画面 ===== -->
-  <div id="main-screen" class="main-screen">
-      <h1>Muscle RPG_test</h1>
-    
-      <input type="text" id="playerId" placeholder="プレーヤーID">
-      
-      <div class="status">
-        <h2>勇者の強さ</h2>
-        <ul>
-          <li>体力：Lv <span id="HPLv">1</span></li>
-          <li>胸筋力：Lv <span id="chestLv">1</span></li>
-          <li>背筋力：Lv <span id="backLv">1</span></li>
-          <li>脚力：Lv <span id="legLv">1</span></li>
-        </ul>
-      </div>
-      
-      <div class="avatar">
-        <img id="avatarImage" src="images/base.png">
-      </div>
-      
-      <select id="training">
-        <option value="">トレーニングを選択</option>
-        <option value="run">ランニング</option>
-        <option value="chest">胸トレ</option>
-        <option value="back">背中トレ</option>
-        <option value="leg">脚トレ</option>
-      </select>
-      <button onclick="runTraining()">トレーニング実行</button>
-      <button class="quest-btn" onclick="goToQuest()">モンスター討伐</button>
-    </div>
-
-  <!-- ===== リザルト画面 ===== -->
-  <div id="result-screen" class="hidden">
-    <h2>トレーニングを記録！</h2>
-    <p id="resultText"></p>
-    <h2>今日もお疲れさま！💪</h2>
-    <button onclick="backToMain()">戻る</button>
+  <div class="status-box">
+    <p>❤️ HP Lv: <span id="HPLv">1</span></p>
+    <p>💪 胸 Lv: <span id="chestLv">1</span></p>
+    <p>🏋️ 背 Lv: <span id="backLv">1</span></p>
+    <p>🦵 脚 Lv: <span id="legLv">1</span></p>
   </div>
 
-  <!-- ===== クエスト画面 ===== -->
-  <div id="quest-screen" class="hidden">
-    <h2>QUEST</h2>
-    <p>モンスターが現れた！</p>
-    <div class="monster">
-      <img src="images/monster/Lv1.png" alt="monster">
-      <p>スライム Lv 3</p>
-    </div>
-  
-    <button onclick="backToMain()">戻る</button>
-  </div>
+  <img id="avatarImage" src="images/run.png" class="avatar">
 
+  <select id="training">
+    <option value="">トレーニング選択</option>
+    <option value="run">ランニング</option>
+    <option value="chest">胸トレ</option>
+    <option value="back">背中トレ</option>
+    <option value="leg">脚トレ</option>
+  </select>
+
+  <div class="button-group">
+    <button onclick="runTraining()">トレーニング実行</button>
+    <button onclick="startQuest()">モンスター討伐</button>
+  </div>
+</div>
+
+<!-- ===== クエスト画面 ===== -->
+<div id="quest-screen" class="screen hidden">
+  <h2 id="monsterName"></h2>
+  <img id="monsterImage" class="monster">
+  <button onclick="battle()">たたかう</button>
+</div>
+
+<!-- ===== リザルト画面 ===== -->
+<div id="result-screen" class="screen hidden">
+  <p id="resultText" class="result"></p>
+  <button onclick="backToMain()">もどる</button>
 </div>
 
 <script src="script.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
