@@ -15,65 +15,86 @@ const monsterList = [
 ];
 
 let currentMonsterIndex = 0;
-let currentMonster = monsterList[0];
 
 // ===== 表示更新 =====
 function updateStatusView() {
-  HPLv.textContent = status.run;
-  chestLv.textContent = status.chest;
-  backLv.textContent = status.back;
-  legLv.textContent = status.leg;
+  document.getElementById("HPLv").textContent = status.run;
+  document.getElementById("chestLv").textContent = status.chest;
+  document.getElementById("backLv").textContent = status.back;
+  document.getElementById("legLv").textContent = status.leg;
 }
 
 // ===== トレーニング =====
 function runTraining() {
-  const training = trainingSelect.value;
-  if (!training) return alert("トレーニングを選択してください");
+  const training = document.getElementById("training").value;
+  const avatar = document.getElementById("avatarImage");
 
+  if (!training) {
+    alert("トレーニングを選択してください");
+    return;
+  }
+
+  // Lvアップ
   status[training]++;
-  avatarImage.src = `images/${training}.png`;
   updateStatusView();
 
-  showResult("レベルアップ！💪");
+  // アバター変更
+  avatar.src = `images/${training}.png`;
+
+  // リザルト表示
+  const textMap = {
+    run: "体力 Lv UP！",
+    chest: "胸筋力 Lv UP！",
+    back: "背筋力 Lv UP！",
+    leg: "脚力 Lv UP！"
+  };
+
+  document.getElementById("resultText").textContent = textMap[training];
+
+  switchScreen("result-screen");
 }
 
-// ===== クエスト開始 =====
+// ===== クエスト =====
 function startQuest() {
-  currentMonster = monsterList[currentMonsterIndex];
-  monsterName.textContent = `${currentMonster.name} Lv ${currentMonster.level}`;
-  monsterImage.src = currentMonster.image;
+  const monster = monsterList[currentMonsterIndex];
+
+  document.getElementById("monsterName").textContent =
+    `${monster.name} Lv ${monster.level}`;
+  document.getElementById("monsterImage").src = monster.image;
 
   switchScreen("quest-screen");
 }
 
 // ===== バトル =====
 function battle() {
-  const heroLv = status.run + status.chest + status.back + status.leg;
+  const monster = monsterList[currentMonsterIndex];
+  const heroLv =
+    status.run + status.chest + status.back + status.leg;
 
-  if (heroLv >= currentMonster.level) {
-    showResult(`やったー！🎉 ${currentMonster.name}を倒した！`);
+  if (heroLv >= monster.level) {
+    document.getElementById("resultText").textContent =
+      `勝利！🎉 ${monster.name}を倒した！`;
+
     if (currentMonsterIndex < monsterList.length - 1) {
       currentMonsterIndex++;
     }
   } else {
-    showResult(`負けてしまった…😵 もっと鍛えよう`);
+    document.getElementById("resultText").textContent =
+      "敗北…😵 もっと鍛えよう";
   }
-}
 
-// ===== 共通UI =====
-function showResult(text) {
-  resultText.textContent = text;
   switchScreen("result-screen");
 }
 
+// ===== 画面切替 =====
 function backToMain() {
   switchScreen("main-screen");
 }
 
 function switchScreen(screenId) {
-  ["main-screen", "quest-screen", "result-screen"].forEach(id =>
-    document.getElementById(id).classList.add("hidden")
-  );
+  ["main-screen", "quest-screen", "result-screen"].forEach(id => {
+    document.getElementById(id).classList.add("hidden");
+  });
   document.getElementById(screenId).classList.remove("hidden");
 }
 
