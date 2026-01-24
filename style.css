@@ -6,6 +6,12 @@ body {
   text-align: center;
 }
 
+#main-screen {
+  background-image: url("images/grass.png");
+  background-repeat: repeat;
+  image-rendering: pixelated;
+}
+
 .screen {
   padding: 20px;
   min-height: 100vh;
@@ -59,3 +65,4 @@ button:hover {
   font-size: 20px;
   margin: 20px 0;
 }
+
