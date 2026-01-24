@@ -48,16 +48,18 @@ function runTraining() {
 
   // リザルト表示
   const textMap = {
+    run: "持久力 Lv UP！",
     chest: "胸筋力 Lv UP！",
     back: "背筋力 Lv UP！",
     leg: "脚力 Lv UP！"
   };
 
   const resultText = document.getElementById("resultText");
-  resultText.textContent = textMap[type];
+  resultText.textContent = textMap[training];
   resultText.className = "level-up";
   
 }
+
 
 
 
