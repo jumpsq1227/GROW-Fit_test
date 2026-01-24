@@ -7,7 +7,7 @@ body {
 }
 
 #main-screen {
-  background-image: url("images/grass.png");
+  background-image: url("images/bg_field.png");
   background-repeat: repeat;
   image-rendering: pixelated;
 }
@@ -65,4 +65,5 @@ button:hover {
   font-size: 20px;
   margin: 20px 0;
 }
+
 
