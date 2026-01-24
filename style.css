@@ -13,7 +13,7 @@ body {
   height: 100vh;
 }
 
-/* ===== アプリ本体 ===== */
+/* ===== メイン画面 ===== */
 .app {
   width: 360px;
   height: 640px;
@@ -49,7 +49,7 @@ input:focus, select:focus {
   border-color: #3b5bfd;
 }
 
-/* ===== 実行ボタン ===== */
+/* ===== トレーニング実行ボタン ===== */
 button {
   margin-top: 12px;
   padding: 16px;
@@ -107,7 +107,7 @@ button:active {
   margin: 4px 0;
 }
 
-/* ===== リザルト演出 ===== */
+/* ===== リザルト画面 ===== */
 .hidden {
   display: none;
 }
@@ -121,6 +121,21 @@ button:active {
   animation: pop 0.4s ease;
 }
 
+/* ===== クエスト画面 ===== */
+#quest-screen {
+  text-align: center;
+}
+
+.monster img {
+  width: 120px;
+  margin: 16px 0;
+}
+
+.quest-btn {
+  background: linear-gradient(135deg, #4caf50, #2e7d32);
+}
+
+
 @keyframes pop {
   0% {
     transform: scale(0.5);
@@ -131,6 +146,7 @@ button:active {
     opacity: 1;
   }
 }
+
 
 
 
