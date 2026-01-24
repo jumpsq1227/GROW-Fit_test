@@ -14,7 +14,7 @@ body {
 }
 
 /* ===== アプリ本体 ===== */
-.container {
+.app {
   width: 360px;
   height: 640px;
   background: #ffffff;
@@ -107,20 +107,17 @@ button:active {
   margin: 4px 0;
 }
 
-/* ===== 成功メッセージ ===== */
-.success {
+/* ===== リザルト演出 ===== */
+#result-screen {
   text-align: center;
-  color: #2ecc71;
-  font-weight: bold;
-  margin-top: 6px;
 }
 
-/* ===== フッター（将来拡張用） ===== */
-.footer {
-  text-align: center;
-  font-size: 12px;
-  color: #aaa;
+.level-up {
+  color: #ffeb3b;
+  font-size: 20px;
+  animation: pop 0.4s ease;
 }
+
 
 
 
