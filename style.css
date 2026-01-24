@@ -158,9 +158,10 @@ button:active {
   padding: 16px;
   color: white;
   text-shadow: 2px 2px 0 #000;
+  background-image: url("images/monster/slime.png");
   background-size: cover;
   background-position: center;
-  background-image: url("images/monster/slime.png");
+
 }
 
 /* ===== モンスター別背景 ===== */
@@ -196,6 +197,7 @@ button:active {
 .hidden {
   display: none;
 }
+
 
 
 
