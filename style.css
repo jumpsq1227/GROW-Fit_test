@@ -15,11 +15,46 @@ body {
   min-height: 100vh;
   background-image: url("images/bg_field.png");
   background-repeat: repeat;
-  background-size: 64px 64px; /* ドット感維持 */
+  background-size: 64px 64px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
+#playerSelectScreen > div,
+#playerSelectScreen {
+  text-align: center;
+}
+
+#playerSelectScreen h1 {
+  font-size: 32px;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px #000;
+}
+
+#playerSelectScreen select {
+  font-size: 18px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  background: #111;
+  color: #fff;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 3px #000 inset;
+}
+
+#playerSelectScreen button {
+  font-size: 18px;
+  padding: 10px 20px;
+  background: #222;
+  color: white;
+  border: 3px solid white;
+  cursor: pointer;
+}
+
+#playerSelectScreen button:hover {
+  background: #444;
+}
+
 
 .screen {
   padding: 20px;
@@ -83,6 +118,7 @@ button:hover {
   font-size: 20px;
   margin: 20px 0;
 }
+
 
 
 
