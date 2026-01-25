@@ -7,14 +7,20 @@
 </head>
 <body>
 
+<!-- ===== プレイヤー選択画面 ===== -->
+<div id="playerSelectScreen">
+  <h1>プレイヤー選択</h1>
+  <select id="playerSelect"></select>
+  <button id="startBtn">はじめる</button>
+</div>
+
 <!-- ===== メイン画面 ===== -->
-<div id="main-screen" class="screen">
+<div id="main-screen" class="hidden">
   <h1 class="title">Muscle RPG</h1>
 
 <!-- ===== ステータス・アバター欄 ===== -->
 <div class="status-box">
   <div class="status-inner">
-
     <!-- ステータス -->
     <div class="status-text">
       <p>体力 Lv <span id="HPLv">1</span></p>
@@ -22,14 +28,10 @@
       <p>背筋 Lv <span id="backLv">1</span></p>
       <p>脚力 Lv <span id="legLv">1</span></p>
     </div>
-
     <!-- アバター -->
     <img src="images/base.png" class="avatar" id="avatarImage">
-
   </div>
 </div>
-
-
 
   <select id="training">
     <option value="">トレーニング選択</option>
@@ -38,7 +40,6 @@
     <option value="back">背中トレ</option>
     <option value="leg">脚トレ</option>
   </select>
-
   <div class="button-group">
     <button onclick="runTraining()">トレーニング実行</button>
     <button onclick="startQuest()">モンスター討伐</button>
@@ -61,6 +62,7 @@
 <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
