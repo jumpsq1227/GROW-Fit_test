@@ -14,8 +14,8 @@ const monsterList = [
   { name: "魔王", level: 20, image: "images/monster/maou.png" }
 ];
 
-// let currentMonsterIndex = 0;
-// let currentMonster = monsterList[0];
+let currentMonsterIndex = 0;
+let currentMonster = monsterList[0];
 
 // プレイヤー管理
 const players = ["勇者", "戦士", "魔法使い"];
@@ -161,6 +161,7 @@ function switchScreen(screenId) {
 
 // 初期化
 updateStatusView();
+
 
 
 
