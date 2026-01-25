@@ -132,7 +132,7 @@ button:hover {
   image-rendering: pixelated;
 }
 
-#quest-screen {
+/* #quest-screen {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -140,7 +140,8 @@ button:hover {
 
 #quest-screen .monster {
   margin: 20px 0;
-}
+} */
+
 
 
 
