@@ -85,6 +85,11 @@ body {
   background: #333;
 }
 
+.result-image {
+  width: 120px;
+  margin: 10px auto;
+  image-rendering: pixelated;
+}
 
 /* ステータス＋アバター横並び */
 .status-box {
@@ -133,6 +138,7 @@ button:hover {
   font-size: 20px;
   margin: 20px 0;
 }
+
 
 
 
