@@ -132,15 +132,10 @@ button:hover {
   image-rendering: pixelated;
 }
 
-/* #quest-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-#quest-screen .monster {
+.monster {
   margin: 20px 0;
 } */
+
 
 
 
