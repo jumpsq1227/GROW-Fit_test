@@ -6,21 +6,22 @@ const monsterList = [
   { name: "魔王", level: 20, image: "images/monster/maou.png" }
 ];
 
-let currentMonsterIndex = 0;
-let currentMonster = monsterList[0];
-
 // プレイヤー管理
 const players = ["勇者", "戦士", "魔法使い"];
 let currentPlayer = null;
 
 // 初期ステータス
 const defaultStatus = {
-  run: 1,
-  chest: 1,
-  back: 1,
-  leg: 1
+  status: {
+    run: 1,
+    chest: 1,
+    back: 1,
+    leg: 1
+  },
+  monsterIndex: 1
 };
 
+let currentMonsterIndex = 0;
 let status = { ...defaultStatus };
 
 // DOM取得（HTML構造に合わせる）
@@ -66,18 +67,33 @@ startBtn.addEventListener("click", () => {
   mainScreen.classList.remove("hidden");
 });
 
-// localStorage 保存 / 読み込み
+// ステータス、討伐モンスター情報の保存
 function saveStatus() {
+  const saveData = {
+    status: status,
+    monsterIndex: currentMonsterIndex
+  };
+
   localStorage.setItem(
     `muscleRPG_${currentPlayer}`,
-    JSON.stringify(status)
+    JSON.stringify(saveData)
   );
 }
 
+// ステータス、討伐モンスター情報の読み込み
 function loadStatus() {
   const data = localStorage.getItem(`muscleRPG_${currentPlayer}`);
-  status = data ? JSON.parse(data) : { ...defaultStatus };
+
+  if (data) {
+    const parsed = JSON.parse(data);
+    status = parsed.status;
+    currentMonsterIndex = parsed.monsterIndex ?? 0;
+  } else {
+    status = { ...defaultStatus };
+    currentMonsterIndex = 0;
+  }
 }
+
 
 // ===== 表示更新 =====
 function updateStatusView() {
@@ -164,6 +180,7 @@ function switchScreen(screenId) {
 
 // 初期化
 updateStatusView();
+
 
 
 
