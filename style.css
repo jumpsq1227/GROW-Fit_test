@@ -16,7 +16,7 @@ body {
   min-height: 100vh;
   background-image: url("images/bg_field.png");
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: 120px;
   background-position: center;
 }
 
@@ -136,6 +136,7 @@ button:hover {
   width: 80px;
   margin: 20px 0;
 } */
+
 
 
 
