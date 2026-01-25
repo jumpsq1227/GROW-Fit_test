@@ -25,6 +25,7 @@ let currentMonsterIndex = 0;
 const playerSelectScreen = document.getElementById("playerSelectScreen");
 const mainScreen = document.getElementById("main-screen");
 const playerSelect = document.getElementById("playerSelect");
+const playerNameText = document.getElementById("playerNameText");
 const startBtn = document.getElementById("startBtn");
 
 const HPLv = document.getElementById("HPLv");
@@ -56,6 +57,8 @@ startBtn.addEventListener("click", () => {
   loadStatus();
   updateStatusView();
 
+  playerNameText.textContent = `トレーニー：${currentPlayer}`;
+  
   playerSelectScreen.classList.add("hidden");
   mainScreen.classList.remove("hidden");
 });
@@ -136,11 +139,25 @@ function showResult(text) {
   switchScreen("result-screen");
 }
 
+function backToMain() {
+  switchScreen("main-screen"); 
+}
+
 function switchScreen(id) {
   ["main-screen", "quest-screen", "result-screen"].forEach(s =>
     document.getElementById(s).classList.add("hidden")
   );
   document.getElementById(id).classList.remove("hidden");
+}
+
+function backToPlayerSelect() {
+  document.getElementById("main-screen").classList.add("hidden");
+  document.getElementById("quest-screen").classList.add("hidden");
+  document.getElementById("result-screen").classList.add("hidden");
+  document.getElementById("playerSelectScreen").classList.remove("hidden");
+
+  playerNameText.textContent = ""; // 表示クリア
+  currentPlayer = null;
 }
 
 
