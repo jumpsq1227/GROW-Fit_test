@@ -11,6 +11,26 @@ const defaultStatus = {
 };
 let status = { ...defaultStatus };
 
+// ===== トレーニング定義 =====
+const trainingInfo = {
+  run: {
+    label: "体力",
+    image: "images/train/run.png"
+  },
+  chest: {
+    label: "胸筋",
+    image: "images/train/chest.png"
+  },
+  back: {
+    label: "背筋",
+    image: "images/train/back.png"
+  },
+  leg: {
+    label: "脚力",
+    image: "images/train/leg.png"
+  }
+};
+
 // ===== モンスター一覧 =====
 const monsterList = [
   { name: "スライム", level: 3, image: "images/monster/slime.png" },
@@ -116,15 +136,23 @@ menu.addEventListener("click", (e) => {
   executeTraining(trainType);
   menu.classList.add("hidden");
 });
-
 function executeTraining(trainType) {
   if (!(trainType in status)) return;
+  // レベルアップ処理
   status[trainType]++;
   saveStatus();
   updateStatusView();
-  showResult("レベルアップ！💪");
+  // 表示用データ取得
+  const info = trainingInfo[trainType];
+  // テキスト
+  resultText.textContent = `${info.label} がレベルアップ！💪`;
+  // 画像
+  const resultImage = document.getElementById("resultImage");
+  resultImage.src = info.image;
+  resultImage.classList.remove("hidden");
+  // リザルト画面へ
+  switchScreen("result-screen");
 }
-
 
 // ===== クエスト =====
 function startQuest() {
@@ -156,6 +184,7 @@ function showResult(text) {
 }
 
 function backToMain() {
+  document.getElementById("resultImage").classList.add("hidden");
   switchScreen("main-screen"); 
 }
 
@@ -174,6 +203,7 @@ function backToPlayerSelect() {
   playerNameText.textContent = ""; // 表示クリア
   currentPlayer = null;
 }
+
 
 
 
