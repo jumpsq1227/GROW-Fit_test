@@ -115,6 +115,7 @@ function runTraining() {
 
   status[training]++;
   avatarImage.src = `images/${training}.png`;
+  saveStatus();
   updateStatusView();
 
   showResult("レベルアップ！💪");
@@ -138,6 +139,7 @@ function battle() {
     if (currentMonsterIndex < monsterList.length - 1) {
       currentMonsterIndex++;
     }
+    saveStatus();
   } else {
     showResult(`敗北…😵 もっと鍛えよう`);
   }
@@ -162,6 +164,7 @@ function switchScreen(screenId) {
 
 // 初期化
 updateStatusView();
+
 
 
 
