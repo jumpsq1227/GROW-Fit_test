@@ -74,14 +74,6 @@ startBtn.addEventListener("click", () => {
   mainScreen.classList.remove("hidden");
 });
 
-// ステータス表示
-function updateStatusView() {
-  HPLv.textContent = status.run;
-  chestLv.textContent = status.chest;
-  backLv.textContent = status.back;
-  legLv.textContent = status.leg;
-}
-
 // localStorage 保存 / 読み込み
 function saveStatus() {
   localStorage.setItem(
@@ -178,6 +170,7 @@ function switchScreen(screenId) {
 
 // 初期化
 updateStatusView();
+
 
 
 
