@@ -103,6 +103,22 @@ function updateStatusView() {
   document.getElementById("legLv").textContent = status.leg;
 }
 
+function backToPlayerSelect() {
+  // メイン画面を隠す
+  document.getElementById("main-screen").classList.add("hidden");
+
+  // クエスト・リザルトも念のため隠す
+  document.getElementById("quest-screen").classList.add("hidden");
+  document.getElementById("result-screen").classList.add("hidden");
+
+  // プレイヤー選択画面を表示
+  document.getElementById("playerSelectScreen").classList.remove("hidden");
+
+  // 現在プレイヤーをリセット（任意）
+  currentPlayer = null;
+}
+
+
 // ===== トレーニング =====
 function runTraining() {
   const training = document.getElementById("training").value;
@@ -162,6 +178,7 @@ function switchScreen(screenId) {
 
 // 初期化
 updateStatusView();
+
 
 
 
