@@ -11,6 +11,7 @@ body {
   text-align: center;
 }
 
+/* プレイヤー選択画面の設定 */
 #playerSelectScreen {
   min-height: 100vh;
   background-image: url("images/bg_field.png");
@@ -118,6 +119,7 @@ button:hover {
   font-size: 20px;
   margin: 20px 0;
 }
+
 
 
 
