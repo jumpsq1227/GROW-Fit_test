@@ -10,7 +10,7 @@ const monsterList = [
 const players = ["勇者", "戦士", "魔法使い"];
 let currentPlayer = null;
 
-// 初期ステータス（中身だけ）
+// 初期ステータス
 const defaultStatus = {
   run: 1,
   chest: 1,
@@ -27,12 +27,10 @@ const mainScreen = document.getElementById("main-screen");
 const playerSelect = document.getElementById("playerSelect");
 const playerNameText = document.getElementById("playerNameText");
 const startBtn = document.getElementById("startBtn");
-
 const HPLv = document.getElementById("HPLv");
 const chestLv = document.getElementById("chestLv");
 const backLv = document.getElementById("backLv");
 const legLv = document.getElementById("legLv");
-
 const resultText = document.getElementById("resultText");
 
 // ===== 初期処理 =====
@@ -99,11 +97,23 @@ function updateStatusView() {
 }
 
 // ===== トレーニング =====
-function runTraining() {
-  const training = document.getElementById("training").value;
-  if (!training) return alert("トレーニングを選択してください");
+const toggleBtn = document.getElementById("trainingToggleBtn");
+const menu = document.getElementById("trainingMenu");
 
-  status[training]++;
+toggleBtn.addEventListener("click", () => {
+  menu.classList.toggle("hidden");
+});
+
+menu.addEventListener("click", (e) => {
+  if (!e.target.dataset.train) return;
+
+  const trainType = e.target.dataset.train;
+  executeTraining(trainType);
+  menu.classList.add("hidden");
+});
+
+function executeTraining(trainType) {
+  status[trainType]++;
   saveStatus();
   updateStatusView();
   showResult("レベルアップ！💪");
@@ -159,6 +169,7 @@ function backToPlayerSelect() {
   playerNameText.textContent = ""; // 表示クリア
   currentPlayer = null;
 }
+
 
 
 
