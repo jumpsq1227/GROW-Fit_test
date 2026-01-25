@@ -15,19 +15,19 @@ let status = { ...defaultStatus };
 const trainingInfo = {
   run: {
     label: "体力",
-    image: "images/train/run.png"
+    image: "images/run.png"
   },
   chest: {
     label: "胸筋",
-    image: "images/train/chest.png"
+    image: "images/chest.png"
   },
   back: {
     label: "背筋",
-    image: "images/train/back.png"
+    image: "images/back.png"
   },
   leg: {
     label: "脚力",
-    image: "images/train/leg.png"
+    image: "images/leg.png"
   }
 };
 
@@ -203,6 +203,7 @@ function backToPlayerSelect() {
   playerNameText.textContent = ""; // 表示クリア
   currentPlayer = null;
 }
+
 
 
 
