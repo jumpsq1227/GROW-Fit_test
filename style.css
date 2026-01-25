@@ -11,13 +11,15 @@ body {
   text-align: center;
 }
 
-/* body { 
-  margin: 0;
-  font-family: "PixelMplus10", monospace;
-  background: linear-gradient(#1b2735, #090a0f);
-  color: white;
-  text-align: center;
-} */
+#playerSelectScreen {
+  min-height: 100vh;
+  background-image: url("images/bg_field.png");
+  background-repeat: repeat;
+  background-size: 64px 64px; /* ドット感維持 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .screen {
   padding: 20px;
@@ -81,6 +83,7 @@ button:hover {
   font-size: 20px;
   margin: 20px 0;
 }
+
 
 
 
