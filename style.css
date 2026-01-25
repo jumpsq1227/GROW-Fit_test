@@ -138,11 +138,10 @@ button:hover {
   align-items: center;
 }
 
-.monster {
-  width: 128px;
-  image-rendering: pixelated;
-  margin: 40px 0;
+#quest-screen .monster {
+  margin: 20px 0;
 }
+
 
 
 
