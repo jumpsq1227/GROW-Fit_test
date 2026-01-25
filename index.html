@@ -33,6 +33,7 @@
   </div>
 </div>
 
+  <!-- ===== アクション欄 ===== -->
   <select id="training">
     <option value="">トレーニング選択</option>
     <option value="run">ランニング</option>
@@ -40,13 +41,18 @@
     <option value="back">背中トレ</option>
     <option value="leg">脚トレ</option>
   </select>
+  
+　<button class="run-training-btn" onclick="runTraining()">トレーニング実行</button>
+  </button>
+  
   <div class="button-group">
-    <button onclick="runTraining()">トレーニング実行</button>
     <button onclick="startQuest()">モンスター討伐</button>
   </div>
+  
   <button class="back-player-btn" onclick="backToPlayerSelect()">
     プレイヤー選択へ
   </button>
+  
 </div>
 
 <!-- ===== クエスト画面 ===== -->
