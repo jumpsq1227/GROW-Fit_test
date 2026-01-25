@@ -34,20 +34,36 @@
 </div>
 
   <!-- ===== アクション欄 ===== -->
-  <select id="training">
+  <div class="button-group">
+    <button id="trainingToggleBtn">
+      トレーニング実行 ▼
+    </button>
+  
+    <div id="trainingMenu" class="training-menu hidden">
+      <button data-train="run">ランニング</button>
+      <button data-train="chest">腕・胸トレ</button>
+      <button data-train="back">背中トレ</button>
+      <button data-train="leg">脚トレ</button>
+    </div>
+
+    <button onclick="startQuest()">モンスター討伐 ▶</button>
+    
+  </div>
+  
+  <!-- <select id="training">
     <option value="">トレーニング選択</option>
     <option value="run">ランニング</option>
     <option value="chest">胸トレ</option>
     <option value="back">背中トレ</option>
     <option value="leg">脚トレ</option>
-  </select>
+  </select> -->
   
-　<button class="run-training-btn" onclick="runTraining()">トレーニング実行</button>
+　<!-- <button class="run-training-btn" onclick="runTraining()">トレーニング実行</button>
   </button>
   
   <div class="button-group">
     <button onclick="startQuest()">モンスター討伐</button>
-  </div>
+  </div> -->
   
   <button class="back-player-btn" onclick="backToPlayerSelect()">
     プレイヤー選択へ
@@ -71,6 +87,7 @@
 <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
