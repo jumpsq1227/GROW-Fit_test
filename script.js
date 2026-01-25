@@ -1,13 +1,5 @@
-// ===== モンスター一覧 =====
-const monsterList = [
-  { name: "スライム", level: 3, image: "images/monster/slime.png" },
-  { name: "がいこつ戦士", level: 6, image: "images/monster/skeleton.png" },
-  { name: "ドラゴン", level: 12, image: "images/monster/dragon.png" },
-  { name: "魔王", level: 20, image: "images/monster/maou.png" }
-];
-
 // プレイヤー管理
-const players = ["勇者", "戦士", "魔法使い"];
+const players = ["おがわ", "すずき", "たなか"];
 let currentPlayer = null;
 
 // 初期ステータス
@@ -17,9 +9,28 @@ const defaultStatus = {
   back: 1,
   leg: 1
 };
-
 let status = { ...defaultStatus };
+
+// ===== モンスター一覧 =====
+const monsterList = [
+  { name: "スライム", level: 3, image: "images/monster/slime.png" },
+  { name: "がいこつ戦士", level: 6, image: "images/monster/skeleton.png" },
+  { name: "ドラゴン", level: 12, image: "images/monster/dragon.png" },
+  { name: "魔王", level: 20, image: "images/monster/maou.png" }
+];
 let currentMonsterIndex = 0;
+
+// ===== SE =====
+const seLevelUp = new Audio("sounds/levelup.mp3");
+const seWin = new Audio("sounds/win.mp3");
+const seLose = new Audio("sounds/lose.mp3");
+
+// 連続再生対策
+function playSE(se) {
+  se.currentTime = 0;
+  se.play();
+}
+
 
 // ===== DOM =====
 const playerSelectScreen = document.getElementById("playerSelectScreen");
@@ -52,13 +63,10 @@ startBtn.addEventListener("click", () => {
     alert("プレイヤーを選択してください");
     return;
   }
-
   currentPlayer = playerSelect.value;
   loadStatus();
   updateStatusView();
-
   playerNameText.textContent = `トレーニー：${currentPlayer}`;
-  
   playerSelectScreen.classList.add("hidden");
   mainScreen.classList.remove("hidden");
 });
@@ -69,7 +77,6 @@ function saveStatus() {
     status: status,
     monsterIndex: currentMonsterIndex
   };
-
   localStorage.setItem(
     `muscleRPG_${currentPlayer}`,
     JSON.stringify(saveData)
@@ -79,7 +86,6 @@ function saveStatus() {
 // ===== 読み込み =====
 function loadStatus() {
   const data = localStorage.getItem(`muscleRPG_${currentPlayer}`);
-
   if (data) {
     const parsed = JSON.parse(data);
     status = parsed.status ?? { ...defaultStatus };
@@ -101,14 +107,11 @@ function updateStatusView() {
 // ===== トレーニング =====
 const toggleBtn = document.getElementById("trainingToggleBtn");
 const menu = document.getElementById("trainingMenu");
-
 toggleBtn.addEventListener("click", () => {
   menu.classList.toggle("hidden");
 });
-
 menu.addEventListener("click", (e) => {
   if (!e.target.dataset.train) return;
-
   const trainType = e.target.dataset.train;
   executeTraining(trainType);
   menu.classList.add("hidden");
@@ -135,7 +138,6 @@ function startQuest() {
 function battle() {
   const heroLv = status.run + status.chest + status.back + status.leg;
   const monster = monsterList[currentMonsterIndex];
-
   if (heroLv >= monster.level) {
     if (currentMonsterIndex < monsterList.length - 1) {
       currentMonsterIndex++;
@@ -169,10 +171,10 @@ function backToPlayerSelect() {
   document.getElementById("quest-screen").classList.add("hidden");
   document.getElementById("result-screen").classList.add("hidden");
   document.getElementById("playerSelectScreen").classList.remove("hidden");
-
   playerNameText.textContent = ""; // 表示クリア
   currentPlayer = null;
 }
+
 
 
 
