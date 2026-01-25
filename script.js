@@ -17,6 +17,58 @@ const monsterList = [
 let currentMonsterIndex = 0;
 let currentMonster = monsterList[0];
 
+// ===== 初期データ =====
+const status = {
+  "おがわ": { run: 1, chest: 1, back: 1, leg: 1 },
+  "すずき": { run: 1, chest: 1, back: 1, leg: 1 },
+};
+
+// ===== localStorage 初期化 =====
+if (!localStorage.getItem("players")) {
+  localStorage.setItem("players", JSON.stringify(status));
+}
+
+// ===== DOM =====
+const selectScreen = document.getElementById("playerSelectScreen");
+const mainScreen = document.getElementById("mainScreen");
+const playerSelect = document.getElementById("playerSelect");
+
+const levelEl = document.getElementById("level");
+const hpEl = document.getElementById("hp");
+const atkEl = document.getElementById("atk");
+
+// ===== プレイヤー一覧表示 =====
+function loadPlayerList() {
+  const players = JSON.parse(localStorage.getItem("players"));
+  playerSelect.innerHTML = "";
+
+  Object.keys(players).forEach(name => {
+    const option = document.createElement("option");
+    option.value = name;
+    option.textContent = name;
+    playerSelect.appendChild(option);
+  });
+}
+
+// ===== ステータス反映 =====
+function renderStatus(player) {
+  levelEl.textContent = player.level;
+  hpEl.textContent = player.hp;
+  atkEl.textContent = player.atk;
+}
+
+// ===== 開始ボタン =====
+document.getElementById("startBtn").addEventListener("click", () => {
+  const selected = playerSelect.value;
+  localStorage.setItem("currentPlayer", selected);
+
+  const players = JSON.parse(localStorage.getItem("players"));
+  renderStatus(players[selected]);
+
+  selectScreen.classList.add("hidden");
+  mainScreen.classList.remove("hidden");
+});
+
 // ===== 表示更新 =====
 function updateStatusView() {
   document.getElementById("HPLv").textContent = status.run;
@@ -84,4 +136,5 @@ function switchScreen(screenId) {
 
 // 初期化
 updateStatusView();
+
 
