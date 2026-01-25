@@ -85,12 +85,6 @@ body {
   background: #333;
 }
 
-.result-image {
-  width: 50px;
-  margin: 10px auto;
-  image-rendering: pixelated;
-}
-
 /* ステータス＋アバター横並び */
 .status-box {
   border: 2px solid #fff;
@@ -114,12 +108,6 @@ body {
   filter: drop-shadow(2px 2px 0 #000);
 }
 
-.monster {
-  width: 128px;
-  image-rendering: pixelated;
-  margin: 20px 0;
-}
-
 select, button {
   font-size: 16px;
   padding: 8px 12px;
@@ -138,9 +126,23 @@ button:hover {
   font-size: 20px;
   margin: 20px 0;
 }
+.result-image {
+  width: 50px;
+  margin: 10px auto;
+  image-rendering: pixelated;
+}
 
+#quest-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-
+.monster {
+  width: 128px;
+  image-rendering: pixelated;
+  margin: 40px 0;
+}
 
 
 
