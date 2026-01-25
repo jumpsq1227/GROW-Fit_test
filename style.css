@@ -72,6 +72,21 @@ body {
   text-shadow: 2px 2px #000;
 }
 
+.back-player-btn {
+  margin-top: 20px;
+  font-size: 14px;
+  padding: 8px 14px;
+  background: #111;
+  color: white;
+  border: 2px solid white;
+  cursor: pointer;
+}
+
+.back-player-btn:hover {
+  background: #333;
+}
+
+
 /* ステータス＋アバター横並び */
 .status-box {
   border: 2px solid #fff;
@@ -119,6 +134,7 @@ button:hover {
   font-size: 20px;
   margin: 20px 0;
 }
+
 
 
 
