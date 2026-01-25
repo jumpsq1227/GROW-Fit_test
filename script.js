@@ -1,10 +1,10 @@
-// ===== ステータス =====
-const status = {
-  run: 1,
-  chest: 1,
-  back: 1,
-  leg: 1
-};
+// // ===== ステータス =====
+// const status = {
+//   run: 1,
+//   chest: 1,
+//   back: 1,
+//   leg: 1
+// };
 
 // ===== モンスター一覧 =====
 const monsterList = [
@@ -14,35 +14,41 @@ const monsterList = [
   { name: "魔王", level: 20, image: "images/monster/maou.png" }
 ];
 
-let currentMonsterIndex = 0;
-let currentMonster = monsterList[0];
+// let currentMonsterIndex = 0;
+// let currentMonster = monsterList[0];
 
-// ===== 初期データ =====
-const status = {
-  "おがわ": { run: 1, chest: 1, back: 1, leg: 1 },
-  "すずき": { run: 1, chest: 1, back: 1, leg: 1 },
+// プレイヤー管理
+const players = ["勇者", "戦士", "魔法使い"];
+let currentPlayer = null;
+
+// 初期ステータス
+const defaultStatus = {
+  run: 1,
+  chest: 1,
+  back: 1,
+  leg: 1
 };
 
-// ===== localStorage 初期化 =====
-if (!localStorage.getItem("players")) {
-  localStorage.setItem("players", JSON.stringify(status));
-}
+let status = { ...defaultStatus };
 
-// ===== DOM =====
-const selectScreen = document.getElementById("playerSelectScreen");
-const mainScreen = document.getElementById("mainScreen");
+// DOM取得（HTML構造に合わせる）
+const playerSelectScreen = document.getElementById("playerSelectScreen");
+const mainScreen = document.getElementById("main-screen");
 const playerSelect = document.getElementById("playerSelect");
+const startBtn = document.getElementById("startBtn");
 
-const levelEl = document.getElementById("level");
-const hpEl = document.getElementById("hp");
-const atkEl = document.getElementById("atk");
+const HPLv = document.getElementById("HPLv");
+const chestLv = document.getElementById("chestLv");
+const backLv = document.getElementById("backLv");
+const legLv = document.getElementById("legLv");
 
-// ===== プレイヤー一覧表示 =====
-function loadPlayerList() {
-  const players = JSON.parse(localStorage.getItem("players"));
-  playerSelect.innerHTML = "";
+const trainingSelect = document.getElementById("training");
+const avatarImage = document.getElementById("avatarImage");
+const resultText = document.getElementById("resultText");
 
-  Object.keys(players).forEach(name => {
+// 初期処理
+function initPlayerSelect() {
+  players.forEach(name => {
     const option = document.createElement("option");
     option.value = name;
     option.textContent = name;
@@ -50,24 +56,43 @@ function loadPlayerList() {
   });
 }
 
-// ===== ステータス反映 =====
-function renderStatus(player) {
-  levelEl.textContent = player.level;
-  hpEl.textContent = player.hp;
-  atkEl.textContent = player.atk;
-}
+initPlayerSelect();
 
-// ===== 開始ボタン =====
-document.getElementById("startBtn").addEventListener("click", () => {
+// プレイヤー開始
+startBtn.addEventListener("click", () => {
   const selected = playerSelect.value;
-  localStorage.setItem("currentPlayer", selected);
+  if (!selected) {
+    alert("プレイヤーを選択してください");
+    return;
+  }
 
-  const players = JSON.parse(localStorage.getItem("players"));
-  renderStatus(players[selected]);
+  currentPlayer = selected;
+  loadStatus();
+  updateStatusView();
 
-  selectScreen.classList.add("hidden");
+  playerSelectScreen.classList.add("hidden");
   mainScreen.classList.remove("hidden");
 });
+
+// ステータス表示
+function updateStatusView() {
+  HPLv.textContent = status.run;
+  chestLv.textContent = status.chest;
+  backLv.textContent = status.back;
+  legLv.textContent = status.leg;
+}
+
+// localStorage 保存 / 読み込み
+function saveStatus() {
+  localStorage.setItem(
+    `muscleRPG_${currentPlayer}`,
+    JSON.stringify(status)
+  );
+}
+
+function loadStatus() {
+  const data = localStorage.getItem(`muscleRPG_${currentPlayer}`);
+  status = data ? JSON.parse(data) : { ...defaultStatus };
 
 // ===== 表示更新 =====
 function updateStatusView() {
@@ -136,5 +161,6 @@ function switchScreen(screenId) {
 
 // 初期化
 updateStatusView();
+
 
 
