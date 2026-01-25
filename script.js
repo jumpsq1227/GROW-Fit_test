@@ -93,6 +93,7 @@ function saveStatus() {
 function loadStatus() {
   const data = localStorage.getItem(`muscleRPG_${currentPlayer}`);
   status = data ? JSON.parse(data) : { ...defaultStatus };
+}
 
 // ===== 表示更新 =====
 function updateStatusView() {
@@ -161,6 +162,7 @@ function switchScreen(screenId) {
 
 // 初期化
 updateStatusView();
+
 
 
 
