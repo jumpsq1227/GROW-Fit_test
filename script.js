@@ -97,10 +97,10 @@ function loadStatus() {
 
 // ===== 表示更新 =====
 function updateStatusView() {
-  document.getElementById("HPLv").textContent = status.run;
-  document.getElementById("chestLv").textContent = status.chest;
-  document.getElementById("backLv").textContent = status.back;
-  document.getElementById("legLv").textContent = status.leg;
+  document.getElementById("HPLv").textContent = status.status.run;
+  document.getElementById("chestLv").textContent = status.status.chest;
+  document.getElementById("backLv").textContent = status.status.back;
+  document.getElementById("legLv").textContent = status.status.leg;
 }
 
 function backToPlayerSelect() {
@@ -180,6 +180,7 @@ function switchScreen(screenId) {
 
 // 初期化
 updateStatusView();
+
 
 
 
