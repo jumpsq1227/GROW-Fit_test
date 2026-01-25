@@ -1,11 +1,3 @@
-// // ===== ステータス =====
-// const status = {
-//   run: 1,
-//   chest: 1,
-//   back: 1,
-//   leg: 1
-// };
-
 // ===== モンスター一覧 =====
 const monsterList = [
   { name: "スライム", level: 3, image: "images/monster/slime.png" },
@@ -170,6 +162,7 @@ function switchScreen(screenId) {
 
 // 初期化
 updateStatusView();
+
 
 
 
