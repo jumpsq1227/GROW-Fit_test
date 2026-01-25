@@ -32,6 +32,8 @@ const chestLv = document.getElementById("chestLv");
 const backLv = document.getElementById("backLv");
 const legLv = document.getElementById("legLv");
 const resultText = document.getElementById("resultText");
+const monsterName = document.getElementById("monsterName");
+const monsterImage = document.getElementById("monsterImage");
 
 // ===== 初期処理 =====
 function initPlayerSelect() {
@@ -113,11 +115,13 @@ menu.addEventListener("click", (e) => {
 });
 
 function executeTraining(trainType) {
+  if (!(trainType in status)) return;
   status[trainType]++;
   saveStatus();
   updateStatusView();
   showResult("レベルアップ！💪");
 }
+
 
 // ===== クエスト =====
 function startQuest() {
@@ -169,6 +173,7 @@ function backToPlayerSelect() {
   playerNameText.textContent = ""; // 表示クリア
   currentPlayer = null;
 }
+
 
 
 
