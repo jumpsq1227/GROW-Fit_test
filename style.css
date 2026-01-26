@@ -159,6 +159,7 @@ button:hover{
 .result{
   font-size: 20px;
   margin: 20px 0;
+  white-space: pre-line; /* 改行可能にする */
 }
 .result-image{
   width: 120px;
@@ -203,6 +204,7 @@ button:hover{
   margin-top: 6px;
   opacity: 0.95;
 }
+
 
 
 
