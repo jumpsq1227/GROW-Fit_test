@@ -271,7 +271,7 @@ function battle() {
   const heroLv = status.run + status.chest + status.back + status.leg;
   const monster = monsterList[currentMonsterIndex];
   if (heroLv >= monster.level) {
-    worldRecovery = Math.min(100, worldRecovery + 2);　// 勝利報酬：回復率 +2%
+    worldRecovery = Math.min(100, worldRecovery + 2); // 勝利報酬：回復率 +2%
     updateWorldView();
     if (currentMonsterIndex < monsterList.length - 1) {
       currentMonsterIndex++;
@@ -283,7 +283,7 @@ function battle() {
        <span class="heal">ジムが2%回復した</span>`
     );
   } else {
-    showResult("負けてしまった…😵\n ちょっとパンプアップが足りないみたいだ！");
+    showResult("負けてしまった…😵<br> ちょっとパンプアップが足りないみたいだ！");
   }
 }
 
@@ -341,6 +341,7 @@ resetAllBtn.addEventListener("click", () => {
 
   alert("全プレイヤーを初期化しました。");
 });
+
 
 
 
