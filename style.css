@@ -157,8 +157,8 @@ button:hover{
 }
 
 .result{
-  font-size: 20px;
-  margin: 20px 0;
+  font-size: 14px;
+  margin: 10px 0;
   white-space: pre-line; /* 改行可能にする */
 }
 
@@ -183,7 +183,7 @@ button:hover{
 .world-recovery{
   margin-top: 12px;
   text-align: left;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .world-label{
@@ -208,9 +208,11 @@ button:hover{
 }
 
 .streak-text{
+  font-size: 14px;
   margin-top: 6px;
   opacity: 0.95;
 }
+
 
 
 
