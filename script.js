@@ -28,7 +28,7 @@ const trainingInfo = {
   chest:{ label: "胸筋", image: "images/chest.png" },
   back: { label: "背筋", image: "images/back.png" },
   leg:  { label: "脚力", image: "images/leg.png" },
-  walk: { label: "ウォーキング", image: "images/run.png" }
+  walk: { label: "ウォーキング", image: "images/walk.png" }
 };
 
 // ===== モンスター一覧 =====
@@ -380,6 +380,7 @@ resetAllBtn.addEventListener("click", () => {
 
   alert("全プレイヤーを初期化しました。");
 });
+
 
 
 
