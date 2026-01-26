@@ -52,6 +52,14 @@ function playSE(se) {
   se.play();
 }
 
+// ===== ジム城ビジュアル定義 =====
+const gymStages = [
+  { min: 0,   max: 19,  image: "images/gym/gym_stage1.png" }, // 荒廃
+  { min: 20,  max: 39,  image: "images/gym/gym_stage2.png" }, // 再建
+  { min: 40,  max: 59,  image: "images/gym/gym_stage3.png" }, // 活気
+  { min: 60,  max: 99,  image: "images/gym/gym_stage4.png" }, // 豪華
+  { min: 100, max: 100, image: "images/gym/gym_stage5.png" } // 100%専用
+];
 
 // ===== DOM =====
 const playerSelectScreen = document.getElementById("playerSelectScreen");
@@ -74,6 +82,9 @@ const streakDaysText = document.getElementById("streakDaysText");
 const resultText = document.getElementById("resultText");
 const monsterName = document.getElementById("monsterName");
 const monsterImage = document.getElementById("monsterImage");
+
+const gymScreen = document.getElementById("gym-screen");
+const gymImage  = document.getElementById("gym-Image");
 
 // ===== 初期処理 =====
 function initPlayerSelect() {
@@ -326,9 +337,27 @@ function battle() {
   }
 }
 
+function getGymImageByRecovery(recovery) {
+  return gymStages.find(stage => recovery >= stage.min && recovery <= stage.max)?.image;
+}
+
 function visitGym() {
+  // 復興度バー更新
+  const v = Math.max(0, Math.min(100, worldRecovery));
+  document.querySelectorAll("#gym-screen #worldRecoveryText")
+    .forEach(el => el.textContent = `${v}%`);
+  document.querySelectorAll("#gym-screen #worldRecoveryFill")
+    .forEach(el => el.style.width = `${v}%`);
+
+  // ジム画像切り替え
+  const img = getGymImageByRecovery(v);
+  gymImage.src = img;
+  gymImage.classList.remove("hidden");
+
+  // 画面切り替え
   switchScreen("gym-screen");
 }
+
 
 // ===== UI =====
 function showResult(html) {
@@ -385,6 +414,7 @@ resetAllBtn.addEventListener("click", () => {
 
   alert("全プレイヤーを初期化しました。");
 });
+
 
 
 
