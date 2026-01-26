@@ -145,7 +145,7 @@ function executeTraining(trainType) {
   // 表示用データ取得
   const info = trainingInfo[trainType];
   // テキスト
-  resultText.textContent = `${info.label} がレベルアップ！💪`;
+  resultText.textContent = `今日もお疲れ様！${info.label} がパンプアップした！`;
   // 画像
   const resultImage = document.getElementById("resultImage");
   resultImage.src = info.image;
@@ -171,9 +171,9 @@ function battle() {
       currentMonsterIndex++;
     }
     saveStatus();
-    showResult(`勝利！🎉 ${monster.name}を倒した！`);
+    showResult(`やったー！🎉 ${monster.name}を倒した！`);
   } else {
-    showResult("敗北…😵 もっと鍛えよう");
+    showResult("負けてしまった…😵 ちょっとパンプアップが足りないみたいだ！");
   }
 }
 
@@ -203,6 +203,7 @@ function backToPlayerSelect() {
   playerNameText.textContent = ""; // 表示クリア
   currentPlayer = null;
 }
+
 
 
 
