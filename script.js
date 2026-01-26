@@ -247,7 +247,7 @@ function executeTraining(trainType) {
   // 表示用データ取得
   const info = trainingInfo[trainType];
   // テキスト
-  resultText.textContent = `今日もお疲れ様！\n${info.label} がパンプアップした！`;
+  resultText.textContent = `今日もお疲れ様！\n${info.label} がパンプアップした！\nジムが1%回復した`;
   // 画像
   const resultImage = document.getElementById("resultImage");
   resultImage.src = info.image;
@@ -277,7 +277,7 @@ function battle() {
     saveStatus();
     showResult(`やったー！🎉 ${monster.name}を倒した！`);
   } else {
-    showResult("負けてしまった…😵 ちょっとパンプアップが足りないみたいだ！");
+    showResult("負けてしまった…😵\n ちょっとパンプアップが足りないみたいだ！");
   }
 }
 
@@ -335,6 +335,7 @@ resetAllBtn.addEventListener("click", () => {
 
   alert("全プレイヤーを初期化しました。");
 });
+
 
 
 
