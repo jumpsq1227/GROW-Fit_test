@@ -213,6 +213,12 @@ button:hover{
   opacity: 0.95;
 }
 
+/* ジム画面専用：復興度バーを細くする */
+#gym-screen .hpbar{
+  max-width: 320px;   /* メイン画面と同じ幅 */
+  margin: 8px auto;   /* 中央寄せ */
+}
+
 .gym-image{
   width: 100%;
   max-width: 360px;
@@ -220,6 +226,7 @@ button:hover{
   image-rendering: pixelated;
   display: block;
 }
+
 
 
 
