@@ -276,8 +276,8 @@ function executeTraining(trainType) {
   if (!isWalk) {
     updateAvatarByTopStatus(trainType);
     resultText.innerHTML =
-      `今日もお疲れ様！\n${info.label} がパンプアップした！<br>
-       <span class="heal">自販機からプロテイン2本を購入し、\nジムが2%復興した</span>`;
+      `今日もお疲れ様！\n${info.label} がパンプアップ！<br>
+       <span class="heal">自販機からプロテイン2本を購入\nジムが2%復興した</span>`;
   } else {
     resultText.innerHTML =
       `今日もお疲れ様！<br>
@@ -319,7 +319,7 @@ function battle() {
     showResult(
       `やったー！<br>
        ${monster.name}を<span class="heal">${muscleName}</span>で倒した！<br>
-       <span class="heal">ドロップしたプロテイン3本を使って、\nジムが3%復興した</span>`
+       <span class="heal">プロテイン3本をドロップ\nジムが3%復興した</span>`
     );
   } else {
     showResult("負けてしまった…😵<br> パンプアップが足りないみたいだ！");
@@ -380,6 +380,7 @@ resetAllBtn.addEventListener("click", () => {
 
   alert("全プレイヤーを初期化しました。");
 });
+
 
 
 
