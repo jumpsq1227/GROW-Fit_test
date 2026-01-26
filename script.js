@@ -278,7 +278,8 @@ function battle() {
     }
     saveStatus();
     showResult(
-      `やったー！ ${monster.name}を倒した！<br>
+      `やったー！<br>
+       ${monster.name}を倒した！<br>
        <span class="heal">ジムが2%回復した</span>`
     );
   } else {
@@ -340,6 +341,7 @@ resetAllBtn.addEventListener("click", () => {
 
   alert("全プレイヤーを初期化しました。");
 });
+
 
 
 
