@@ -24,22 +24,11 @@ const muscleLabel = {
 
 // ===== トレーニング定義 =====
 const trainingInfo = {
-  run: {
-    label: "体力",
-    image: "images/run.png"
-  },
-  chest: {
-    label: "胸筋",
-    image: "images/chest.png"
-  },
-  back: {
-    label: "背筋",
-    image: "images/back.png"
-  },
-  leg: {
-    label: "脚力",
-    image: "images/leg.png"
-  }
+  run: { label: "体力", image: "images/run.png" },
+  chest:{ label: "胸筋", image: "images/chest.png" },
+  back: { label: "背筋", image: "images/back.png" },
+  leg:  { label: "脚力", image: "images/leg.png" },
+  walk: { label: "ウォーキング", image: "images/run.png" }
 };
 
 // ===== モンスター一覧 =====
@@ -133,7 +122,7 @@ startBtn.addEventListener("click", () => {
   mainScreen.classList.remove("hidden");
 });
 
-// ===== 保存 =====
+// ===== ステータス保存 =====
 function saveStatus() {
   const saveData = {
     status: status,
@@ -245,11 +234,17 @@ menu.addEventListener("click", (e) => {
   executeTraining(trainType);
   menu.classList.add("hidden");
 });
-function executeTraining(trainType) {
-  if (!(trainType in status)) return;
-  // レベルアップ処理
-  status[trainType]++;
 
+function executeTraining(trainType) {
+  // ★ walk は status に無いので先に分岐
+  const isWalk = (trainType === "walk");
+  // walk以外は従来通りステータスがある前提
+  if (!isWalk && !(trainType in status)) return;
+  // ===== ステータス更新（walkはしない）=====
+  if (!isWalk) {
+    status[trainType]++;
+  }
+  
   // ===== ストリーク更新（1日1回カウント）=====
   const todayKey = getTodayKeyTokyo();
   if (!lastTrainingDate) {
@@ -264,20 +259,31 @@ function executeTraining(trainType) {
     streakDays = 1;
     lastTrainingDate = todayKey;
   }
-  // ===== ジム城回復率（今はトレーニングで +1%）=====
-  worldRecovery = Math.min(100, worldRecovery + 2);
+  
+  // ===== ジム城回復率：walkは+1、他は+2 =====
+  const before = worldRecovery;
+  const inc = isWalk ? 1 : 2;
+  worldRecovery = Math.min(100, worldRecovery + inc);
+  const gained = worldRecovery - before;
   
   saveStatus();
   updateStatusView();
   updateWorldView();
-  updateAvatarByTopStatus(trainType); 
-  
+
   // 表示用データ取得
   const info = trainingInfo[trainType];
-  // テキスト
-  resultText.innerHTML =
-    `今日もお疲れ様！${info.label} がパンプアップした！<br>
-     <span class="heal">自販機からプロテイン2本を購入し、ジムが2%回復した</span>`;
+  
+  if (!isWalk) {
+    updateAvatarByTopStatus(trainType);
+    resultText.innerHTML =
+      `今日もお疲れ様！${info.label} がパンプアップした！<br>
+       <span class="heal">自販機からプロテイン2本を購入し、ジムが2%回復した</span>`;
+  } else {
+    resultText.innerHTML =
+      `今日もお疲れ様！<br>
+       <span class="heal">姫からプロテイン1本をもらって、ジムが1%回復した</span>`;
+  }
+  
   // 画像
   const resultImage = document.getElementById("resultImage");
   resultImage.src = info.image;
@@ -374,6 +380,7 @@ resetAllBtn.addEventListener("click", () => {
 
   alert("全プレイヤーを初期化しました。");
 });
+
 
 
 
