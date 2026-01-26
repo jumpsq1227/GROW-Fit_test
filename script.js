@@ -2,7 +2,7 @@
 const players = ["おがわ", "すずき", "たなか"];
 let currentPlayer = null;
 
-// 初期ステータス
+// 初期ステータス（プレイヤー、ジム）
 const defaultStatus = {
   run: 1,
   chest: 1,
@@ -10,6 +10,9 @@ const defaultStatus = {
   leg: 1
 };
 let status = { ...defaultStatus };
+let worldRecovery = 0;     // 0〜100
+let streakDays = 0;        // 連続継続日数
+let lastTrainingDate = null; // "YYYY-MM-DD" 形式
 
 // ===== トレーニング定義 =====
 const trainingInfo = {
@@ -67,6 +70,10 @@ const backLv = document.getElementById("backLv");
 const legLv = document.getElementById("legLv");
 const avatarImage = document.getElementById("avatarImage");
 
+const worldRecoveryText = document.getElementById("worldRecoveryText");
+const worldRecoveryFill = document.getElementById("worldRecoveryFill");
+const streakDaysText = document.getElementById("streakDaysText");
+
 const resultText = document.getElementById("resultText");
 const monsterName = document.getElementById("monsterName");
 const monsterImage = document.getElementById("monsterImage");
@@ -82,6 +89,26 @@ function initPlayerSelect() {
 }
 initPlayerSelect();
 
+// ===== 日付取得 =====
+function getTodayKeyTokyo() {
+  const parts = new Intl.DateTimeFormat("ja-JP", {timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit"}).formatToParts(new Date());
+  const y = parts.find(p => p.type === "year").value;
+  const m = parts.find(p => p.type === "month").value;
+  const d = parts.find(p => p.type === "day").value;
+  return `${y}-${m}-${d}`;
+}
+function isYesterdayTokyo(lastKey, todayKey){
+  const toDate = (key) => {
+    const [y,m,d] = key.split("-").map(Number);
+    return new Date(y, m-1, d);
+  };
+  const last = toDate(lastKey);
+  const today = toDate(todayKey);
+  const diffDays = Math.round((today - last) / (1000*60*60*24));
+  return diffDays === 1;
+}
+
+
 // ===== プレイヤー選択 =====
 startBtn.addEventListener("click", () => {
   if (!playerSelect.value) {
@@ -91,6 +118,7 @@ startBtn.addEventListener("click", () => {
   currentPlayer = playerSelect.value;
   loadStatus();
   updateStatusView();
+  updateWorldView();
   updateAvatarByTopStatus();
   playerNameText.textContent = `トレーニー：${currentPlayer}`;
   playerSelectScreen.classList.add("hidden");
@@ -101,7 +129,10 @@ startBtn.addEventListener("click", () => {
 function saveStatus() {
   const saveData = {
     status: status,
-    monsterIndex: currentMonsterIndex
+    monsterIndex: currentMonsterIndex,
+    worldRecovery: worldRecovery,
+    streakDays: streakDays,
+    lastTrainingDate: lastTrainingDate,
   };
   localStorage.setItem(
     `muscleRPG_${currentPlayer}`,
@@ -116,11 +147,19 @@ function loadStatus() {
     const parsed = JSON.parse(data);
     status = parsed.status ?? { ...defaultStatus };
     currentMonsterIndex = parsed.monsterIndex ?? 0;
+
+    worldRecovery = parsed.worldRecovery ?? 0;
+    streakDays = parsed.streakDays ?? 0;
+    lastTrainingDate = parsed.lastTrainingDate ?? null;
   } else {
     status = { ...defaultStatus };
     currentMonsterIndex = 0;
+    worldRecovery = 0;
+    streakDays = 0;
+    lastTrainingDate = null;
   }
 }
+
 
 // ===== ステータスの更新 =====
 function updateStatusView() {
@@ -128,6 +167,13 @@ function updateStatusView() {
   chestLv.textContent = status.chest;
   backLv.textContent = status.back;
   legLv.textContent = status.leg;
+}
+
+function updateWorldView(){
+  const v = Math.max(0, Math.min(100, worldRecovery));
+  worldRecoveryText.textContent = `${v}%`;
+  worldRecoveryFill.style.width = `${v}%`;
+  streakDaysText.textContent = String(streakDays);
 }
 
 // ===== アバター画像変更 =====
@@ -175,8 +221,27 @@ function executeTraining(trainType) {
   if (!(trainType in status)) return;
   // レベルアップ処理
   status[trainType]++;
+
+  // ===== ストリーク更新（1日1回カウント）=====
+  const todayKey = getTodayKeyTokyo();
+  if (!lastTrainingDate) {
+    streakDays = 1;
+    lastTrainingDate = todayKey;
+  } else if (lastTrainingDate === todayKey) {
+    // 同じ日に2回以上トレしてもストリークは増やさない（仕様）
+  } else if (isYesterdayTokyo(lastTrainingDate, todayKey)) {
+    streakDays += 1;
+    lastTrainingDate = todayKey;
+  } else {
+    streakDays = 1;
+    lastTrainingDate = todayKey;
+  }
+  // ===== ジム城回復率（今はトレーニングで +1%）=====
+  worldRecovery = Math.min(100, worldRecovery + 1);
+  
   saveStatus();
   updateStatusView();
+  updateWorldView();
   updateAvatarByTopStatus(); 
   
   // 表示用データ取得
@@ -259,11 +324,13 @@ resetAllBtn.addEventListener("click", () => {
 
   // 画面に反映（メイン側にいた場合でも整合が取れるように）
   updateStatusView();
+  updateWorldView();
   updateAvatarByTopStatus();
   playerNameText.textContent = "";
 
   alert("全プレイヤーを初期化しました。");
 });
+
 
 
 
