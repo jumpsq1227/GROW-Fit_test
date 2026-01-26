@@ -213,6 +213,16 @@ button:hover{
   opacity: 0.95;
 }
 
+.gym-image{
+  width: 100%;
+  max-width: 360px;
+  margin: 16px auto;
+  image-rendering: pixelated;
+  display: block;
+}
+
+
+
 
 
 
