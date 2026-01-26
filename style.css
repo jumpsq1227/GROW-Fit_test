@@ -168,7 +168,7 @@ button:hover{
 }
 
 .result-image{
-  width: 120px;
+  width: 180px;
   margin: 10px auto;
   image-rendering: pixelated;
 }
@@ -212,6 +212,7 @@ button:hover{
   margin-top: 6px;
   opacity: 0.95;
 }
+
 
 
 
