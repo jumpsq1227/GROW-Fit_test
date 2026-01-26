@@ -145,7 +145,7 @@ function executeTraining(trainType) {
   // 表示用データ取得
   const info = trainingInfo[trainType];
   // テキスト
-  resultText.textContent = `今日もお疲れ様！${info.label} がパンプアップした！`;
+  resultText.textContent = `今日もお疲れ様！\n${info.label} がパンプアップした！`;
   // 画像
   const resultImage = document.getElementById("resultImage");
   resultImage.src = info.image;
@@ -203,6 +203,7 @@ function backToPlayerSelect() {
   playerNameText.textContent = ""; // 表示クリア
   currentPlayer = null;
 }
+
 
 
 
