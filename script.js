@@ -326,6 +326,10 @@ function battle() {
   }
 }
 
+function visitGym() {
+  switchScreen("gym-screen");
+}
+
 // ===== UI =====
 function showResult(html) {
   resultText.innerHTML = html;
@@ -338,7 +342,7 @@ function backToMain() {
 }
 
 function switchScreen(id) {
-  ["main-screen", "quest-screen", "result-screen"].forEach(s =>
+  ["main-screen", "quest-screen", "result-screen", "gym-screen"].forEach(s =>
     document.getElementById(s).classList.add("hidden")
   );
   document.getElementById(id).classList.remove("hidden");
@@ -348,6 +352,7 @@ function backToPlayerSelect() {
   document.getElementById("main-screen").classList.add("hidden");
   document.getElementById("quest-screen").classList.add("hidden");
   document.getElementById("result-screen").classList.add("hidden");
+  document.getElementById("gym-screen").classList.add("hidden");
   document.getElementById("playerSelectScreen").classList.remove("hidden");
   playerNameText.textContent = ""; // 表示クリア
   currentPlayer = null;
@@ -380,6 +385,7 @@ resetAllBtn.addEventListener("click", () => {
 
   alert("全プレイヤーを初期化しました。");
 });
+
 
 
 
