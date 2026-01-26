@@ -39,6 +39,7 @@ const monsterList = [
   { name: "ぽっちゃりドラゴン", level: 20, image: "images/monster/dragon.png" },
   { name: "魔王", level: 28, image: "images/monster/maou.png" },
   { name: "ボディービルダー", level: 35, image: "images/monster/bodybuilder.png" },
+  { name: "ボディービルダー【強】", level: 35, image: "images/monster/bodybuilder2.png" },
 ];
 let currentMonsterIndex = 0;
 
@@ -416,6 +417,7 @@ resetAllBtn.addEventListener("click", () => {
 
   alert("全プレイヤーを初期化しました。");
 });
+
 
 
 
