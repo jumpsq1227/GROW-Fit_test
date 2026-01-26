@@ -14,6 +14,14 @@ let worldRecovery = 0;     // 0〜100
 let streakDays = 0;        // 連続継続日数
 let lastTrainingDate = null; // "YYYY-MM-DD" 形式
 
+// ===== マッスル定義 =====
+const muscleLabel = {
+  run: "体力",
+  chest: "胸筋",
+  back: "背筋",
+  leg: "脚力"
+};
+
 // ===== トレーニング定義 =====
 const trainingInfo = {
   run: {
@@ -160,6 +168,26 @@ function loadStatus() {
   }
 }
 
+// ===== 最も育っている筋肉の読み込み =====
+function getTopMuscle(preferType = null) {
+  const types = ["run", "chest", "back", "leg"];
+
+  // 最大レベルを取得
+  let maxLv = -Infinity;
+  for (const t of types) {
+    if (status[t] > maxLv) maxLv = status[t];
+  }
+
+  // 同率トップを列挙
+  const topTypes = types.filter(t => status[t] === maxLv);
+
+  // 優先指定があればそれを採用
+  if (preferType && topTypes.includes(preferType)) {
+    return preferType;
+  }
+  return topTypes[0];
+}
+
 
 // ===== ステータスの更新 =====
 function updateStatusView() {
@@ -273,14 +301,19 @@ function battle() {
   if (heroLv >= monster.level) {
     worldRecovery = Math.min(100, worldRecovery + 2); // 勝利報酬：回復率 +2%
     updateWorldView();
+    
+    // 最強筋力を取得
+    const topMuscle = getTopMuscle();
+    const muscleName = muscleLabel[topMuscle];
+    
     if (currentMonsterIndex < monsterList.length - 1) {
       currentMonsterIndex++;
     }
     saveStatus();
     showResult(
       `やったー！<br>
-       ${monster.name}を倒した！<br>
-       <span class="heal">ジムが2%回復した</span>`
+       ${monster.name}を<span class="heal">${muscleName}</span>で倒した！<br>
+       <span class="heal">ジムが${gained}%回復した</span>`
     );
   } else {
     showResult("負けてしまった…😵<br> ちょっとパンプアップが足りないみたいだ！");
@@ -341,6 +374,7 @@ resetAllBtn.addEventListener("click", () => {
 
   alert("全プレイヤーを初期化しました。");
 });
+
 
 
 
