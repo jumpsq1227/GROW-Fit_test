@@ -313,7 +313,7 @@ function battle() {
     showResult(
       `やったー！<br>
        ${monster.name}を<span class="heal">${muscleName}</span>で倒した！<br>
-       <span class="heal">ジムが${gained}%回復した</span>`
+       <span class="heal">ジムが2%回復した</span>`
     );
   } else {
     showResult("負けてしまった…😵<br> ちょっとパンプアップが足りないみたいだ！");
@@ -374,6 +374,7 @@ resetAllBtn.addEventListener("click", () => {
 
   alert("全プレイヤーを初期化しました。");
 });
+
 
 
 
