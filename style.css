@@ -89,8 +89,7 @@ button:hover{
 #playerSelectScreen{
   min-height: 100vh;
   background: url("images/bg_field.png") no-repeat center;
-  background-size: 2000px;
-  text-align: center;
+  background-size: min(90vw, 400px);
 }
 
 #playerSelectScreen > div{
@@ -170,6 +169,7 @@ button:hover{
   width: 80px;
   margin: 20px 0;
 }
+
 
 
 
