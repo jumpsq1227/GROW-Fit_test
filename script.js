@@ -241,6 +241,29 @@ function backToPlayerSelect() {
 }
 
 
+// ===== 全プレイヤーステータスの初期化 =====
+resetAllBtn.addEventListener("click", () => {
+  const ok = confirm("全プレイヤーのステータスと進行状況を初期化します。よろしいですか？");
+  if (!ok) return;
+
+  // 全プレイヤーのセーブデータを削除
+  players.forEach(name => {
+    localStorage.removeItem(`muscleRPG_${name}`);
+  });
+
+  // 画面上の状態も初期化（念のため）
+  currentPlayer = null;
+  status = { ...defaultStatus };
+  currentMonsterIndex = 0;
+
+  // 画面に反映（メイン側にいた場合でも整合が取れるように）
+  updateStatusView();
+  updateAvatarByTopStatus();
+  playerNameText.textContent = "";
+
+  alert("全プレイヤーを初期化しました。");
+});
+
 
 
 
