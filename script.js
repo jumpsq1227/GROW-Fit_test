@@ -54,6 +54,8 @@ function playSE(se) {
 
 // ===== DOM =====
 const playerSelectScreen = document.getElementById("playerSelectScreen");
+const resetAllBtn = document.getElementById("resetAllBtn");
+
 const mainScreen = document.getElementById("main-screen");
 const playerSelect = document.getElementById("playerSelect");
 const playerNameText = document.getElementById("playerNameText");
@@ -237,6 +239,7 @@ function backToPlayerSelect() {
   playerNameText.textContent = ""; // 表示クリア
   currentPlayer = null;
 }
+
 
 
 
