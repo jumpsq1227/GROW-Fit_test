@@ -226,6 +226,14 @@ button:hover{
   image-rendering: pixelated;
   display: block;
 }
+.gym-comment{
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-line;   /* ← これが重要 */
+  opacity: 0.95;
+}
+
 
 
 
