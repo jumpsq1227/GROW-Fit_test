@@ -1,169 +1,175 @@
-html, body {
+/* =========================
+   Base
+========================= */
+:root{
+  --bg1:#1b2735;
+  --bg2:#090a0f;
+
+  --txt:#fff;
+  --black:#000;
+
+  --ui-bg:#222;
+  --ui-bg-hover:#444;
+
+  --border:#fff;
+  --panel: rgba(0,0,0,0.5);
+
+  --shadow: 2px 2px 0 var(--black);
+}
+
+html, body{
   margin: 0;
   min-height: 100svh;
 }
 
-body {
+body{
   font-family: "PixelMplus10", monospace;
-  background: linear-gradient(#1b2735, #090a0f);
-  background-repeat: no-repeat;
-  color: white;
+  background: linear-gradient(var(--bg1), var(--bg2)) no-repeat;
+  color: var(--txt);
   text-align: center;
 }
 
-/* プレイヤー選択画面の設定 */
-#playerSelectScreen {
-  min-height: 100vh;
-  background-image: url("images/bg_field.png");
-  background-repeat: no-repeat;
-  background-size: 2000px;
-  background-position: center;
-}
-
-
-#playerSelectScreen > div,
-#playerSelectScreen {
-  text-align: center;
-}
-
-#playerSelectScreen h1 {
-  font-size: 32px;
-  margin-bottom: 20px;
-  text-shadow: 2px 2px #000;
-}
-
-#playerSelectScreen select {
-  font-size: 18px;
-  padding: 10px 14px;
-  margin-bottom: 16px;
-  background: #111;
-  color: #fff;
-  border: 3px solid #fff;
-  box-shadow: 0 0 0 3px #000 inset;
-}
-
-#playerSelectScreen button {
-  font-size: 18px;
-  padding: 10px 20px;
-  background: #222;
-  color: white;
-  border: 3px solid white;
-  cursor: pointer;
-}
-
-#playerSelectScreen button:hover {
-  background: #444;
-}
-
-.btn-training {
-  background: linear-gradient(#2ecc71, #27ae60);
-  border: 2px solid #1e8449;
-  color: #fff;
-}
-
-.btn-training:hover {
-  background: linear-gradient(#58d68d, #2ecc71);
-}
-
-.btn-quest {
-  background: linear-gradient(#e74c3c, #c0392b);
-  border: 2px solid #922b21;
-  color: #fff;
-}
-
-.btn-quest:hover {
-  background: linear-gradient(#ec7063, #e74c3c);
-}
-
-
-.screen {
+/* =========================
+   Common utilities
+========================= */
+.screen{
   padding: 20px;
   min-height: 100vh;
 }
 
-.hidden {
-  display: none;
-}
+.hidden{ display:none; }
 
-.title {
+.title,
+#playerSelectScreen h1{
   font-size: 32px;
   margin-bottom: 10px;
-  text-shadow: 2px 2px #000;
+  text-shadow: var(--shadow);
 }
 
-.back-player-btn {
+/* =========================
+   Common form controls
+   （select/buttonの二重定義を一本化）
+========================= */
+select,
+button{
+  font-size: 16px;
+  padding: 8px 12px;
+  margin: 6px;
+  background: var(--ui-bg);
+  color: var(--txt);
+  border: 2px solid var(--border);
+  cursor: pointer;
+}
+
+button:hover{
+  background: var(--ui-bg-hover);
+}
+
+/* プレイヤー選択だけ少し大きくしたい場合 */
+#playerSelectScreen select,
+#playerSelectScreen button{
+  font-size: 18px;
+  padding: 10px 14px;
+}
+
+#playerSelectScreen button{
+  padding: 10px 20px;
+}
+
+/* select専用の“枠の内側影”が必要ならここに集約 */
+#playerSelectScreen select{
+  background: #111;
+  border-width: 3px;
+  box-shadow: 0 0 0 3px var(--black) inset;
+}
+
+/* =========================
+   Player Select Screen
+========================= */
+#playerSelectScreen{
+  min-height: 100vh;
+  background: url("images/bg_field.png") no-repeat center;
+  background-size: 2000px;
+  text-align: center;
+}
+
+#playerSelectScreen > div{
+  text-align: center;
+}
+
+/* =========================
+   Button variants
+========================= */
+.btn-training{
+  background: linear-gradient(#2ecc71, #27ae60);
+  border: 2px solid #1e8449;
+  color: #fff;
+}
+.btn-training:hover{
+  background: linear-gradient(#58d68d, #2ecc71);
+}
+
+.btn-quest{
+  background: linear-gradient(#e74c3c, #c0392b);
+  border: 2px solid #922b21;
+  color: #fff;
+}
+.btn-quest:hover{
+  background: linear-gradient(#ec7063, #e74c3c);
+}
+
+/* =========================
+   Components
+========================= */
+.back-player-btn{
   margin-top: 20px;
   font-size: 14px;
   padding: 8px 14px;
   background: #111;
-  color: white;
-  border: 2px solid white;
-  cursor: pointer;
+  border: 2px solid var(--border);
 }
-
-.back-player-btn:hover {
+.back-player-btn:hover{
   background: #333;
 }
 
 /* ステータス＋アバター横並び */
-.status-box {
-  border: 2px solid #fff;
-  padding: 10px;
-  margin: 10px auto;
+.status-box{
   width: 260px;
-  background: rgba(0,0,0,0.5);
+  margin: 10px auto;
+  padding: 10px;
+  border: 2px solid var(--border);
+  background: var(--panel);
 }
-.status-inner {
+.status-inner{
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.status-text {
+.status-text{
   font-size: 14px;
   text-align: left;
 }
-.avatar {
+
+.avatar{
   width: 140px;
   image-rendering: pixelated;
-  filter: drop-shadow(2px 2px 0 #000);
+  filter: drop-shadow(2px 2px 0 var(--black));
 }
 
-select, button {
-  font-size: 16px;
-  padding: 8px 12px;
-  margin: 6px;
-  background: #222;
-  color: white;
-  border: 2px solid white;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #444;
-}
-
-.result {
+.result{
   font-size: 20px;
   margin: 20px 0;
 }
-.result-image {
+.result-image{
   width: 80px;
   margin: 10px auto;
   image-rendering: pixelated;
 }
 
-.monster {
+.monster{
   width: 80px;
   margin: 20px 0;
-} */
-
-
-
-
-
-
-
-
+}
 
 
 
