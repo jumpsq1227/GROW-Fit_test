@@ -85,6 +85,7 @@ const monsterImage = document.getElementById("monsterImage");
 
 const gymScreen = document.getElementById("gym-screen");
 const gymImage  = document.getElementById("gym-Image");
+const gymComment = document.getElementById("gymComment");
 
 // ===== 初期処理 =====
 function initPlayerSelect() {
@@ -337,27 +338,27 @@ function battle() {
   }
 }
 
-function getGymImageByRecovery(recovery) {
-  return gymStages.find(stage => recovery >= stage.min && recovery <= stage.max)?.image;
+function getGymStageByRecovery(recovery) {
+  return gymStages.find(stage => recovery >= stage.min && recovery <= stage.max);
 }
 
+// ===== ジムの見学 =====
 function visitGym() {
-  // 復興度バー更新
   const v = Math.max(0, Math.min(100, worldRecovery));
+  // バー表示
   document.querySelectorAll("#gym-screen #worldRecoveryText")
     .forEach(el => el.textContent = `${v}%`);
   document.querySelectorAll("#gym-screen #worldRecoveryFill")
     .forEach(el => el.style.width = `${v}%`);
-
-  // ジム画像切り替え
-  const img = getGymImageByRecovery(v);
-  gymImage.src = img;
+  // ステージ取得
+  const stage = getGymStageByRecovery(v);
+  // 画像
+  gymImage.src = stage.image;
   gymImage.classList.remove("hidden");
-
-  // 画面切り替え
+  // コメント
+  gymComment.textContent = stage.comment;
   switchScreen("gym-screen");
 }
-
 
 // ===== UI =====
 function showResult(html) {
@@ -414,6 +415,7 @@ resetAllBtn.addEventListener("click", () => {
 
   alert("全プレイヤーを初期化しました。");
 });
+
 
 
 
