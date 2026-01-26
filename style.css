@@ -133,7 +133,7 @@ button:hover{
 
 /* ステータス＋アバター横並び */
 .status-box{
-  width: 260px;
+  width: 320px;
   margin: 10px auto;
   padding: 10px;
   border: 2px solid var(--border);
@@ -171,6 +171,7 @@ button:hover{
   display: block;
   margin: 16px auto;
 }
+
 
 
 
