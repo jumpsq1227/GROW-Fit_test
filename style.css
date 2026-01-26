@@ -166,9 +166,11 @@ button:hover{
 }
 
 .monster{
-  width: 80px;
-  margin: 20px 0;
+  width: 120px;
+  display: block;
+  margin: 16px auto;
 }
+
 
 
 
