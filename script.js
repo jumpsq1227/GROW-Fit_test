@@ -265,7 +265,7 @@ function executeTraining(trainType) {
     lastTrainingDate = todayKey;
   }
   // ===== ジム城回復率（今はトレーニングで +1%）=====
-  worldRecovery = Math.min(100, worldRecovery + 1);
+  worldRecovery = Math.min(100, worldRecovery + 2);
   
   saveStatus();
   updateStatusView();
@@ -277,7 +277,7 @@ function executeTraining(trainType) {
   // テキスト
   resultText.innerHTML =
     `今日もお疲れ様！${info.label} がパンプアップした！<br>
-     <span class="heal">自販機からプロテイン1本を購入し、ジムが1%回復した</span>`;
+     <span class="heal">自販機からプロテイン2本を購入し、ジムが2%回復した</span>`;
   // 画像
   const resultImage = document.getElementById("resultImage");
   resultImage.src = info.image;
@@ -299,7 +299,7 @@ function battle() {
   const heroLv = status.run + status.chest + status.back + status.leg;
   const monster = monsterList[currentMonsterIndex];
   if (heroLv >= monster.level) {
-    worldRecovery = Math.min(100, worldRecovery + 2); // 勝利報酬：回復率 +2%
+    worldRecovery = Math.min(100, worldRecovery + 3); // 勝利報酬：回復率 +2%
     updateWorldView();
     
     // 最強筋力を取得
@@ -313,7 +313,7 @@ function battle() {
     showResult(
       `やったー！<br>
        ${monster.name}を<span class="heal">${muscleName}</span>で倒した！<br>
-       <span class="heal">ドロップしたプロテイン2本を使って、ジムが2%回復した</span>`
+       <span class="heal">ドロップしたプロテイン3本を使って、ジムが3%回復した</span>`
     );
   } else {
     showResult("負けてしまった…😵<br> ちょっとパンプアップが足りないみたいだ！");
@@ -374,6 +374,7 @@ resetAllBtn.addEventListener("click", () => {
 
   alert("全プレイヤーを初期化しました。");
 });
+
 
 
 
