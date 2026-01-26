@@ -38,7 +38,7 @@ const trainingInfo = {
 const monsterList = [
   { name: "スライム", level: 5, image: "images/monster/slime.png" },
   { name: "がいこつ戦士", level: 7, image: "images/monster/skeleton.png" },
-  { name: "ハンバーガーゴーレム", level: 10, image: "images/monster/skeleton.png" },
+  { name: "ハンバーガーゴーレム", level: 10, image: "images/monster/golem.png" },
   { name: "ぽっちゃりドラゴン", level: 15, image: "images/monster/dragon.png" },
   { name: "魔王", level: 20, image: "images/monster/maou.png" }
 ];
@@ -341,6 +341,7 @@ resetAllBtn.addEventListener("click", () => {
 
   alert("全プレイヤーを初期化しました。");
 });
+
 
 
 
