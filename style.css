@@ -213,6 +213,17 @@ button:hover{
   opacity: 0.95;
 }
 
+/* ===== ジム画面専用 ===== */
+#gym-screen .world-label{
+  display: flex;
+  justify-content: center;   /* 中央寄せ */
+  align-items: center;
+  gap: 6px;                  /* 文言と%の間隔 */
+  font-size: 14px;           /* メイン画面と同じ */
+  margin-bottom: 6px;
+  white-space: nowrap;       /* 1行に収める */
+}
+
 /* ジム画面専用：復興度バーを細くする */
 #gym-screen .hpbar{
   max-width: 320px;   /* メイン画面と同じ幅 */
@@ -233,6 +244,7 @@ button:hover{
   white-space: pre-line;   /* ← これが重要 */
   opacity: 0.95;
 }
+
 
 
 
