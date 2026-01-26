@@ -275,7 +275,7 @@ function battle() {
       currentMonsterIndex++;
     }
     saveStatus();
-    showResult(`やったー！🎉 ${monster.name}を倒した！`);
+    showResult(`やったー！\n${monster.name}を倒した！\nジムが2%回復した`);
   } else {
     showResult("負けてしまった…😵\n ちょっとパンプアップが足りないみたいだ！");
   }
@@ -335,6 +335,7 @@ resetAllBtn.addEventListener("click", () => {
 
   alert("全プレイヤーを初期化しました。");
 });
+
 
 
 
