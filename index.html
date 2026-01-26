@@ -66,6 +66,10 @@
     </button>
     
   </div>
+
+  <button class="visit-gym-btn" onclick="visitGym()">
+    ジムを見学する
+  </button>
   
   <button class="back-player-btn" onclick="backToPlayerSelect()">
     プレイヤー選択へ
@@ -87,9 +91,23 @@
   <button onclick="backToMain()">もどる</button>
 </div>
 
+<!-- ===== ジム画面 ===== -->
+<div id="gym-screen" class="screen hidden">
+  <div class="world-label">
+    ジム【GOLD】の復興度 <span id="worldRecoveryText">0%</span>
+  </div>
+  <div class="hpbar">
+    <div class="hpbar-fill" id="worldRecoveryFill" style="width:0%"></div>
+  </div>
+  <img id="gym-Image" class="gym-image hidden">
+  <p id="resultText" class="result"></p>
+  <button onclick="backToMain()">もどる</button>
+</div>
+  
 <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
