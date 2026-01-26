@@ -119,7 +119,7 @@ startBtn.addEventListener("click", () => {
   loadStatus();
   updateStatusView();
   updateWorldView();
-  updateAvatarByTopStatus(trainType);
+  updateAvatarByTopStatus();
   playerNameText.textContent = `トレーニー：${currentPlayer}`;
   playerSelectScreen.classList.add("hidden");
   mainScreen.classList.remove("hidden");
@@ -201,7 +201,7 @@ function updateAvatarByTopStatus(preferType = null) {
   // 保険（画像がないとき）
   avatarImage.onerror = () => {
     avatarImage.onerror = null;
-    avatarImage.src = 'images/player/${chosen}_LvMAX.png';
+    avatarImage.src = `images/player/${chosen}_LvMAX.png`;
   };
 }
 
@@ -269,6 +269,8 @@ function battle() {
   const heroLv = status.run + status.chest + status.back + status.leg;
   const monster = monsterList[currentMonsterIndex];
   if (heroLv >= monster.level) {
+    worldRecovery = Math.min(100, worldRecovery + 2);　// 勝利報酬：回復率 +2%
+    updateWorldView();
     if (currentMonsterIndex < monsterList.length - 1) {
       currentMonsterIndex++;
     }
@@ -333,6 +335,7 @@ resetAllBtn.addEventListener("click", () => {
 
   alert("全プレイヤーを初期化しました。");
 });
+
 
 
 
