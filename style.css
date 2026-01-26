@@ -161,6 +161,12 @@ button:hover{
   margin: 20px 0;
   white-space: pre-line; /* 改行可能にする */
 }
+
+.result .heal {
+  color: #2ecc71;           /* 回復っぽい緑 */
+  font-weight: bold;
+}
+
 .result-image{
   width: 120px;
   margin: 10px auto;
@@ -204,6 +210,7 @@ button:hover{
   margin-top: 6px;
   opacity: 0.95;
 }
+
 
 
 
