@@ -62,6 +62,8 @@ const HPLv = document.getElementById("HPLv");
 const chestLv = document.getElementById("chestLv");
 const backLv = document.getElementById("backLv");
 const legLv = document.getElementById("legLv");
+const avatarImage = document.getElementById("avatarImage");
+
 const resultText = document.getElementById("resultText");
 const monsterName = document.getElementById("monsterName");
 const monsterImage = document.getElementById("monsterImage");
@@ -77,7 +79,7 @@ function initPlayerSelect() {
 }
 initPlayerSelect();
 
-// ===== プレイヤー開始 =====
+// ===== プレイヤー選択 =====
 startBtn.addEventListener("click", () => {
   if (!playerSelect.value) {
     alert("プレイヤーを選択してください");
@@ -86,6 +88,7 @@ startBtn.addEventListener("click", () => {
   currentPlayer = playerSelect.value;
   loadStatus();
   updateStatusView();
+  updateAvatarByTopStatus();
   playerNameText.textContent = `トレーニー：${currentPlayer}`;
   playerSelectScreen.classList.add("hidden");
   mainScreen.classList.remove("hidden");
@@ -103,7 +106,7 @@ function saveStatus() {
   );
 }
 
-// ===== 読み込み =====
+// ===== プレイヤー情報の読み込み =====
 function loadStatus() {
   const data = localStorage.getItem(`muscleRPG_${currentPlayer}`);
   if (data) {
@@ -116,12 +119,41 @@ function loadStatus() {
   }
 }
 
-// ===== 表示 =====
+// ===== ステータスの更新 =====
 function updateStatusView() {
   HPLv.textContent = status.run;
   chestLv.textContent = status.chest;
   backLv.textContent = status.back;
   legLv.textContent = status.leg;
+}
+
+// ===== アバター画像変更 =====
+function updateAvatarByTopStatus(preferType = null) {
+  const types = ["run", "chest", "back", "leg"];
+
+  // まず最大レベルを求める
+  let maxLv = -Infinity;
+  for (const t of types) {
+    if (status[t] > maxLv) maxLv = status[t];
+  }
+
+  // 最大レベルの候補を集める（同率トップ）
+  const topTypes = types.filter(t => status[t] === maxLv);
+
+  // preferType が同率トップに含まれていれば優先
+  let chosen = topTypes[0];
+  if (preferType && topTypes.includes(preferType)) {
+    chosen = preferType;
+  }
+
+  const lv = status[chosen];
+  avatarImage.src = `images/${chosen}_Lv${lv}.png`;
+
+  // 保険（画像がないとき）
+  avatarImage.onerror = () => {
+    avatarImage.onerror = null;
+    avatarImage.src = "images/player/max.png";
+  };
 }
 
 // ===== トレーニング =====
@@ -142,6 +174,8 @@ function executeTraining(trainType) {
   status[trainType]++;
   saveStatus();
   updateStatusView();
+  updateAvatarByTopStatus(); 
+  
   // 表示用データ取得
   const info = trainingInfo[trainType];
   // テキスト
@@ -203,6 +237,7 @@ function backToPlayerSelect() {
   playerNameText.textContent = ""; // 表示クリア
   currentPlayer = null;
 }
+
 
 
 
