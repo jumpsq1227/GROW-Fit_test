@@ -58,7 +58,7 @@ const gymStages = [
   { min: 25,  max: 49,  image: "images/gym/gym_stage2.png",  comment: "あれ、筋肉の妖精が現れたようだ..." }, // 再建
   { min: 50,  max: 74,  image: "images/gym/gym_stage3.png",  comment: "あなたの頑張りでジムの復興が進み、\n筋肉の妖精が増えたようだ" }, // 活気
   { min: 75,  max: 99,  image: "images/gym/gym_stage4.png",  comment: "ジムは復興間近のようだ！\n筋肉の妖精が入会が増えてきた" }, // 豪華
-  { min: 100, max: 100, image: "images/gym/gym_stage5.png",  comment: "ジムは完全に復興した！\n豪華絢爛なジムには筋肉の妖精でにぎわっている" } // 100%専用
+  { min: 100, max: 100, image: "images/gym/gym_stage5.png",  comment: "ジムは完全に復興した！\n豪華絢爛なジムには筋肉の妖精でにぎわっている\nマッスリーヌ姫：「ありがとう…ジムが息を吹き返しました！」" } // 100%専用
 ];
 
 // ===== DOM =====
@@ -415,6 +415,7 @@ resetAllBtn.addEventListener("click", () => {
 
   alert("全プレイヤーを初期化しました。");
 });
+
 
 
 
