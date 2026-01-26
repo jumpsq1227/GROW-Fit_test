@@ -119,7 +119,7 @@ startBtn.addEventListener("click", () => {
   loadStatus();
   updateStatusView();
   updateWorldView();
-  updateAvatarByTopStatus();
+  updateAvatarByTopStatus(trainType);
   playerNameText.textContent = `トレーニー：${currentPlayer}`;
   playerSelectScreen.classList.add("hidden");
   mainScreen.classList.remove("hidden");
@@ -201,7 +201,7 @@ function updateAvatarByTopStatus(preferType = null) {
   // 保険（画像がないとき）
   avatarImage.onerror = () => {
     avatarImage.onerror = null;
-    avatarImage.src = "images/player/${chosen}_LvMAX.png`";
+    avatarImage.src = 'images/player/${chosen}_LvMAX.png';
   };
 }
 
@@ -242,7 +242,7 @@ function executeTraining(trainType) {
   saveStatus();
   updateStatusView();
   updateWorldView();
-  updateAvatarByTopStatus(); 
+  updateAvatarByTopStatus(trainType); 
   
   // 表示用データ取得
   const info = trainingInfo[trainType];
@@ -321,6 +321,9 @@ resetAllBtn.addEventListener("click", () => {
   currentPlayer = null;
   status = { ...defaultStatus };
   currentMonsterIndex = 0;
+  worldRecovery = 0;
+  streakDays = 0;
+  lastTrainingDate = null;
 
   // 画面に反映（メイン側にいた場合でも整合が取れるように）
   updateStatusView();
@@ -330,6 +333,7 @@ resetAllBtn.addEventListener("click", () => {
 
   alert("全プレイヤーを初期化しました。");
 });
+
 
 
 
