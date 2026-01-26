@@ -147,12 +147,12 @@ function updateAvatarByTopStatus(preferType = null) {
   }
 
   const lv = status[chosen];
-  avatarImage.src = `images/${chosen}_Lv${lv}.png`;
+  avatarImage.src = `images/player/${chosen}_Lv${lv}.png`;
 
   // 保険（画像がないとき）
   avatarImage.onerror = () => {
     avatarImage.onerror = null;
-    avatarImage.src = "images/player/max.png";
+    avatarImage.src = "images/player/${chosen}_LvMAX.png`";
   };
 }
 
@@ -237,6 +237,7 @@ function backToPlayerSelect() {
   playerNameText.textContent = ""; // 表示クリア
   currentPlayer = null;
 }
+
 
 
 
