@@ -21,21 +21,21 @@
 
 <!-- ===== ステータス・アバター欄 ===== -->
 <div class="status-box">
+        <!-- ジム回復率 -->
+  <div class="world-recovery">
+    <div class="world-label">
+      ジム回復率 <span id="worldRecoveryText">0%</span>
+    </div>
+    <div class="hpbar">
+      <div class="hpbar-fill" id="worldRecoveryFill" style="width:0%"></div>
+    </div>
+    <div class="streak-text">
+      連続トレ：<span id="streakDaysText">0</span>日
+    </div>
+  </div>
   <div class="status-inner">
     <!-- ステータス -->
     <div class="status-text">
-      <!-- ジム回復率 -->
-      <div class="world-recovery">
-        <div class="world-label">
-          ジム回復率 <span id="worldRecoveryText">0%</span>
-        </div>
-        <div class="hpbar">
-          <div class="hpbar-fill" id="worldRecoveryFill" style="width:0%"></div>
-        </div>
-        <div class="streak-text">
-          連続トレ：<span id="streakDaysText">0</span>日
-        </div>
-      </div>
       <!-- プレイヤーのステータス -->
       <p>体力 Lv <span id="HPLv">1</span></p>
       <p>胸筋 Lv <span id="chestLv">1</span></p>
@@ -89,6 +89,7 @@
 <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
