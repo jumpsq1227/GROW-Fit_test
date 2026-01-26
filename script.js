@@ -288,8 +288,8 @@ function battle() {
 }
 
 // ===== UI =====
-function showResult(text) {
-  resultText.textContent = text;
+function showResult(html) {
+  resultText.innerHTML = html;
   switchScreen("result-screen");
 }
 
@@ -341,6 +341,7 @@ resetAllBtn.addEventListener("click", () => {
 
   alert("全プレイヤーを初期化しました。");
 });
+
 
 
 
