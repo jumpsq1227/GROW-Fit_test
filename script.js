@@ -277,7 +277,7 @@ function executeTraining(trainType) {
   // テキスト
   resultText.innerHTML =
     `今日もお疲れ様！${info.label} がパンプアップした！<br>
-     <span class="heal">ジムが1%回復した</span>`;
+     <span class="heal">自販機からプロテイン1本を購入し、ジムが1%回復した</span>`;
   // 画像
   const resultImage = document.getElementById("resultImage");
   resultImage.src = info.image;
@@ -313,7 +313,7 @@ function battle() {
     showResult(
       `やったー！<br>
        ${monster.name}を<span class="heal">${muscleName}</span>で倒した！<br>
-       <span class="heal">ジムが2%回復した</span>`
+       <span class="heal">ドロップしたプロテイン2本を使って、ジムが2%回復した</span>`
     );
   } else {
     showResult("負けてしまった…😵<br> ちょっとパンプアップが足りないみたいだ！");
@@ -374,6 +374,7 @@ resetAllBtn.addEventListener("click", () => {
 
   alert("全プレイヤーを初期化しました。");
 });
+
 
 
 
