@@ -65,6 +65,17 @@ body {
   background: linear-gradient(#58d68d, #2ecc71);
 }
 
+.btn-quest {
+  background: linear-gradient(#e74c3c, #c0392b);
+  border: 2px solid #922b21;
+  color: #fff;
+}
+
+.btn-quest:hover {
+  background: linear-gradient(#ec7063, #e74c3c);
+}
+
+
 .screen {
   padding: 20px;
   min-height: 100vh;
@@ -145,6 +156,7 @@ button:hover {
   width: 80px;
   margin: 20px 0;
 } */
+
 
 
 
