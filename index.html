@@ -44,21 +44,27 @@
     </div>
 
     <!-- アバター -->
-    <img src="images/base.png" class="avatar" id="avatarImage">
-    
-    <!-- ===== アイテム欄 ===== -->
-    <div class="item-box">
-      <button id="itemToggleBtn" class="btn-item">アイテム ▼</button>
-      <div id="itemMenu" class="item-menu hidden">
+    <div class="avatar-wrap" id="avatarWrap">
+      <img src="images/base.png" class="avatar" id="avatarImage">
+      <!-- 右上チップ（常時表示） -->
+      <button id="itemToggleBtn" class="item-chip" type="button" aria-label="アイテムを開く">
+        🥤×0
+      </button>
+      <!-- 小ポップ（押したら開く） -->
+      <div id="itemMenu" class="item-pop hidden" role="dialog" aria-label="アイテム">
+        <div class="item-pop-title">アイテム</div>
         <div class="item-row">
-          <span>超回復スポドリLv2：</span>
-          <span id="drinkCountText">0</span>
-          <button id="useDrinkBtn">使う（次回復興率2倍）</button>
+          <span>超回復スポドリ</span>
+          <span class="item-count">×<span id="drinkCountText">0</span></span>
         </div>
-        <div class="item-hint" id="itemHintText"></div>
+        <div id="itemHintText" class="item-hint">
+          プロテインスライムを倒すとスポドリを入手できます。
+        </div>
+        <button id="useDrinkBtn" class="item-use" type="button">
+          使う（次回復興2倍）
+        </button>
       </div>
     </div>
-
   </div>
 </div>
 
@@ -125,6 +131,7 @@
 <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
