@@ -10,7 +10,7 @@ let streakDays = 0;          // 連続継続日数
 let lastTrainingDate = null; // "YYYY-MM-DD"
 
 // ===== アイテム =====
-let superDrinkCount = 0;        // 超回復スポドリ所持数
+let superDrinkCount = 1;        // 超回復スポドリ所持数
 let doubleNextTraining = false; // 次回トレ復興2倍フラグ（1回消費）
 
 // ===== プロテインスライム（特別遭遇）=====
@@ -49,13 +49,13 @@ const trainingInfo = {
 // ===== モンスター一覧（通常進行）=====
 const monsterList = [
   { name: "スライム", level: 5, image: "images/monster/slime.png" },
-  { name: "ゴースト", level: 8, image: "images/monster/ghost.png" },
-  { name: "ハンバーガーゴーレム", level: 10, image: "images/monster/golem.png" },
-  { name: "がいこつ戦士", level: 15, image: "images/monster/skeleton.png" },
+  { name: "ゴースト", level: 9, image: "images/monster/ghost.png" },
+  { name: "ハンバーガーゴーレム", level: 12, image: "images/monster/golem.png" },
+  { name: "がいこつ戦士", level: 16, image: "images/monster/skeleton.png" },
   { name: "ぽっちゃりドラゴン", level: 20, image: "images/monster/dragon.png" },
   { name: "魔王", level: 28, image: "images/monster/maou.png" },
   { name: "ボディービルダー", level: 35, image: "images/monster/bodybuilder.png" },
-  { name: "ボディービルダー【強】", level: 35, image: "images/monster/bodybuilder2.png" },
+  { name: "ボディービルダー【強】", level: 42, image: "images/monster/bodybuilder2.png" },
 ];
 let currentMonsterIndex = 0;
 
@@ -640,4 +640,5 @@ resetAllBtn.addEventListener("click", () => {
 
   alert("全プレイヤーを初期化しました。");
 });
+
 
