@@ -268,24 +268,41 @@ function maybeShowNewsBanner() {
 
 // ===== アイテムUI =====
 function updateItemView() {
-  if (!drinkCountText || !useDrinkBtn || !itemHintText) return;
-
+  if (!drinkCountText || !useDrinkBtn || !itemHintText || !itemToggleBtn) return;
+  // 所持数表示
   drinkCountText.textContent = String(superDrinkCount);
-
+  // チップ（常時表示）
+  itemToggleBtn.textContent = `🥤×${superDrinkCount}`;
+  // 発動中ならチップを強調
+  if (doubleNextTraining) itemToggleBtn.classList.add("on");
+  else itemToggleBtn.classList.remove("on");
+  // 「使う」ボタンの活性制御
   const disabled = (superDrinkCount <= 0) || doubleNextTraining;
   useDrinkBtn.disabled = disabled;
-  useDrinkBtn.style.opacity = disabled ? 0.6 : 1.0;
-
+  // 説明文
   if (doubleNextTraining) {
     itemHintText.textContent = "【発動中】次回トレーニングのジム復興が2倍！";
+  } else if (superDrinkCount > 0) {
+    itemHintText.textContent = "使うと、次回トレーニングのジム復興が2倍になります。";
   } else {
     itemHintText.textContent = "プロテインスライムを倒すとスポドリを入手できます。";
   }
 }
 
 if (itemToggleBtn && itemMenu) {
-  itemToggleBtn.addEventListener("click", () => {
+  // チップを押したら開閉（ポップ内クリックは閉じない）
+  itemToggleBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
     itemMenu.classList.toggle("hidden");
+  });
+  itemMenu.addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
+  // 画面のどこかを押したら閉じる
+  document.addEventListener("click", () => {
+    if (!itemMenu.classList.contains("hidden")) {
+      itemMenu.classList.add("hidden");
+    }
   });
 }
 
@@ -640,5 +657,6 @@ resetAllBtn.addEventListener("click", () => {
 
   alert("全プレイヤーを初期化しました。");
 });
+
 
 
