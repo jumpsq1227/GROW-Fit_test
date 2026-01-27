@@ -331,6 +331,9 @@ button:hover{
   box-shadow: 2px 2px 0 #000;
   /* これがないと中身が押し広げてゴチャつく */
   box-sizing: border-box;
+  text-align: left;
+}
+
 }
 
 /* 文字量で縦に伸びても綺麗に */
@@ -357,6 +360,7 @@ button:hover{
   opacity: 0.6;
   cursor: not-allowed;
 }
+
 
 
 
