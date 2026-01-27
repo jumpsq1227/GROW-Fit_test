@@ -303,6 +303,86 @@ button:hover{
   opacity: 0.95;
 }
 
+/* ===== アイテム：アバター右上チップ＋小ポップ ===== */
+.avatar-wrap{
+  position: relative;
+  display: inline-block;
+  line-height: 0;           /* 余計な隙間防止 */
+}
+
+.item-chip{
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  font-size: 12px;
+  padding: 4px 6px;
+  margin: 0;
+  border: 2px solid #fff;
+  background: rgba(0,0,0,0.65);
+  box-shadow: 2px 2px 0 #000;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.item-chip.on{
+  border-color: #2ecc71;
+  box-shadow: 0 0 0 2px #000, 0 0 10px rgba(46,204,113,0.6);
+}
+
+.item-pop{
+  position: absolute;
+  top: 34px;
+  right: 6px;
+  width: 200px;
+  padding: 10px;
+  background: rgba(0,0,0,0.85);
+  border: 2px solid #fff;
+  box-shadow: 2px 2px 0 #000;
+  z-index: 50;
+  text-align: left;
+}
+
+.item-pop-title{
+  font-size: 13px;
+  margin-bottom: 8px;
+  opacity: 0.95;
+}
+
+.item-row{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.item-count{
+  font-weight: bold;
+}
+
+.item-hint{
+  font-size: 12px;
+  opacity: 0.9;
+  line-height: 1.4;
+  margin: 6px 0 8px;
+}
+
+.item-use{
+  width: 100%;
+  font-size: 12px;
+  padding: 8px 10px;
+  margin: 0;
+  background: linear-gradient(#2ecc71, #27ae60);
+  border: 2px solid #1e8449;
+}
+.item-use:hover{
+  background: linear-gradient(#58d68d, #2ecc71);
+}
+.item-use:disabled{
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 
 
 
