@@ -314,7 +314,7 @@ button:hover{
   position: absolute;
   top: 6px;
   right: 6px;
-  transform: translateX(-55px);
+  transform: translateX(-80px);
 }
 
 
@@ -357,6 +357,7 @@ button:hover{
   opacity: 0.6;
   cursor: not-allowed;
 }
+
 
 
 
