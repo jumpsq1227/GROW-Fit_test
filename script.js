@@ -17,7 +17,7 @@ let doubleNextTraining = false; // 次回トレ復興2倍フラグ（1回消費�
 const proteinSlime = {
   name: "プロテインスライム",
   level: 1,
-  image: "images/monster/muscleslime.png", // 画像を用意できるまで既存スライム流用
+  image: "images/monster/proteinslime.png", // 画像を用意できるまで既存スライム流用
   special: "protein"
 };
 
@@ -33,7 +33,6 @@ const SLIME = {
   kStreak: 0.25,   // 継続寄与（streak/30）
   cooldownDays: 2  // 連日で出ないようにする
 };
-
 
 // ===== マッスル定義 =====
 const muscleLabel = { run: "体力", chest: "胸筋", back: "背筋", leg: "脚力" };
@@ -396,7 +395,7 @@ function battle() {
         `やったー！<br>
          <span class="heal">プロテインスライム</span>を倒した！<br>
          <span class="heal">超回復スポドリ</span>を手に入れた！<br>
-         <span class="heal">（任意で使用：次回トレのジム復興2倍）</span>`
+         <span class="heal">（次回トレのジム復興2倍）</span>`
       );
       return;
     }
@@ -663,6 +662,7 @@ resetAllBtn.addEventListener("click", () => {
 
   alert("全プレイヤーを初期化しました。");
 });
+
 
 
 
