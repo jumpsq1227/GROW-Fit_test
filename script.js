@@ -206,7 +206,7 @@ function rollProteinSlimeIfNeeded() {
 }
 
 // ===== 近況バナー（フェイク）=====
-function makeFakeActivityText(name) {
+function makeFakeActivityText() {
   const actions = ["胸トレ", "背中トレ", "脚トレ", "ランニング", "ウォーキング"];
   const when = ["先ほど", "さっき", "今日", "少し前に"][Math.floor(Math.random() * 4)];
   const a = actions[Math.floor(Math.random() * actions.length)];
@@ -525,7 +525,6 @@ function executeTraining(trainType) {
 
 // ===== クエスト =====
 function startQuest() {
-  // ★ここを修正：proteinSlimeReadyならプロテインスライム
   const monster = proteinSlimeReady ? proteinSlime : monsterList[currentMonsterIndex];
   monsterName.textContent = `${monster.name} Lv ${monster.level}`;
   monsterImage.src = monster.image;
@@ -557,7 +556,7 @@ function battle() {
       return;
     }
 
-    // 通常勝利：従来通り
+    // 通常勝利
     worldRecovery = Math.min(100, worldRecovery + 3);
     updateWorldView();
 
@@ -657,6 +656,7 @@ resetAllBtn.addEventListener("click", () => {
 
   alert("全プレイヤーを初期化しました。");
 });
+
 
 
 
