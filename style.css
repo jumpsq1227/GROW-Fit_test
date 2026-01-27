@@ -311,9 +311,10 @@ button:hover{
 }
 /* チップはアバタ左上 */
 .item-chip{
-  top: 22px;
-  right: 22px;
-  transform: translateX(-28px);
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  transform: translateX(-30px); /* ← ここだけ調整 */
 }
 
 
@@ -356,6 +357,7 @@ button:hover{
   opacity: 0.6;
   cursor: not-allowed;
 }
+
 
 
 
