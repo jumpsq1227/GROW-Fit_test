@@ -304,76 +304,49 @@ button:hover{
 }
 
 /* ===== アイテム：アバター右上チップ＋小ポップ ===== */
+/* アバター基準（ここが基準になってないと absolute が崩れる） */
 .avatar-wrap{
   position: relative;
   display: inline-block;
-  line-height: 0;           /* 余計な隙間防止 */
 }
-
+/* チップはアバター右上 */
 .item-chip{
   position: absolute;
   top: 6px;
   right: 6px;
-  font-size: 12px;
-  padding: 4px 6px;
-  margin: 0;
-  border: 2px solid #fff;
-  background: rgba(0,0,0,0.65);
-  box-shadow: 2px 2px 0 #000;
-  border-radius: 4px;
-  white-space: nowrap;
+  z-index: 60;
 }
-
-.item-chip.on{
-  border-color: #2ecc71;
-  box-shadow: 0 0 0 2px #000, 0 0 10px rgba(46,204,113,0.6);
-}
-
+/* ポップは “レイアウトに参加させない” */
 .item-pop{
   position: absolute;
   top: 34px;
   right: 6px;
-  width: 200px;
+  z-index: 70;
+  width: 190px;
   padding: 10px;
-  background: rgba(0,0,0,0.85);
+  background: rgba(0,0,0,0.9);
   border: 2px solid #fff;
   box-shadow: 2px 2px 0 #000;
-  z-index: 50;
-  text-align: left;
+  /* これがないと中身が押し広げてゴチャつく */
+  box-sizing: border-box;
 }
 
+/* 文字量で縦に伸びても綺麗に */
+.item-hint{
+  margin: 6px 0 8px;
+  white-space: normal;
+}
+/* 「アイテム」見出しが大きいと詰まるので小さく */
 .item-pop-title{
-  font-size: 13px;
-  margin-bottom: 8px;
-  opacity: 0.95;
-}
-
-.item-row{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   font-size: 12px;
   margin-bottom: 6px;
+  opacity: 0.95;
 }
-
-.item-count{
-  font-weight: bold;
-}
-
-.item-hint{
-  font-size: 12px;
-  opacity: 0.9;
-  line-height: 1.4;
-  margin: 6px 0 8px;
-}
-
+/* ボタンは1行固定に */
 .item-use{
   width: 100%;
+  white-space: nowrap;
   font-size: 12px;
-  padding: 8px 10px;
-  margin: 0;
-  background: linear-gradient(#2ecc71, #27ae60);
-  border: 2px solid #1e8449;
 }
 .item-use:hover{
   background: linear-gradient(#58d68d, #2ecc71);
@@ -382,6 +355,7 @@ button:hover{
   opacity: 0.6;
   cursor: not-allowed;
 }
+
 
 
 
