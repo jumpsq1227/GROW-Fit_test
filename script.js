@@ -281,11 +281,11 @@ function updateItemView() {
   useDrinkBtn.disabled = disabled;
   // 説明文
   if (doubleNextTraining) {
-    itemHintText.textContent = "【発動中】次回トレーニングのジム復興が2倍！";
+    itemHintText.textContent = "【発動中】次回トレーニングの効果が2倍！";
   } else if (superDrinkCount > 0) {
-    itemHintText.textContent = "使うと、次回トレーニングのジム復興が2倍になります。";
+    itemHintText.textContent = "使うと、トレーニング後の復興度が2倍。";
   } else {
-    itemHintText.textContent = "プロテインスライムを倒すとスポドリを入手できます。";
+    itemHintText.textContent = "プロテインスライムを倒すと入手できます。";
   }
 }
 
@@ -657,6 +657,7 @@ resetAllBtn.addEventListener("click", () => {
 
   alert("全プレイヤーを初期化しました。");
 });
+
 
 
 
