@@ -309,13 +309,13 @@ button:hover{
   position: relative;
   display: inline-block;
 }
-/* チップはアバター右上 */
+/* チップはアバタ左上 */
 .item-chip{
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  transform: translateX(-18px); /* ← ここだけ調整 */
+  top: 22px;
+  right: 22px;
+  transform: translateX(-28px);
 }
+
 
 /* ポップは “レイアウトに参加させない” */
 .item-pop{
@@ -356,6 +356,7 @@ button:hover{
   opacity: 0.6;
   cursor: not-allowed;
 }
+
 
 
 
