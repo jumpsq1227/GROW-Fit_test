@@ -1,461 +1,552 @@
-(() => {
-  /**********************
-   * 1) 定数（ゲーム定義）
-   **********************/
-  const PLAYERS = ["おがわ", "すずき", "たなか"];
+// プレイヤー管理
+const players = ["おがわ", "すずき", "たなか"];
+let currentPlayer = null;
 
-  const DEFAULT = {
-    status: { run: 1, chest: 1, back: 1, leg: 1 },
-    monsterIndex: 0,
-    worldRecovery: 0,
-    streakDays: 0,
-    lastTrainingDate: null,
+// 初期ステータス（プレイヤー、ジム）
+const defaultStatus = { run: 1, chest: 1, back: 1, leg: 1 };
+let status = { ...defaultStatus };
+let worldRecovery = 0;       // 0〜100
+let streakDays = 0;          // 連続継続日数
+let lastTrainingDate = null; // "YYYY-MM-DD"
 
-    // アイテム
-    superDrinkCount: 0,         // 新規プレイだけ 1 にしたい場合は loadで制御
-    doubleNextTraining: false,
+// ===== アイテム =====
+let superDrinkCount = 0;        // 超回復スポドリ所持数
+let doubleNextTraining = false; // 次回トレ復興2倍フラグ（1回消費）
 
-    // プロテインスライム
-    proteinSlimeReady: false,
-    lastSlimeRollDate: null,
-    slimeCooldownUntil: null,
+// ===== プロテインスライム（特別遭遇）=====
+const proteinSlime = {
+  name: "プロテインスライム",
+  level: 1,
+  image: "images/monster/proteinslime.png",
+  special: "protein"
+};
+
+let proteinSlimeReady = false;  // 次のクエストがプロテインスライムになる
+let lastSlimeRollDate = null;   // 1日1回抽選（YYYY-MM-DD）
+let slimeCooldownUntil = null;  // epoch ms（連続出現抑制）
+
+// ===== 信頼性・公平性ベースの出現率パラメータ =====
+const SLIME = {
+  pMin: 0.08,      // 継続者の最低保証（毎日8%程度）
+  pMax: 0.45,      // 出過ぎ防止
+  kRisk: 0.55,     // 離脱リスク寄与
+  kStreak: 0.25,   // 継続寄与（streak/30）
+  cooldownDays: 2  // 連日で出ないようにする
+};
+
+// ===== マッスル定義 =====
+const muscleLabel = { run: "体力", chest: "胸筋", back: "背筋", leg: "脚力" };
+
+// ===== トレーニング定義 =====
+const trainingInfo = {
+  run: { label: "体力", image: "images/run.png" },
+  chest: { label: "胸筋", image: "images/chest.png" },
+  back: { label: "背筋", image: "images/back.png" },
+  leg: { label: "脚力", image: "images/leg.png" },
+  walk: { label: "ウォーキング", image: "images/walk.png" }
+};
+
+// ===== モンスター一覧（通常進行）=====
+const monsterList = [
+  { name: "スライム", level: 5, image: "images/monster/slime.png" },
+  { name: "ゴースト", level: 9, image: "images/monster/ghost.png" },
+  { name: "ハンバーガーゴーレム", level: 12, image: "images/monster/golem.png" },
+  { name: "がいこつ戦士", level: 16, image: "images/monster/skeleton.png" },
+  { name: "ぽっちゃりドラゴン", level: 20, image: "images/monster/dragon.png" },
+  { name: "魔王", level: 28, image: "images/monster/maou.png" },
+  { name: "ボディービルダー", level: 35, image: "images/monster/bodybuilder.png" },
+  { name: "ボディービルダー【強】", level: 42, image: "images/monster/bodybuilder2.png" },
+];
+let currentMonsterIndex = 0;
+
+// ===== SE =====
+const seLevelUp = new Audio("sounds/levelup.mp3");
+const seWin = new Audio("sounds/win.mp3");
+const seLose = new Audio("sounds/lose.mp3");
+
+// 連続再生対策
+function playSE(se) {
+  try {
+    se.currentTime = 0;
+    se.play();
+  } catch (e) {
+    // 自動再生制限がある環境では無視
+  }
+}
+
+// ===== ジム城ビジュアル定義 =====
+const gymStages = [
+  { min: 0, max: 24, image: "images/gym/gym_stage1.png", comment: "ジムはまだ復興が始まったばかりだ！" },
+  { min: 25, max: 49, image: "images/gym/gym_stage2.png", comment: "あれ、筋肉の妖精が現れたようだ..." },
+  { min: 50, max: 74, image: "images/gym/gym_stage3.png", comment: "あなたの頑張りでジムの復興が進み、\n筋肉の妖精が増えたようだ" },
+  { min: 75, max: 99, image: "images/gym/gym_stage4.png", comment: "ジムは復興間近のようだ！\n筋肉の妖精が入会が増えてきた" },
+  { min: 100, max: 100, image: "images/gym/gym_stage5.png", comment: "ジムは完全に復興した！\n豪華絢爛なジムには筋肉の妖精でにぎわっている\nマッスリーヌ姫：「ありがとう…ジムが息を吹き返しました！」" }
+];
+
+// ===== DOM =====
+const playerSelectScreen = document.getElementById("playerSelectScreen");
+const resetAllBtn = document.getElementById("resetAllBtn");
+
+const mainScreen = document.getElementById("main-screen");
+const playerSelect = document.getElementById("playerSelect");
+const playerNameText = document.getElementById("playerNameText");
+const startBtn = document.getElementById("startBtn");
+
+const HPLv = document.getElementById("HPLv");
+const chestLv = document.getElementById("chestLv");
+const backLv = document.getElementById("backLv");
+const legLv = document.getElementById("legLv");
+const avatarImage = document.getElementById("avatarImage");
+
+const worldRecoveryText = document.getElementById("worldRecoveryText");
+const worldRecoveryFill = document.getElementById("worldRecoveryFill");
+const streakDaysText = document.getElementById("streakDaysText");
+
+const resultText = document.getElementById("resultText");
+const monsterName = document.getElementById("monsterName");
+const monsterImage = document.getElementById("monsterImage");
+
+const gymScreen = document.getElementById("gym-screen");
+const gymImage = document.getElementById("gym-Image");
+const gymComment = document.getElementById("gymComment");
+
+const itemToggleBtn = document.getElementById("itemToggleBtn");
+const itemMenu = document.getElementById("itemMenu");
+const drinkCountText = document.getElementById("drinkCountText");
+const useDrinkBtn = document.getElementById("useDrinkBtn");
+const itemHintText = document.getElementById("itemHintText");
+
+const newsBanner = document.getElementById("newsBanner");
+
+// ===== 初期処理 =====
+function initPlayerSelect() {
+  players.forEach(name => {
+    const option = document.createElement("option");
+    option.value = name;
+    option.textContent = name;
+    playerSelect.appendChild(option);
+  });
+}
+initPlayerSelect();
+
+// ===== 日付 =====
+function getTodayKeyTokyo() {
+  const parts = new Intl.DateTimeFormat("ja-JP", { timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date());
+  const y = parts.find(p => p.type === "year").value;
+  const m = parts.find(p => p.type === "month").value;
+  const d = parts.find(p => p.type === "day").value;
+  return `${y}-${m}-${d}`;
+}
+
+function isYesterdayTokyo(lastKey, todayKey) {
+  const toDate = (key) => {
+    const [y, m, d] = key.split("-").map(Number);
+    return new Date(y, m - 1, d);
   };
+  const last = toDate(lastKey);
+  const today = toDate(todayKey);
+  const diffDays = Math.round((today - last) / (1000 * 60 * 60 * 24));
+  return diffDays === 1;
+}
 
-  const TRAINING = {
-    run:  { label: "体力", image: "images/run.png" },
-    chest:{ label: "胸筋", image: "images/chest.png" },
-    back: { label: "背筋", image: "images/back.png" },
-    leg:  { label: "脚力", image: "images/leg.png" },
-    walk: { label: "ウォーキング", image: "images/walk.png" },
+function diffDaysTokyo(fromKey, toKey) {
+  const toDate = (key) => {
+    const [y, m, d] = key.split("-").map(Number);
+    return new Date(y, m - 1, d);
   };
+  const from = toDate(fromKey);
+  const to = toDate(toKey);
+  return Math.round((to - from) / (1000 * 60 * 60 * 24));
+}
 
-  const MUSCLE_LABEL = { run: "体力", chest: "胸筋", back: "背筋", leg: "脚力" };
+// ===== 数学ユーティリティ =====
+function clamp(x, lo, hi) { return Math.max(lo, Math.min(hi, x)); }
+function sigmoid(x) { return 1 / (1 + Math.exp(-x)); }
 
-  const MONSTERS = [
-    { name: "スライム", level: 5,  image: "images/monster/slime.png" },
-    { name: "ゴースト", level: 9,  image: "images/monster/ghost.png" },
-    { name: "ハンバーガーゴーレム", level: 12, image: "images/monster/golem.png" },
-    { name: "がいこつ戦士", level: 16, image: "images/monster/skeleton.png" },
-    { name: "ぽっちゃりドラゴン", level: 20, image: "images/monster/dragon.png" },
-    { name: "魔王", level: 28, image: "images/monster/maou.png" },
-    { name: "ボディービルダー", level: 35, image: "images/monster/bodybuilder.png" },
-    { name: "ボディービルダー【強】", level: 42, image: "images/monster/bodybuilder2.png" },
-  ];
+// ===== 信頼性工学（簡易）リスク推定 =====
+function calcDropoutRiskApprox() {
+  const todayKey = getTodayKeyTokyo();
+  let gapDays = 0;
+  if (lastTrainingDate) gapDays = Math.max(0, diffDaysTokyo(lastTrainingDate, todayKey));
 
-  const PROTEIN_SLIME = {
-    name: "プロテインスライム",
-    level: 1,
-    image: "images/monster/proteinslime.png",
-    special: "protein",
-  };
+  const heroLv = status.run + status.chest + status.back + status.leg;
+  const nextMonster = monsterList[Math.min(currentMonsterIndex, monsterList.length - 1)];
+  const ratio = (nextMonster.level + 1) / (heroLv + 1);
+  const deltaD = Math.max(0, Math.log(ratio));
 
-  const SLIME = {
-    pMin: 0.08,
-    pMax: 0.45,
-    kRisk: 0.55,
-    kStreak: 0.25,
-    cooldownDays: 2,
-  };
+  const supportB = worldRecovery + 2.0 * streakDays;
+  const x = -2.2 + 1.3 * deltaD + 0.25 * gapDays - 0.03 * supportB;
+  return clamp(sigmoid(x), 0, 1);
+}
 
-  const seLevelUp = new Audio("sounds/levelup.mp3");
-  const seWin = new Audio("sounds/win.mp3");
-  const seLose = new Audio("sounds/lose.mp3");
+// ===== プロテインスライム抽選（1日1回 / 公平+必要の混合モデル）=====
+function rollProteinSlimeIfNeeded() {
+  const todayKey = getTodayKeyTokyo();
+  if (lastSlimeRollDate === todayKey) return;
+  if (proteinSlimeReady) { lastSlimeRollDate = todayKey; return; }
 
-  /**********************
-   * 2) state（実行時の状態）
-   **********************/
-  const state = {
-    currentPlayer: null,
-    ...structuredClone(DEFAULT),
-  };
-
-  /**********************
-   * 3) DOM（参照はまとめる）
-   **********************/
-  const el = {
-    playerSelectScreen: document.getElementById("playerSelectScreen"),
-    resetAllBtn: document.getElementById("resetAllBtn"),
-
-    mainScreen: document.getElementById("main-screen"),
-    playerSelect: document.getElementById("playerSelect"),
-    playerNameText: document.getElementById("playerNameText"),
-    startBtn: document.getElementById("startBtn"),
-
-    HPLv: document.getElementById("HPLv"),
-    chestLv: document.getElementById("chestLv"),
-    backLv: document.getElementById("backLv"),
-    legLv: document.getElementById("legLv"),
-    avatarImage: document.getElementById("avatarImage"),
-
-    worldRecoveryText: document.getElementById("worldRecoveryText"),
-    worldRecoveryFill: document.getElementById("worldRecoveryFill"),
-    streakDaysText: document.getElementById("streakDaysText"),
-
-    resultText: document.getElementById("resultText"),
-    monsterName: document.getElementById("monsterName"),
-    monsterImage: document.getElementById("monsterImage"),
-
-    gymScreen: document.getElementById("gym-screen"),
-    gymImage: document.getElementById("gym-Image"),
-    gymComment: document.getElementById("gymComment"),
-
-    // アイテム（チップ＋ポップ）
-    itemToggleBtn: document.getElementById("itemToggleBtn"),
-    itemMenu: document.getElementById("itemMenu"),
-    drinkCountText: document.getElementById("drinkCountText"),
-    useDrinkBtn: document.getElementById("useDrinkBtn"),
-    itemHintText: document.getElementById("itemHintText"),
-
-    // 近況
-    newsBanner: document.getElementById("newsBanner"),
-
-    // training menu
-    trainingToggleBtn: document.getElementById("trainingToggleBtn"),
-    trainingMenu: document.getElementById("trainingMenu"),
-
-    resultImage: document.getElementById("resultImage"),
-  };
-
-  /**********************
-   * 4) 共通ユーティリティ
-   **********************/
-  const clamp = (x, lo, hi) => Math.max(lo, Math.min(hi, x));
-  const sigmoid = (x) => 1 / (1 + Math.exp(-x));
-
-  function playSE(se) {
-    try { se.currentTime = 0; se.play(); } catch {}
+  const t = Date.now();
+  if (slimeCooldownUntil && t < slimeCooldownUntil) {
+    lastSlimeRollDate = todayKey;
+    return;
   }
 
-  // Tokyoの日付キー
-  function getTodayKeyTokyo() {
-    const parts = new Intl.DateTimeFormat("ja-JP", {
-      timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit",
-    }).formatToParts(new Date());
-    const y = parts.find(p => p.type === "year").value;
-    const m = parts.find(p => p.type === "month").value;
-    const d = parts.find(p => p.type === "day").value;
-    return `${y}-${m}-${d}`;
+  const risk = calcDropoutRiskApprox();
+  const streakTerm = clamp(streakDays / 30, 0, 1);
+
+  const p = clamp(SLIME.pMin + SLIME.kRisk * risk + SLIME.kStreak * streakTerm, SLIME.pMin, SLIME.pMax);
+
+  if (Math.random() < p) {
+    proteinSlimeReady = true;
+    slimeCooldownUntil = t + SLIME.cooldownDays * 24 * 60 * 60 * 1000;
   }
 
-  function diffDaysTokyo(fromKey, toKey) {
-    const toDate = (key) => {
-      const [y, m, d] = key.split("-").map(Number);
-      return new Date(y, m - 1, d);
-    };
-    return Math.round((toDate(toKey) - toDate(fromKey)) / (1000 * 60 * 60 * 24));
+  lastSlimeRollDate = todayKey;
+  saveStatus();
+}
+
+// ===== 近況バナー（フェイク）=====
+function makeFakeActivityText() {
+  const actions = ["胸トレ", "背中トレ", "脚トレ", "ランニング", "ウォーキング"];
+  const when = ["先ほど", "さっき", "今日", "少し前に"][Math.floor(Math.random() * 4)];
+  const a = actions[Math.floor(Math.random() * actions.length)];
+  return `トレーニーおがわは${when}${a}を実行したようだ。`;
+}
+
+function setBanner(text) {
+  if (!newsBanner) return;
+  newsBanner.textContent = text;
+  newsBanner.classList.remove("hidden");
+  setTimeout(() => newsBanner.classList.add("hidden"), 8000);
+}
+
+function loadPlayerData(name) {
+  const raw = localStorage.getItem(`muscleRPG_${name}`);
+  if (!raw) return null;
+  try { return JSON.parse(raw); } catch { return null; }
+}
+
+function calcDropoutRiskForPlayerData(p) {
+  const todayKey = getTodayKeyTokyo();
+  let gapDays = 0;
+  if (p.lastTrainingDate) gapDays = Math.max(0, diffDaysTokyo(p.lastTrainingDate, todayKey));
+
+  const streak = p.streakDays ?? 0;
+  const wr = p.worldRecovery ?? 0;
+
+  const st = p.status ?? { run: 1, chest: 1, back: 1, leg: 1 };
+  const heroLv = (st.run ?? 1) + (st.chest ?? 1) + (st.back ?? 1) + (st.leg ?? 1);
+
+  const idx = p.monsterIndex ?? 0;
+  const m = monsterList[Math.min(idx, monsterList.length - 1)];
+  const ratio = (m.level + 1) / (heroLv + 1);
+  const deltaD = Math.max(0, Math.log(ratio));
+
+  const supportB = wr + 2.0 * streak;
+  const x = -2.2 + 1.3 * deltaD + 0.25 * gapDays - 0.03 * supportB;
+  return clamp(sigmoid(x), 0, 1);
+}
+
+function maybeShowNewsBanner() {
+  if (!newsBanner) return;
+  if (Math.random() > 0.55) return;
+
+  const others = players.filter(n => n !== currentPlayer);
+  const candidates = [];
+
+  for (const n of others) {
+    const data = loadPlayerData(n);
+    if (!data) continue;
+    const risk = calcDropoutRiskForPlayerData(data);
+    if (risk >= 0.45) candidates.push({ name: n, risk });
   }
+  if (candidates.length === 0) return;
 
-  function isYesterdayTokyo(lastKey, todayKey) {
-    return diffDaysTokyo(lastKey, todayKey) === 1;
+  candidates.sort((a, b) => b.risk - a.risk);
+  setBanner(makeFakeActivityText(candidates[0].name));
+}
+
+// ===== アイテムUI =====
+function updateItemView() {
+  if (!drinkCountText || !useDrinkBtn || !itemHintText || !itemToggleBtn) return;
+  // 所持数表示
+  drinkCountText.textContent = String(superDrinkCount);
+  // チップ（常時表示）
+  itemToggleBtn.textContent = `🥤×${superDrinkCount}`;
+  // 発動中ならチップを強調
+  if (doubleNextTraining) itemToggleBtn.classList.add("on");
+  else itemToggleBtn.classList.remove("on");
+  // 「使う」ボタンの活性制御
+  const disabled = (superDrinkCount <= 0) || doubleNextTraining;
+  useDrinkBtn.disabled = disabled;
+  // 説明文
+  if (doubleNextTraining) {
+    itemHintText.textContent = "【発動中】次回トレーニングの効果が2倍！";
+  } else if (superDrinkCount > 0) {
+    itemHintText.textContent = "使うと、トレーニング後の復興度が2倍。";
+  } else {
+    itemHintText.textContent = "プロテインスライムを倒すと入手できます。";
   }
+}
 
-  /**********************
-   * 5) セーブ/ロード（1本化）
-   **********************/
-  const storageKey = (name) => `muscleRPG_${name}`;
+if (itemToggleBtn && itemMenu) {
+  // チップを押したら開閉（ポップ内クリックは閉じない）
+  itemToggleBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    itemMenu.classList.toggle("hidden");
+  });
+  itemMenu.addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
+  // 画面のどこかを押したら閉じる
+  document.addEventListener("click", () => {
+    if (!itemMenu.classList.contains("hidden")) {
+      itemMenu.classList.add("hidden");
+    }
+  });
+}
 
-  function save() {
-    if (!state.currentPlayer) return;
-    localStorage.setItem(storageKey(state.currentPlayer), JSON.stringify({
-      status: state.status,
-      monsterIndex: state.monsterIndex,
-      worldRecovery: state.worldRecovery,
-      streakDays: state.streakDays,
-      lastTrainingDate: state.lastTrainingDate,
-
-      superDrinkCount: state.superDrinkCount,
-      doubleNextTraining: state.doubleNextTraining,
-
-      proteinSlimeReady: state.proteinSlimeReady,
-      lastSlimeRollDate: state.lastSlimeRollDate,
-      slimeCooldownUntil: state.slimeCooldownUntil,
-    }));
-  }
-
-  function load() {
-    const raw = localStorage.getItem(storageKey(state.currentPlayer));
-    if (!raw) {
-      // ★新規プレイ限定：初期スポドリ1個（ここだけでOK）
-      Object.assign(state, structuredClone(DEFAULT));
-      state.superDrinkCount = 1;
+if (useDrinkBtn) {
+  useDrinkBtn.addEventListener("click", () => {
+    if (superDrinkCount <= 0) {
+      if (itemHintText) itemHintText.textContent = "超回復スポドリは持っていません！";
       return;
     }
-    const parsed = JSON.parse(raw);
-
-    // defaultを土台にして上書き → elseブロック不要で短い
-    const merged = { ...structuredClone(DEFAULT), ...parsed };
-    state.status = merged.status;
-    state.monsterIndex = merged.monsterIndex;
-    state.worldRecovery = merged.worldRecovery;
-    state.streakDays = merged.streakDays;
-    state.lastTrainingDate = merged.lastTrainingDate;
-
-    state.superDrinkCount = merged.superDrinkCount;
-    state.doubleNextTraining = merged.doubleNextTraining;
-
-    state.proteinSlimeReady = merged.proteinSlimeReady;
-    state.lastSlimeRollDate = merged.lastSlimeRollDate;
-    state.slimeCooldownUntil = merged.slimeCooldownUntil;
-  }
-
-  /**********************
-   * 6) 信頼性モデル（離脱リスク）
-   *    stateっぽい構造なら何でも評価できるようにする
-   **********************/
-  function calcDropoutRisk(s) {
-    const todayKey = getTodayKeyTokyo();
-    const last = s.lastTrainingDate;
-    const gapDays = last ? Math.max(0, diffDaysTokyo(last, todayKey)) : 0;
-
-    const st = s.status ?? DEFAULT.status;
-    const heroLv = (st.run ?? 1) + (st.chest ?? 1) + (st.back ?? 1) + (st.leg ?? 1);
-
-    const idx = s.monsterIndex ?? 0;
-    const nextMonster = MONSTERS[Math.min(idx, MONSTERS.length - 1)];
-    const ratio = (nextMonster.level + 1) / (heroLv + 1);
-    const deltaD = Math.max(0, Math.log(ratio));
-
-    const wr = s.worldRecovery ?? 0;
-    const streak = s.streakDays ?? 0;
-    const supportB = wr + 2.0 * streak;
-
-    const x = -2.2 + 1.3 * deltaD + 0.25 * gapDays - 0.03 * supportB;
-    return clamp(sigmoid(x), 0, 1);
-  }
-
-  /**********************
-   * 7) プロテインスライム抽選（1日1回）
-   **********************/
-  function rollProteinSlimeIfNeeded() {
-    const todayKey = getTodayKeyTokyo();
-    if (state.lastSlimeRollDate === todayKey) return;
-    if (state.proteinSlimeReady) { state.lastSlimeRollDate = todayKey; return; }
-
-    const t = Date.now();
-    if (state.slimeCooldownUntil && t < state.slimeCooldownUntil) {
-      state.lastSlimeRollDate = todayKey;
+    if (doubleNextTraining) {
+      if (itemHintText) itemHintText.textContent = "すでに次回2倍が有効です。";
       return;
     }
+    superDrinkCount -= 1;
+    doubleNextTraining = true;
+    saveStatus();
+    updateItemView();
+  });
+}
 
-    const risk = calcDropoutRisk(state);
-    const streakTerm = clamp(state.streakDays / 30, 0, 1);
-    const p = clamp(SLIME.pMin + SLIME.kRisk * risk + SLIME.kStreak * streakTerm, SLIME.pMin, SLIME.pMax);
-
-    if (Math.random() < p) {
-      state.proteinSlimeReady = true;
-      state.slimeCooldownUntil = t + SLIME.cooldownDays * 24 * 60 * 60 * 1000;
-    }
-
-    state.lastSlimeRollDate = todayKey;
-    save();
+// ===== プレイヤー選択 =====
+startBtn.addEventListener("click", () => {
+  if (!playerSelect.value) {
+    alert("プレイヤーを選択してください");
+    return;
   }
+  currentPlayer = playerSelect.value;
 
-  /**********************
-   * 8) UI描画（まとめて呼べる形に）
-   **********************/
-  function getTopMuscle(preferType = null) {
-    const types = ["run", "chest", "back", "leg"];
-    let maxLv = -Infinity;
-    for (const t of types) maxLv = Math.max(maxLv, state.status[t]);
-    const topTypes = types.filter(t => state.status[t] === maxLv);
-    if (preferType && topTypes.includes(preferType)) return preferType;
-    return topTypes[0];
-  }
+  loadStatus();
+  updateStatusView();
+  updateWorldView();
+  updateAvatarByTopStatus();
+  updateItemView();
 
-  function renderStatus() {
-    el.HPLv.textContent = state.status.run;
-    el.chestLv.textContent = state.status.chest;
-    el.backLv.textContent = state.status.back;
-    el.legLv.textContent = state.status.leg;
-  }
+  playerNameText.textContent = `トレーニー：${currentPlayer}`;
+  playerSelectScreen.classList.add("hidden");
+  mainScreen.classList.remove("hidden");
 
-  function renderWorld() {
-    const v = clamp(state.worldRecovery, 0, 100);
-    el.worldRecoveryText.textContent = `${v}%`;
-    el.worldRecoveryFill.style.width = `${v}%`;
-    el.streakDaysText.textContent = String(state.streakDays);
-  }
+  maybeShowNewsBanner();
+});
 
-  function renderAvatar(preferType = null) {
-    const chosen = getTopMuscle(preferType);
-    const lv = state.status[chosen];
-    el.avatarImage.src = `images/player/${chosen}_Lv${lv}.png`;
-    el.avatarImage.onerror = () => {
-      el.avatarImage.onerror = null;
-      el.avatarImage.src = `images/player/${chosen}_LvMAX.png`;
-    };
-  }
+// ===== 保存 =====
+function saveStatus() {
+  const saveData = {
+    status: status,
+    monsterIndex: currentMonsterIndex,
+    worldRecovery: worldRecovery,
+    streakDays: streakDays,
+    lastTrainingDate: lastTrainingDate,
 
-  function renderItem() {
-    if (!el.itemToggleBtn || !el.drinkCountText || !el.useDrinkBtn || !el.itemHintText) return;
+    superDrinkCount: superDrinkCount,
+    doubleNextTraining: doubleNextTraining,
 
-    el.drinkCountText.textContent = String(state.superDrinkCount);
-    el.itemToggleBtn.textContent = `🥤×${state.superDrinkCount}`;
-
-    if (state.doubleNextTraining) el.itemToggleBtn.classList.add("on");
-    else el.itemToggleBtn.classList.remove("on");
-
-    const disabled = (state.superDrinkCount <= 0) || state.doubleNextTraining;
-    el.useDrinkBtn.disabled = disabled;
-
-    if (state.doubleNextTraining) el.itemHintText.textContent = "【発動中】次回トレーニングの効果が2倍！";
-    else if (state.superDrinkCount > 0) el.itemHintText.textContent = "使うと、トレーニング後の復興度が2倍。";
-    else el.itemHintText.textContent = "プロテインスライムを倒すと入手できます。";
-  }
-
-  function renderAll(preferType = null) {
-    renderStatus();
-    renderWorld();
-    renderAvatar(preferType);
-    renderItem();
-  }
-
-  /**********************
-   * 9) 近況バナー（フェイク）
-   **********************/
-  function loadPlayerData(name) {
-    const raw = localStorage.getItem(storageKey(name));
-    if (!raw) return null;
-    try { return JSON.parse(raw); } catch { return null; }
-  }
-
-  function makeFakeActivityText(name) {
-    const actions = ["胸トレ", "背中トレ", "脚トレ", "ランニング", "ウォーキング"];
-    const when = ["先ほど", "さっき", "今日", "少し前に"][Math.floor(Math.random() * 4)];
-    const a = actions[Math.floor(Math.random() * actions.length)];
-    return `トレーニー${name}は${when}${a}を実行したようだ。`;
-  }
-
-  function setBanner(text) {
-    if (!el.newsBanner) return;
-    el.newsBanner.textContent = text;
-    el.newsBanner.classList.remove("hidden");
-    setTimeout(() => el.newsBanner.classList.add("hidden"), 8000);
-  }
-
-  function maybeShowNewsBanner() {
-    if (!el.newsBanner) return;
-    if (Math.random() > 0.55) return;
-
-    const others = PLAYERS.filter(n => n !== state.currentPlayer);
-    const candidates = [];
-
-    for (const n of others) {
-      const data = loadPlayerData(n);
-      if (!data) continue;
-      const risk = calcDropoutRisk(data);
-      if (risk >= 0.45) candidates.push({ name: n, risk });
-    }
-    if (candidates.length === 0) return;
-
-    candidates.sort((a, b) => b.risk - a.risk);
-    setBanner(makeFakeActivityText(candidates[0].name));
-  }
-
-  /**********************
-   * 10) 画面遷移
-   **********************/
-  function switchScreen(id) {
-    ["main-screen", "quest-screen", "result-screen", "gym-screen"].forEach(s =>
-      document.getElementById(s)?.classList.add("hidden")
-    );
-    document.getElementById(id)?.classList.remove("hidden");
-  }
-
-  function showResult(html) {
-    el.resultText.innerHTML = html;
-    switchScreen("result-screen");
-  }
-
-  /**********************
-   * 11) ゲーム操作（トレ・クエスト・戦闘）
-   **********************/
-  function executeTraining(trainType) {
-    const isWalk = (trainType === "walk");
-    if (!isWalk && !(trainType in state.status)) return;
-
-    // (1) 成長：walk以外はLv+1
-    if (!isWalk) state.status[trainType]++;
-
-    // (2) ストリーク更新（1日1回増）
-    const todayKey = getTodayKeyTokyo();
-    if (!state.lastTrainingDate) {
-      state.streakDays = 1;
-      state.lastTrainingDate = todayKey;
-    } else if (state.lastTrainingDate === todayKey) {
-      // 同日複数回は増えない
-    } else if (isYesterdayTokyo(state.lastTrainingDate, todayKey)) {
-      state.streakDays += 1;
-      state.lastTrainingDate = todayKey;
-    } else {
-      state.streakDays = 1;
-      state.lastTrainingDate = todayKey;
-    }
-
-    // (3) プロテインスライム抽選（1日1回）
-    rollProteinSlimeIfNeeded();
-
-    // (4) 復興度加算（スポドリなら次回だけ2倍）
-    const before = state.worldRecovery;
-    let inc = isWalk ? 1 : 2;
-    if (state.doubleNextTraining) {
-      inc *= 2;
-      state.doubleNextTraining = false;
-    }
-    state.worldRecovery = Math.min(100, state.worldRecovery + inc);
-    const gained = state.worldRecovery - before;
-
-    // (5) 保存と描画
-    save();
-    renderAll(!isWalk ? trainType : null);
-
-    // (6) 結果表示
-    const info = TRAINING[trainType];
-    if (!isWalk) {
-      el.resultText.innerHTML =
-        `今日もお疲れ様！\n${info.label} がパンプアップ！<br>
-         <span class="heal">自販機からプロテイン2本を購入\nジムが${gained}%復興した</span>`;
-      playSE(seLevelUp);
-    } else {
-      el.resultText.innerHTML =
-        `今日もお疲れ様！<br>
-         <span class="heal">マッスリーナ姫からプロテイン1本をもらった！\nジムが${gained}%復興した</span>`;
-    }
-
-    el.resultImage.src = info.image;
-    el.resultImage.classList.remove("hidden");
-    switchScreen("result-screen");
-
-    // (7) 行動後に近況バナー
-    maybeShowNewsBanner();
-  }
-
-  // クエスト開始：プロテインスライムが予約されていれば優先
-  window.startQuest = function () {
-    const monster = state.proteinSlimeReady ? PROTEIN_SLIME : MONSTERS[state.monsterIndex];
-    el.monsterName.textContent = `${monster.name} Lv ${monster.level}`;
-    el.monsterImage.src = monster.image;
-    switchScreen("quest-screen");
+    proteinSlimeReady: proteinSlimeReady,
+    lastSlimeRollDate: lastSlimeRollDate,
+    slimeCooldownUntil: slimeCooldownUntil,
   };
+  localStorage.setItem(`muscleRPG_${currentPlayer}`, JSON.stringify(saveData));
+}
 
-  // バトル：勝ったら通常は復興+3、プロテインスライムならアイテム付与
-  window.battle = function () {
-    const heroLv = state.status.run + state.status.chest + state.status.back + state.status.leg;
-    const monster = state.proteinSlimeReady ? PROTEIN_SLIME : MONSTERS[state.monsterIndex];
+// ===== 読み込み =====
+function loadStatus() {
+  const data = localStorage.getItem(`muscleRPG_${currentPlayer}`);
+  if (data) {
+    const parsed = JSON.parse(data);
 
-    if (heroLv < monster.level) {
-      playSE(seLose);
-      showResult("負けてしまった…😵<br> パンプアップが足りないみたいだ！");
-      return;
-    }
+    status = parsed.status ?? { ...defaultStatus };
+    currentMonsterIndex = parsed.monsterIndex ?? 0;
+    worldRecovery = parsed.worldRecovery ?? 0;
+    streakDays = parsed.streakDays ?? 0;
+    lastTrainingDate = parsed.lastTrainingDate ?? null;
 
-    // プロテインスライム勝利：復興度は増やさずスポドリ付与
+    superDrinkCount = parsed.superDrinkCount ?? 0;
+    doubleNextTraining = parsed.doubleNextTraining ?? false;
+
+    proteinSlimeReady = parsed.proteinSlimeReady ?? false;
+    lastSlimeRollDate = parsed.lastSlimeRollDate ?? null;
+    slimeCooldownUntil = parsed.slimeCooldownUntil ?? null;
+  } else {
+    status = { ...defaultStatus };
+    currentMonsterIndex = 0;
+    worldRecovery = 0;
+    streakDays = 0;
+    lastTrainingDate = null;
+
+    superDrinkCount = 1;
+    doubleNextTraining = false;
+
+    proteinSlimeReady = false;
+    lastSlimeRollDate = null;
+    slimeCooldownUntil = null;
+  }
+}
+
+// ===== 最も育っている筋肉 =====
+function getTopMuscle(preferType = null) {
+  const types = ["run", "chest", "back", "leg"];
+  let maxLv = -Infinity;
+  for (const t of types) if (status[t] > maxLv) maxLv = status[t];
+  const topTypes = types.filter(t => status[t] === maxLv);
+  if (preferType && topTypes.includes(preferType)) return preferType;
+  return topTypes[0];
+}
+
+// ===== 表示更新 =====
+function updateStatusView() {
+  HPLv.textContent = status.run;
+  chestLv.textContent = status.chest;
+  backLv.textContent = status.back;
+  legLv.textContent = status.leg;
+}
+
+function updateWorldView() {
+  const v = Math.max(0, Math.min(100, worldRecovery));
+  worldRecoveryText.textContent = `${v}%`;
+  worldRecoveryFill.style.width = `${v}%`;
+  streakDaysText.textContent = String(streakDays);
+}
+
+// ===== アバター更新 =====
+function updateAvatarByTopStatus(preferType = null) {
+  const types = ["run", "chest", "back", "leg"];
+  let maxLv = -Infinity;
+  for (const t of types) if (status[t] > maxLv) maxLv = status[t];
+  const topTypes = types.filter(t => status[t] === maxLv);
+
+  let chosen = topTypes[0];
+  if (preferType && topTypes.includes(preferType)) chosen = preferType;
+
+  const lv = status[chosen];
+  avatarImage.src = `images/player/${chosen}_Lv${lv}.png`;
+
+  avatarImage.onerror = () => {
+    avatarImage.onerror = null;
+    avatarImage.src = `images/player/${chosen}_LvMAX.png`;
+  };
+}
+
+// ===== トレーニング =====
+const toggleBtn = document.getElementById("trainingToggleBtn");
+const menu = document.getElementById("trainingMenu");
+
+toggleBtn.addEventListener("click", () => {
+  menu.classList.toggle("hidden");
+});
+
+menu.addEventListener("click", (e) => {
+  if (!e.target.dataset.train) return;
+  const trainType = e.target.dataset.train;
+  executeTraining(trainType);
+  menu.classList.add("hidden");
+});
+
+function executeTraining(trainType) {
+  const isWalk = (trainType === "walk");
+  if (!isWalk && !(trainType in status)) return;
+
+  // ステータス更新（walkはしない）
+  if (!isWalk) status[trainType]++;
+
+  // ストリーク更新
+  const todayKey = getTodayKeyTokyo();
+  if (!lastTrainingDate) {
+    streakDays = 1;
+    lastTrainingDate = todayKey;
+  } else if (lastTrainingDate === todayKey) {
+    // 同日複数回は増えない
+  } else if (isYesterdayTokyo(lastTrainingDate, todayKey)) {
+    streakDays += 1;
+    lastTrainingDate = todayKey;
+  } else {
+    streakDays = 1;
+    lastTrainingDate = todayKey;
+  }
+
+  // プロテインスライム抽選（今日1回）
+  rollProteinSlimeIfNeeded();
+
+  // ジム復興度：walkは+1、他は+2（スポドリで2倍）
+  const before = worldRecovery;
+  let inc = isWalk ? 1 : 2;
+
+  if (doubleNextTraining) {
+    inc *= 2;
+    doubleNextTraining = false; // 1回で消費
+  }
+
+  worldRecovery = Math.min(100, worldRecovery + inc);
+  const gained = worldRecovery - before;
+
+  saveStatus();
+  updateStatusView();
+  updateWorldView();
+  updateItemView();
+
+  const info = trainingInfo[trainType];
+
+  // ★表示の「2%/1%固定」をやめて gained を表示
+  if (!isWalk) {
+    updateAvatarByTopStatus(trainType);
+    resultText.innerHTML =
+      `今日もお疲れ様！\n${info.label} がパンプアップ！<br>
+       <span class="heal">自販機からプロテイン2本を購入\nジムが${gained}%復興した</span>`;
+    playSE(seLevelUp);
+  } else {
+    resultText.innerHTML =
+      `今日もお疲れ様！<br>
+       <span class="heal">マッスリーナ姫からプロテイン1本をもらった！\nジムが${gained}%復興した</span>`;
+  }
+
+  const resultImage = document.getElementById("resultImage");
+  resultImage.src = info.image;
+  resultImage.classList.remove("hidden");
+
+  switchScreen("result-screen");
+
+  // 行動後にバナー
+  maybeShowNewsBanner();
+}
+
+// ===== クエスト =====
+function startQuest() {
+  const monster = proteinSlimeReady ? proteinSlime : monsterList[currentMonsterIndex];
+  monsterName.textContent = `${monster.name} Lv ${monster.level}`;
+  monsterImage.src = monster.image;
+  switchScreen("quest-screen");
+}
+
+// ===== バトル =====
+function battle() {
+  const heroLv = status.run + status.chest + status.back + status.leg;
+  const monster = proteinSlimeReady ? proteinSlime : monsterList[currentMonsterIndex];
+
+  if (heroLv >= monster.level) {
+
+    // プロテインスライム：復興度増なし、アイテム付与
     if (monster.special === "protein") {
-      state.proteinSlimeReady = false;
-      state.superDrinkCount += 1;
-      save();
-      renderItem();
+      proteinSlimeReady = false;
+      superDrinkCount += 1;
+
+      saveStatus();
+      updateItemView();
       playSE(seWin);
+
       showResult(
         `やったー！<br>
          <span class="heal">プロテインスライム</span>を倒した！<br>
@@ -465,94 +556,103 @@
       return;
     }
 
-    // 通常勝利：復興+3、敵を進める
-    state.worldRecovery = Math.min(100, state.worldRecovery + 3);
-    const top = getTopMuscle();
-    const muscleName = MUSCLE_LABEL[top];
-    if (state.monsterIndex < MONSTERS.length - 1) state.monsterIndex++;
+    // 通常勝利
+    worldRecovery = Math.min(100, worldRecovery + 3);
+    updateWorldView();
 
-    save();
-    renderWorld();
+    const topMuscle = getTopMuscle();
+    const muscleName = muscleLabel[topMuscle];
+
+    if (currentMonsterIndex < monsterList.length - 1) currentMonsterIndex++;
+
+    saveStatus();
     playSE(seWin);
+
     showResult(
       `やったー！<br>
        ${monster.name}を<span class="heal">${muscleName}</span>で倒した！<br>
        <span class="heal">プロテイン3本をドロップ\nジムが3%復興した</span>`
     );
-  };
 
-  /**********************
-   * 12) イベント配線（起動時）
-   **********************/
-  function initPlayerSelect() {
-    PLAYERS.forEach(name => {
-      const option = document.createElement("option");
-      option.value = name;
-      option.textContent = name;
-      el.playerSelect.appendChild(option);
-    });
+  } else {
+    playSE(seLose);
+    showResult("負けてしまった…😵<br> パンプアップが足りないみたいだ！");
   }
+}
 
-  function bindEvents() {
-    // プレイヤー開始
-    el.startBtn.addEventListener("click", () => {
-      if (!el.playerSelect.value) return alert("プレイヤーを選択してください");
-      state.currentPlayer = el.playerSelect.value;
+function getGymStageByRecovery(recovery) {
+  return gymStages.find(stage => recovery >= stage.min && recovery <= stage.max);
+}
 
-      load();
-      renderAll();
+// ===== ジムの見学 =====
+function visitGym() {
+  const v = Math.max(0, Math.min(100, worldRecovery));
+  document.querySelectorAll("#gym-screen #worldRecoveryText")
+    .forEach(el => el.textContent = `${v}%`);
+  document.querySelectorAll("#gym-screen #worldRecoveryFill")
+    .forEach(el => el.style.width = `${v}%`);
 
-      el.playerNameText.textContent = `トレーニー：${state.currentPlayer}`;
-      el.playerSelectScreen.classList.add("hidden");
-      el.mainScreen.classList.remove("hidden");
+  const stage = getGymStageByRecovery(v);
+  gymImage.src = stage.image;
+  gymImage.classList.remove("hidden");
+  gymComment.textContent = stage.comment;
+  switchScreen("gym-screen");
+}
 
-      maybeShowNewsBanner();
-    });
+// ===== UI =====
+function showResult(html) {
+  resultText.innerHTML = html;
+  switchScreen("result-screen");
+}
 
-    // トレーニングメニュー
-    el.trainingToggleBtn.addEventListener("click", () => {
-      el.trainingMenu.classList.toggle("hidden");
-    });
+function backToMain() {
+  document.getElementById("resultImage").classList.add("hidden");
+  switchScreen("main-screen");
+}
 
-    el.trainingMenu.addEventListener("click", (e) => {
-      const t = e.target.dataset.train;
-      if (!t) return;
-      executeTraining(t);
-      el.trainingMenu.classList.add("hidden");
-    });
+function switchScreen(id) {
+  ["main-screen", "quest-screen", "result-screen", "gym-screen"].forEach(s =>
+    document.getElementById(s).classList.add("hidden")
+  );
+  document.getElementById(id).classList.remove("hidden");
+}
 
-    // アイテム（チップ＋ポップ）
-    if (el.itemToggleBtn && el.itemMenu) {
-      el.itemToggleBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        el.itemMenu.classList.toggle("hidden");
-      });
-      el.itemMenu.addEventListener("click", (e) => e.stopPropagation());
-      document.addEventListener("click", () => el.itemMenu.classList.add("hidden"));
-    }
+function backToPlayerSelect() {
+  document.getElementById("main-screen").classList.add("hidden");
+  document.getElementById("quest-screen").classList.add("hidden");
+  document.getElementById("result-screen").classList.add("hidden");
+  document.getElementById("gym-screen").classList.add("hidden");
+  document.getElementById("playerSelectScreen").classList.remove("hidden");
+  playerNameText.textContent = "";
+  currentPlayer = null;
+}
 
-    if (el.useDrinkBtn) {
-      el.useDrinkBtn.addEventListener("click", () => {
-        if (state.superDrinkCount <= 0) return;
-        if (state.doubleNextTraining) return;
-        state.superDrinkCount -= 1;
-        state.doubleNextTraining = true;
-        save();
-        renderItem();
-      });
-    }
+// ===== 全プレイヤーステータス初期化 =====
+resetAllBtn.addEventListener("click", () => {
+  const ok = confirm("全プレイヤーのステータスと進行状況を初期化します。よろしいですか？");
+  if (!ok) return;
 
-    // 全プレイヤー初期化（※あなたの要望通り、新規だけ1個なのでここは0のまま）
-    el.resetAllBtn.addEventListener("click", () => {
-      const ok = confirm("全プレイヤーのステータスと進行状況を初期化します。よろしいですか？");
-      if (!ok) return;
-      PLAYERS.forEach(name => localStorage.removeItem(storageKey(name)));
-      alert("全プレイヤーを初期化しました。");
-      location.reload();
-    });
-  }
+  players.forEach(name => localStorage.removeItem(`muscleRPG_${name}`));
 
-  // 起動
-  initPlayerSelect();
-  bindEvents();
-})();
+  currentPlayer = null;
+  status = { ...defaultStatus };
+  currentMonsterIndex = 0;
+  worldRecovery = 0;
+  streakDays = 0;
+  lastTrainingDate = null;
+
+  superDrinkCount = 0;
+  doubleNextTraining = false;
+
+  proteinSlimeReady = false;
+  lastSlimeRollDate = null;
+  slimeCooldownUntil = null;
+
+  updateStatusView();
+  updateWorldView();
+  updateAvatarByTopStatus();
+  updateItemView();
+  playerNameText.textContent = "";
+
+  alert("全プレイヤーを初期化しました。");
+});
