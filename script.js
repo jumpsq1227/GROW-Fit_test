@@ -388,7 +388,7 @@ function loadStatus() {
     streakDays = 0;
     lastTrainingDate = null;
 
-    superDrinkCount = 0;
+    superDrinkCount = 1;
     doubleNextTraining = false;
 
     proteinSlimeReady = false;
@@ -657,6 +657,7 @@ resetAllBtn.addEventListener("click", () => {
 
   alert("全プレイヤーを初期化しました。");
 });
+
 
 
 
