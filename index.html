@@ -21,7 +21,7 @@
 
 <!-- ===== ステータス・アバター欄 ===== -->
 <div class="status-box">
-        <!-- ジム回復率 -->
+  <!-- ジム回復率 -->
   <div class="world-recovery">
     <div class="world-label">
       ジム【GOLD】の復興度 <span id="worldRecoveryText">0%</span>
@@ -41,6 +41,18 @@
       <p>・胸筋 Lv <span id="chestLv">1</span></p>
       <p>・背筋 Lv <span id="backLv">1</span></p>
       <p>・脚力 Lv <span id="legLv">1</span></p>
+    </div>
+    <!-- ===== アイテム欄 ===== -->
+    <div class="item-box">
+      <button id="itemToggleBtn" class="btn-item">アイテム ▼</button>
+      <div id="itemMenu" class="item-menu hidden">
+        <div class="item-row">
+          <span>超回復スポドリLv2：</span>
+          <span id="drinkCountText">0</span>
+          <button id="useDrinkBtn">使う（次回回復率2倍）</button>
+        </div>
+        <div class="item-hint" id="itemHintText"></div>
+      </div>
     </div>
     <!-- アバター -->
     <img src="images/base.png" class="avatar" id="avatarImage">
@@ -74,6 +86,9 @@
   <button class="back-player-btn" onclick="backToPlayerSelect()">
     プレイヤー選択へ
   </button>
+
+  <!-- ===== 近況バナー ===== -->
+<div id="newsBanner" class="banner hidden"></div>
   
 </div>
 
@@ -107,6 +122,7 @@
 <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
