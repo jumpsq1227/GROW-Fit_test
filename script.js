@@ -10,7 +10,7 @@ let streakDays = 0;          // 連続継続日数
 let lastTrainingDate = null; // "YYYY-MM-DD"
 
 // ===== アイテム =====
-let superDrinkCount = 1;        // 超回復スポドリ所持数
+let superDrinkCount = 0;        // 超回復スポドリ所持数
 let doubleNextTraining = false; // 次回トレ復興2倍フラグ（1回消費）
 
 // ===== プロテインスライム（特別遭遇）=====
@@ -657,6 +657,7 @@ resetAllBtn.addEventListener("click", () => {
 
   alert("全プレイヤーを初期化しました。");
 });
+
 
 
 
