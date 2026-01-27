@@ -314,8 +314,9 @@ button:hover{
   position: absolute;
   top: 6px;
   right: 6px;
-  z-index: 60;
+  transform: translateX(-18px); /* ← ここだけ調整 */
 }
+
 /* ポップは “レイアウトに参加させない” */
 .item-pop{
   position: absolute;
@@ -355,6 +356,7 @@ button:hover{
   opacity: 0.6;
   cursor: not-allowed;
 }
+
 
 
 
