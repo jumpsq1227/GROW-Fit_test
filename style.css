@@ -245,6 +245,63 @@ button:hover{
   opacity: 0.95;
 }
 
+/* =========================
+   Banner / Items
+========================= */
+.banner{
+  width: min(92vw, 420px);
+  margin: 10px auto 0;
+  padding: 10px 12px;
+  border: 2px solid var(--border);
+  background: rgba(0,0,0,0.65);
+  box-shadow: var(--shadow);
+  font-size: 13px;
+  line-height: 1.4;
+  text-align: left;
+  animation: bannerIn 0.25s ease-out;
+}
+@keyframes bannerIn{
+  from{ transform: translateY(-6px); opacity: 0; }
+  to{ transform: translateY(0); opacity: 1; }
+}
+
+.item-box{
+  width: 320px;
+  margin: 10px auto;
+}
+.btn-item{
+  background: linear-gradient(#3498db, #2e86c1);
+  border: 2px solid #1f618d;
+  color: #fff;
+}
+.btn-item:hover{
+  background: linear-gradient(#5dade2, #3498db);
+}
+
+.item-menu{
+  margin-top: 8px;
+  padding: 10px;
+  border: 2px solid var(--border);
+  background: var(--panel);
+  text-align: left;
+}
+.item-row{
+  display:flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+}
+.item-row button{
+  font-size: 13px;
+  padding: 6px 10px;
+  margin: 0;
+}
+.item-hint{
+  margin-top: 8px;
+  font-size: 12px;
+  opacity: 0.95;
+}
 
 
 
