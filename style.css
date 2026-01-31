@@ -212,3 +212,11 @@ button:hover{
    display: block;
    margin: 16px auto;
 }
+
+.gym-image{
+   width: 100%;
+   max-width: 360px;
+   margin: 16px auto;
+   image-rendering: pixelated;
+   display: block;
+}
