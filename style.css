@@ -1,19 +1,15 @@
 /* =========================
-   Base
+   Base / Tokens
 ========================= */
 :root{
   --bg1:#1b2735;
   --bg2:#090a0f;
-
   --txt:#fff;
   --black:#000;
-
   --ui-bg:#222;
   --ui-bg-hover:#444;
-
   --border:#fff;
   --panel: rgba(0,0,0,0.5);
-
   --shadow: 2px 2px 0 var(--black);
 }
 
@@ -30,25 +26,17 @@ body{
 }
 
 /* =========================
-   Common utilities
+   Utilities
 ========================= */
+.hidden{ display:none !important; }
+
 .screen{
   padding: 20px;
   min-height: 100vh;
 }
 
-.hidden{ display:none; }
-
-.title,
-#playerSelectScreen h1{
-  font-size: 40px;
-  margin-bottom: 10px;
-  text-shadow: var(--shadow);
-}
-
 /* =========================
-   Common form controls
-   （select/buttonの二重定義を一本化）
+   Common UI
 ========================= */
 select,
 button{
@@ -65,73 +53,20 @@ button:hover{
   background: var(--ui-bg-hover);
 }
 
-/* プレイヤー選択だけ少し大きくしたい場合 */
-#playerSelectScreen select,
-#playerSelectScreen button{
-  font-size: 18px;
-  padding: 10px 14px;
-}
-
-#playerSelectScreen button{
-  padding: 10px 20px;
-}
-
-/* select専用の“枠の内側影”が必要ならここに集約 */
-#playerSelectScreen select{
-  background: #111;
-  border-width: 3px;
-  box-shadow: 0 0 0 3px var(--black) inset;
-}
-
-/* =========================
-   Player Select Screen
-========================= */
-#playerSelectScreen{
-  min-height: 100vh;
-  background: url("images/bg_field.png") no-repeat center;
-  background-size: min(90vw, 400px);
-}
-
-#playerSelectScreen > div{
-  text-align: center;
-}
-
-/* =========================
-   Button variants
-========================= */
 .btn-training{
   background: linear-gradient(#2ecc71, #27ae60);
-  border: 2px solid #1e8449;
-  color: #fff;
+  border-color:#1e8449;
 }
-.btn-training:hover{
-  background: linear-gradient(#58d68d, #2ecc71);
-}
-
 .btn-quest{
   background: linear-gradient(#e74c3c, #c0392b);
-  border: 2px solid #922b21;
-  color: #fff;
-}
-.btn-quest:hover{
-  background: linear-gradient(#ec7063, #e74c3c);
+  border-color:#922b21;
 }
 
 /* =========================
    Components
 ========================= */
-.back-player-btn{
-  margin-top: 20px;
-  font-size: 14px;
-  padding: 8px 14px;
-  background: #111;
-  border: 2px solid var(--border);
-}
-.back-player-btn:hover{
-  background: #333;
-}
 
-/* ステータス＋アバター横並び */
+/* ---- Status ---- */
 .status-box{
   width: 320px;
   margin: 10px auto;
@@ -139,365 +74,92 @@ button:hover{
   border: 2px solid var(--border);
   background: var(--panel);
 }
+
 .status-inner{
-  display: flex;
-  align-items: center;
+  display:flex;
   justify-content: space-between;
 }
+
 .status-text{
   font-size: 14px;
   text-align: left;
 }
 
+/* ---- Avatar ---- */
+.avatar-wrap{
+  position: relative;
+}
 .avatar{
-  height: 140px;              /* ★ 高さを固定 */
-  object-fit: contain;        /* ★ 比率維持で収める */
+  height: 140px;
   image-rendering: pixelated;
   filter: drop-shadow(2px 2px 0 var(--black));
 }
 
-.result{
-  font-size: 14px;
-  margin: 10px 0;
-  white-space: pre-line; /* 改行可能にする */
-}
-
-.result .heal {
-  color: #2ecc71;           /* 回復っぽい緑 */
-  font-weight: bold;
-}
-
-.result-image{
-  width: 180px;
-  margin: 10px auto;
-  image-rendering: pixelated;
-}
-
-.monster{
-  width: 120px;
-  display: block;
-  margin: 16px auto;
-}
-
-/* ジム回復 */
-.world-recovery{
-  margin-top: 12px;
-  text-align: left;
-  font-size: 14px;
-}
-
-.world-label{
-  display:flex;
-  justify-content: space-between;
-  margin-bottom: 4px;
-}
-
+/* ---- World Recovery ---- */
 .hpbar{
-  width: 100%;
-  height: 16px;              /* ★太くして存在感 */
+  height: 16px;
   border: 2px solid var(--border);
   background: rgba(0,0,0,0.35);
-  box-shadow: 0 0 0 2px var(--black) inset;
 }
-
 .hpbar-fill{
   height: 100%;
-  width: 0%;
   background: linear-gradient(#2ecc71, #27ae60);
-  transition: width 0.35s ease-out; /* ★伸びる演出 */
+  transition: width 0.35s;
 }
 
-.streak-text{
-  font-size: 14px;
-  margin-top: 6px;
-  opacity: 0.95;
-}
-
-/* ===== ジム画面専用 ===== */
-#gym-screen .world-label{
-  display: flex;
-  justify-content: center;   /* 中央寄せ */
-  align-items: center;
-  gap: 6px;                  /* 文言と%の間隔 */
-  font-size: 14px;           /* メイン画面と同じ */
-  margin-bottom: 6px;
-  white-space: nowrap;       /* 1行に収める */
-}
-
-/* ジム画面専用：復興度バーを細くする */
-#gym-screen .hpbar{
-  max-width: 320px;   /* メイン画面と同じ幅 */
-  margin: 8px auto;   /* 中央寄せ */
-}
-
-.gym-image{
-  width: 100%;
-  max-width: 360px;
-  margin: 16px auto;
-  image-rendering: pixelated;
-  display: block;
-}
-.gym-comment{
-  margin-top: 12px;
-  font-size: 14px;
-  line-height: 1.6;
-  white-space: pre-line;   /* ← これが重要 */
-  opacity: 0.95;
-}
-
-/* =========================
-   Banner / Items
-========================= */
-.banner{
-  width: min(92vw, 420px);
-  margin: 10px auto 0;
-  padding: 10px 12px;
-  border: 2px solid var(--border);
-  background: rgba(0,0,0,0.65);
-  box-shadow: var(--shadow);
-  font-size: 13px;
-  line-height: 1.4;
-  text-align: left;
-  animation: bannerIn 0.25s ease-out;
-}
-@keyframes bannerIn{
-  from{ transform: translateY(-6px); opacity: 0; }
-  to{ transform: translateY(0); opacity: 1; }
-}
-
-.item-box{
-  width: 320px;
-  margin: 10px auto;
-}
-.btn-item{
-  background: linear-gradient(#3498db, #2e86c1);
-  border: 2px solid #1f618d;
-  color: #fff;
-}
-.btn-item:hover{
-  background: linear-gradient(#5dade2, #3498db);
-}
-
-.item-menu{
-  margin-top: 8px;
-  padding: 10px;
-  border: 2px solid var(--border);
-  background: var(--panel);
-  text-align: left;
-}
-.item-row{
-  display:flex;
-  gap: 8px;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 13px;
-}
-.item-row button{
-  font-size: 13px;
-  padding: 6px 10px;
-  margin: 0;
-}
-.item-hint{
-  margin-top: 8px;
-  font-size: 12px;
-  opacity: 0.95;
-}
-
-/* ===== アイテム：アバター右上チップ＋小ポップ ===== */
-/* アバター基準（ここが基準になってないと absolute が崩れる） */
-.avatar-wrap{
-  position: relative;
-  display: inline-block;
-}
-/* チップはアバタ左上 */
-.item-chip{
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  transform: translateX(-80px);
-}
-
-
-/* ポップは “レイアウトに参加させない” */
-.item-pop{
-  position: absolute;
-  top: 34px;
-  right: 6px;
-  z-index: 70;
-  width: 190px;
-  padding: 10px;
-  background: rgba(0,0,0,0.9);
-  border: 2px solid #fff;
-  box-shadow: 2px 2px 0 #000;
-  /* これがないと中身が押し広げてゴチャつく */
-  box-sizing: border-box;
-  text-align: left;
-}
-
-}
-
-/* 文字量で縦に伸びても綺麗に */
-.item-hint{
-  margin: 6px 0 8px;
-  white-space: normal;
-}
-/* 「アイテム」見出しが大きいと詰まるので小さく */
-.item-pop-title{
-  font-size: 12px;
-  margin-bottom: 6px;
-  opacity: 0.95;
-}
-/* ボタンは1行固定に */
-.item-use{
-  width: 100%;
-  white-space: nowrap;
-  font-size: 12px;
-}
-.item-use:hover{
-  background: linear-gradient(#58d68d, #2ecc71);
-}
-.item-use:disabled{
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* ===== 週4回UI（安定ゾーン） ===== */
-.weekly-box{
-  margin-top: 8px;
-  text-align: left;
-  font-size: 13px;
-}
-
-.weekly-title{
-  display:flex;
-  justify-content: space-between;
-  margin-bottom: 6px;
-  opacity: 0.95;
-}
-
-.weekbar{
-  width: 100%;
-  height: 12px;
-  border: 2px solid var(--border);
-  background: rgba(0,0,0,0.35);
-  box-shadow: 0 0 0 2px var(--black) inset;
-}
-
-.weekbar-fill{
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(#3498db, #2e86c1);
-  transition: width 0.35s ease-out;
-}
-
-.stability-text{
-  margin-top: 6px;
-  font-size: 13px;
-  opacity: 0.95;
-}
-
-/* ===== 継続安定度（★） ===== */
+/* ---- Reliability ---- */
 .reliability-row{
-  margin-top: 6px;
   display:flex;
   justify-content: space-between;
-  align-items: center;
   font-size: 13px;
 }
 .reliability-stars{
   letter-spacing: 1px;
 }
 
-/* ===== プレイヤー選択：背景が見えるストーリー枠 ===== */
-.story-teaser{
+/* ---- Banner ---- */
+.banner{
   width: min(92vw, 420px);
-  margin: 10px auto 8px;
-  padding: 10px 12px;
+  margin: 10px auto;
+  padding: 10px;
   border: 2px solid var(--border);
-  background: rgba(0,0,0,0.55);
-  box-shadow: var(--shadow);
-  text-align: left;
-  line-height: 1.5;
-}
-.story-teaser-title{
-  margin: 0 0 6px;
-  font-size: 13px;
-  opacity: 0.95;
-}
-.story-teaser-sub{
-  margin: 6px 0 0;
-  font-size: 12px;
-  opacity: 0.9;
+  background: rgba(0,0,0,0.65);
 }
 
-/* ===== ストーリー画面 ===== */
-.story-screen{
+/* =========================
+   Screens
+========================= */
+
+/* --- Player Select --- */
+#playerSelectScreen{
+  min-height: 100vh;
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 24px;
   background: url("images/bg_field.png") no-repeat center;
   background-size: min(90vw, 400px);
+}
+
+#resetAllBtn{
+  margin-top: auto;
+  margin-bottom: 18px;
+}
+
+/* --- Story Screen --- */
+#story-screen{
   min-height: 100vh;
-  display: flex;
+  display:flex;
   justify-content: center;
-  align-items: center;
-  padding: 18px;
+  align-items: flex-start;
+  padding-top: 40px;
+  background: url("images/bg_field.png") no-repeat center;
+  background-size: min(90vw, 400px);
 }
 
 .story-panel{
   width: min(92vw, 420px);
-  padding: 14px 14px;
+  padding: 14px;
   border: 2px solid var(--border);
   background: rgba(0,0,0,0.65);
-  box-shadow: var(--shadow);
-  text-align: left;
 }
-
-.story-title{
-  margin: 0 0 10px;
-  font-size: 18px;
-  text-shadow: var(--shadow);
-}
-
-.story-text{
-  margin: 0 0 12px;
-  font-size: 13px;
-  line-height: 1.7;
-  white-space: pre-line;
-}
-
-#playerSelectScreen{
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding-top: 24px;
-  box-sizing: border-box;
-}
-
-/* resetを一番下へ押し下げる */
-#resetAllBtn{
-  margin-top: auto;     /* これが効く */
-  margin-bottom: 18px;  /* 画面下の余白 */
-}
-
-#story-screen{
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;     /* 横中央 */
-  align-items: flex-start;     /* 上寄せ */
-  padding-top: 40px;           /* 上段中央っぽい位置 */
-  box-sizing: border-box;
-}
-
-/* ストーリーパネルの見た目（既にあるなら不要） */
-.story-box{
-  width: min(92vw, 360px);
-  padding: 14px 12px;
-  border: 2px solid #fff;
-  background: rgba(0,0,0,0.65);
-  box-shadow: 2px 2px 0 #000;
-}
-
-
-
-
-
