@@ -463,14 +463,39 @@ button:hover{
   white-space: pre-line;
 }
 
+#playerSelectScreen{
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 24px;
+  box-sizing: border-box;
+}
 
+/* resetを一番下へ押し下げる */
+#resetAllBtn{
+  margin-top: auto;     /* これが効く */
+  margin-bottom: 18px;  /* 画面下の余白 */
+}
 
+#story-screen{
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;     /* 横中央 */
+  align-items: flex-start;     /* 上寄せ */
+  padding-top: 40px;           /* 上段中央っぽい位置 */
+  box-sizing: border-box;
+}
 
-
-
-
-
-
+/* ストーリーパネルの見た目（既にあるなら不要） */
+.story-box{
+  width: min(92vw, 360px);
+  padding: 14px 12px;
+  border: 2px solid #fff;
+  background: rgba(0,0,0,0.65);
+  box-shadow: 2px 2px 0 #000;
+}
 
 
 
