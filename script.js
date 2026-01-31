@@ -653,7 +653,8 @@ function backToMain() {
 }
 
 function switchScreen(id) {
-  ["main-screen", "quest-screen", "result-screen", "gym-screen", "story-screen"].forEach(s => {
+  const screens = ["playerSelectScreen", "story-screen", "main-screen", "quest-screen", "result-screen", "gym-screen"];
+  screens.forEach(s => {
     const el = document.getElementById(s);
     if (el) el.classList.add("hidden");
   });
@@ -662,17 +663,9 @@ function switchScreen(id) {
 }
 
 function backToPlayerSelect() {
-  switchScreen("playerSelectScreen"); // ← playerSelectScreen は id なので例外
-  // ↑この一行だけだと hidden制御が合わないので、現状維持で明示的に戻す
-  document.getElementById("main-screen").classList.add("hidden");
-  document.getElementById("quest-screen").classList.add("hidden");
-  document.getElementById("result-screen").classList.add("hidden");
-  document.getElementById("gym-screen").classList.add("hidden");
-  if (storyScreen) storyScreen.classList.add("hidden");
-  document.getElementById("playerSelectScreen").classList.remove("hidden");
-
   playerNameText.textContent = "";
   currentPlayer = null;
+  switchScreen("playerSelectScreen");
 }
 
 /* =========================================================
@@ -731,26 +724,25 @@ function bindEvents() {
     updateItemView();
     updateWorldView();
 
-    playerNameText.textContent = `トレーニー：${currentPlayer}`;
+  playerNameText.textContent = `トレーニー：${currentPlayer}`;
 
-    if (isNewGame()) {
-      playerSelectScreen.classList.add("hidden");
-      if (storyScreen) storyScreen.classList.remove("hidden");
-      return;
-    }
+  // 新規開始のみストーリー
+  if (isNewGame()) {
+    switchScreen("story-screen");
+    return;
+  }
 
-    playerSelectScreen.classList.add("hidden");
-    mainScreen.classList.remove("hidden");
-    maybeShowNewsBanner();
-  });
+  // 通常はメイン
+  switchScreen("main-screen");
+  maybeShowNewsBanner();
+});
 
   // story next
   if (storyNextBtn) {
     storyNextBtn.addEventListener("click", () => {
       storySeen = true;
       saveStatus();
-      if (storyScreen) storyScreen.classList.add("hidden");
-      mainScreen.classList.remove("hidden");
+      switchScreen("main-screen");
       maybeShowNewsBanner();
     });
   }
@@ -800,3 +792,4 @@ function bindEvents() {
     alert("全プレイヤーを初期化しました。");
   });
 }
+
