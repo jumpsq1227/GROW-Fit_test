@@ -15,6 +15,8 @@ const defaultStatus = { run: 1, chest: 1, back: 1, leg: 1 };
 
 // 週4回ベース（安定ゾーン）
 const WEEK_TARGET = 4;
+// ===== 週4達成ボーナス =====
+let weeklyBonusGranted = false; // その週で既に付与したか
 
 // プロテインスライム（特別遭遇）
 const proteinSlime = {
@@ -224,6 +226,7 @@ function updateWeeklyOnTraining(todayKey){
   if (weekStartKey !== currentWeekStart) {
     weekStartKey = currentWeekStart;
     weekTrainedDays = [];
+    weeklyBonusGranted = false;   // ★週ボーナスをリセット
   }
   if (!weekTrainedDays.includes(todayKey)) {
     weekTrainedDays.push(todayKey);
@@ -236,6 +239,22 @@ function getStabilityLabel(count){
   if (count >= 2) return "状態：回復中";
   return "状態：要支援";
 }
+
+function checkWeeklyBonus(){
+  // 既に付与済みなら何もしない
+  if (weeklyBonusGranted) return;
+
+  // 週4達成した瞬間だけ
+  if (weekTrainedDays.length >= WEEK_TARGET) {
+    proteinSlimeReady = true;      // 次の討伐を確定スライムに
+    weeklyBonusGranted = true;     // 今週はもう出さない
+    saveStatus();
+
+    // 演出（任意だが強くオススメ）
+    setBanner("【週4達成】プロテインスライムが現れた！");
+  }
+}
+
 
 function starsFromRisk(risk){
   const score = Math.round((1 - risk) * 5);
@@ -370,6 +389,7 @@ function saveStatus() {
   const saveData = {
     status,
     monsterIndex: currentMonsterIndex,
+    weeklyBonusGranted: weeklyBonusGranted,
     worldRecovery,
     lastTrainingDate,
 
@@ -396,7 +416,7 @@ function loadStatus() {
     currentMonsterIndex = parsed.monsterIndex ?? 0;
     worldRecovery = parsed.worldRecovery ?? 0;
     lastTrainingDate = parsed.lastTrainingDate ?? null;
-
+    weeklyBonusGranted = parsed.weeklyBonusGranted ?? false;
     superDrinkCount = parsed.superDrinkCount ?? 0;
     doubleNextTraining = parsed.doubleNextTraining ?? false;
 
@@ -524,6 +544,9 @@ function executeTraining(trainType) {
   // 週4カウント更新（同日複数回は1回）
   const todayKey = getTodayKeyTokyo();
   updateWeeklyOnTraining(todayKey);
+
+  // ★ここでチェック
+  checkWeeklyBonus();
 
   // 最終実施日（離脱リスク gapDays に使用）
   if (lastTrainingDate !== todayKey) lastTrainingDate = todayKey;
@@ -792,4 +815,5 @@ function bindEvents() {
     alert("全プレイヤーを初期化しました。");
   });
 }
+
 
