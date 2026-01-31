@@ -88,11 +88,54 @@ button:hover{
 /* ---- Avatar ---- */
 .avatar-wrap{
   position: relative;
+  display: inline-block;
 }
 .avatar{
   height: 140px;
   image-rendering: pixelated;
   filter: drop-shadow(2px 2px 0 var(--black));
+}
+
+/* ---- Item ---- */
+.item-chip{
+   position: absolute;
+   top: 6px;
+   right: 6px;
+   transform: translateX(-80px);
+}
+.item-pop{
+   position: absolute;
+   top: 34px;
+   right: 6px;
+   z-index: 70;
+   width: 190px;
+   padding: 10px;
+   background: rgba(0,0,0,0.9);
+   border: 2px solid #fff;
+   box-shadow: 2px 2px 0 #000;
+   box-sizing: border-box;
+   text-align: left;
+}
+.item-hint{
+   margin: 6px 0 8px;
+   white-space: normal;
+} 
+.item-pop-title{
+   font-size: 12px;
+   margin-bottom: 6px;
+   opacity: 0.95;
+} 
+.item-use{
+   width: 100%;
+   white-space: nowrap;
+   font-size: 12px;
+}
+.item-use:hover{
+   background: linear-gradient(#58d68d, #2ecc71);
+}
+.item-use:disabled{
+   opacity: 0.6;
+   cursor: not-allowed;
 }
 
 /* ---- World Recovery ---- */
@@ -163,3 +206,4 @@ button:hover{
   border: 2px solid var(--border);
   background: rgba(0,0,0,0.65);
 }
+
