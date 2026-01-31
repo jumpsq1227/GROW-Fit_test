@@ -10,11 +10,22 @@
 <!-- ===== プレイヤー選択画面 ===== -->
 <div id="playerSelectScreen">
   <h1>Muscle RPG</h1>
+  <div class="story-teaser">
+    <p class="story-teaser-title">＜ストーリー＞</p>
+    <p>
+      20XX年、ジム【GOLD】に暮らす筋肉の妖精たちは、魔王軍の進軍により、<br>
+      日々の運動をやめてしまった...<br>
+      ジム【WORLD】が荒廃してしばらく経った頃、"あなた"が運動を始めた。<br>
+      あなたの"たった1回の運動"が、あなた自身と世界を少しずつ変えていく。
+    </p>
+  </div>
   <select id="playerSelect"></select>
   <button id="startBtn">筋トレをはじめる</button>
   <button id="resetAllBtn">全プレイヤー初期化</button>
 </div>
 
+
+  
 <!-- ===== メイン画面 ===== -->
 <div id="main-screen" class="hidden">
   <p id="playerNameText" class="player-name"></p>
@@ -29,9 +40,23 @@
     <div class="hpbar">
       <div class="hpbar-fill" id="worldRecoveryFill" style="width:0%"></div>
     </div>
-    <div class="streak-text">
-      連続トレ：<span id="streakDaysText">0</span>日
+    <div class="weekly-box">
+      <div class="weekly-title">
+        今週の運動：<span id="weekCountText">0</span>/4
+      </div>
+      <div class="weekbar">
+        <div class="weekbar-fill" id="weekBarFill" style="width:0%"></div>
+      </div>
+      <div id="stabilityText" class="stability-text">
+        状態：要支援
+      </div>
+      <!--  継続安定度インジケータ -->
+      <div class="reliability-row">
+        <span class="reliability-label">継続安定度</span>
+        <span id="reliabilityStars" class="reliability-stars">★★★☆☆</span>
+      </div>
     </div>
+
   </div>
   <div class="status-inner">
     <!-- ステータス -->
@@ -130,6 +155,7 @@
 <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
