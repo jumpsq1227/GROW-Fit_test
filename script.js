@@ -1,5 +1,5 @@
 // プレイヤー管理
-const players = ["おがわ", "すずき", "たなか"];
+const players = ["おがわ", "いまえだ", "わたなべ"];
 let currentPlayer = null;
 
 // 初期ステータス（プレイヤー、ジム）
@@ -8,6 +8,12 @@ let status = { ...defaultStatus };
 let worldRecovery = 0;       // 0〜100
 let streakDays = 0;          // 連続継続日数
 let lastTrainingDate = null; // "YYYY-MM-DD"
+
+// ===== 週4回ベース（安定ゾーン） =====
+let weekStartKey = null;     // その週の月曜(YYYY-MM-DD)
+let weekTrainedDays = [];    // その週に実施した日付キー配列（重複なし）
+let storySeen = false;       // 新規開始時のストーリーを見たか
+const WEEK_TARGET = 4;
 
 // ===== アイテム =====
 let superDrinkCount = 0;        // 超回復スポドリ所持数
@@ -118,6 +124,15 @@ const itemHintText = document.getElementById("itemHintText");
 
 const newsBanner = document.getElementById("newsBanner");
 
+const weekCountText = document.getElementById("weekCountText");
+const weekBarFill = document.getElementById("weekBarFill");
+const stabilityText = document.getElementById("stabilityText");
+const reliabilityStars = document.getElementById("reliabilityStars");
+
+const storyScreen = document.getElementById("story-screen");
+const storyNextBtn = document.getElementById("storyNextBtn");
+
+
 // ===== 初期処理 =====
 function initPlayerSelect() {
   players.forEach(name => {
@@ -136,6 +151,33 @@ function getTodayKeyTokyo() {
   const m = parts.find(p => p.type === "month").value;
   const d = parts.find(p => p.type === "day").value;
   return `${y}-${m}-${d}`;
+}
+
+function getTokyoDateParts(date = new Date()) {
+  const parts = new Intl.DateTimeFormat("ja-JP", {
+    timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit"
+  }).formatToParts(date);
+  return {
+    y: Number(parts.find(p => p.type === "year").value),
+    m: Number(parts.find(p => p.type === "month").value),
+    d: Number(parts.find(p => p.type === "day").value),
+  };
+}
+
+function toKey(y, m, d){
+  const mm = String(m).padStart(2,"0");
+  const dd = String(d).padStart(2,"0");
+  return `${y}-${mm}-${dd}`;
+}
+
+// 月曜始まりの「週開始日キー」を返す
+function getWeekStartKeyTokyo(date = new Date()){
+  const {y,m,d} = getTokyoDateParts(date);
+  const dt = new Date(y, m-1, d);    // ローカルDateだが日付差分はOK
+  const day = dt.getDay();           // 0:日 1:月 ... 6:土
+  const shift = (day + 6) % 7;       // 月曜を0に揃える
+  dt.setDate(dt.getDate() - shift);
+  return toKey(dt.getFullYear(), dt.getMonth()+1, dt.getDate());
 }
 
 function isYesterdayTokyo(lastKey, todayKey) {
@@ -159,6 +201,35 @@ function diffDaysTokyo(fromKey, toKey) {
   return Math.round((to - from) / (1000 * 60 * 60 * 24));
 }
 
+function updateWeeklyOnTraining(todayKey){
+  const currentWeekStart = getWeekStartKeyTokyo();
+
+  // 週が変わったらリセット
+  if (weekStartKey !== currentWeekStart) {
+    weekStartKey = currentWeekStart;
+    weekTrainedDays = [];
+  }
+
+  // 同日複数回は1回扱い
+  if (!weekTrainedDays.includes(todayKey)) {
+    weekTrainedDays.push(todayKey);
+  }
+}
+
+function getStabilityLabel(count){
+  if (count >= 5) return "状態：オーバーロード（やりすぎ注意）";
+  if (count >= 4) return "状態：安定ゾーン";
+  if (count >= 2) return "状態：回復中";
+  return "状態：要支援";
+}
+
+function starsFromRisk(risk){
+  // risk(0良い〜1悪い) → ★★★★★〜★☆☆☆☆
+  const score = Math.round((1 - risk) * 5);  // 0〜5
+  const s = Math.max(1, Math.min(5, score)); // 最低1★
+  return "★".repeat(s) + "☆".repeat(5 - s);
+}
+
 // ===== 数学ユーティリティ =====
 function clamp(x, lo, hi) { return Math.max(lo, Math.min(hi, x)); }
 function sigmoid(x) { return 1 / (1 + Math.exp(-x)); }
@@ -174,7 +245,9 @@ function calcDropoutRiskApprox() {
   const ratio = (nextMonster.level + 1) / (heroLv + 1);
   const deltaD = Math.max(0, Math.log(ratio));
 
-  const supportB = worldRecovery + 2.0 * streakDays;
+  const weekCount = weekTrainedDays.length; // その週の実施日数
+  const supportB = worldRecovery + 2.0 * Math.min(weekCount, WEEK_TARGET);
+
   const x = -2.2 + 1.3 * deltaD + 0.25 * gapDays - 0.03 * supportB;
   return clamp(sigmoid(x), 0, 1);
 }
@@ -323,6 +396,13 @@ if (useDrinkBtn) {
   });
 }
 
+// 新規判定：全ステータスLv1 かつ story未閲覧
+function isNewGame(){
+  const allLv1 =
+    status.run === 1 && status.chest === 1 && status.back === 1 && status.leg === 1;
+  return allLv1 && !storySeen;
+}
+
 // ===== プレイヤー選択 =====
 startBtn.addEventListener("click", () => {
   if (!playerSelect.value) {
@@ -333,16 +413,36 @@ startBtn.addEventListener("click", () => {
 
   loadStatus();
   updateStatusView();
-  updateWorldView();
   updateAvatarByTopStatus();
   updateItemView();
+  updateWorldView();
 
   playerNameText.textContent = `トレーニー：${currentPlayer}`;
+
+  // ★新規開始のみ：ストーリーへ
+  if (isNewGame()) {
+    playerSelectScreen.classList.add("hidden");
+    if (storyScreen) storyScreen.classList.remove("hidden");
+    return;
+  }
+
+  // 通常はメインへ
   playerSelectScreen.classList.add("hidden");
   mainScreen.classList.remove("hidden");
-
   maybeShowNewsBanner();
 });
+
+// ストーリー「次へ」→ メイン
+if (storyNextBtn) {
+  storyNextBtn.addEventListener("click", () => {
+    storySeen = true;
+    saveStatus();
+
+    if (storyScreen) storyScreen.classList.add("hidden");
+    mainScreen.classList.remove("hidden");
+    maybeShowNewsBanner();
+  });
+}
 
 // ===== 保存 =====
 function saveStatus() {
@@ -359,6 +459,10 @@ function saveStatus() {
     proteinSlimeReady: proteinSlimeReady,
     lastSlimeRollDate: lastSlimeRollDate,
     slimeCooldownUntil: slimeCooldownUntil,
+
+    weekStartKey: weekStartKey,
+    weekTrainedDays: weekTrainedDays,
+    storySeen: storySeen,
   };
   localStorage.setItem(`muscleRPG_${currentPlayer}`, JSON.stringify(saveData));
 }
@@ -381,6 +485,9 @@ function loadStatus() {
     proteinSlimeReady = parsed.proteinSlimeReady ?? false;
     lastSlimeRollDate = parsed.lastSlimeRollDate ?? null;
     slimeCooldownUntil = parsed.slimeCooldownUntil ?? null;
+    weekStartKey = parsed.weekStartKey ?? null;
+    weekTrainedDays = parsed.weekTrainedDays ?? [];
+    storySeen = parsed.storySeen ?? false;
   } else {
     status = { ...defaultStatus };
     currentMonsterIndex = 0;
@@ -394,6 +501,10 @@ function loadStatus() {
     proteinSlimeReady = false;
     lastSlimeRollDate = null;
     slimeCooldownUntil = null;
+
+    weekStartKey = getWeekStartKeyTokyo();
+    weekTrainedDays = [];
+    storySeen = false;
   }
 }
 
@@ -417,9 +528,25 @@ function updateStatusView() {
 
 function updateWorldView() {
   const v = Math.max(0, Math.min(100, worldRecovery));
-  worldRecoveryText.textContent = `${v}%`;
-  worldRecoveryFill.style.width = `${v}%`;
-  streakDaysText.textContent = String(streakDays);
+
+  // id重複対策：両方更新（main と gym）
+  document.querySelectorAll("#worldRecoveryText")
+    .forEach(el => el.textContent = `${v}%`);
+  document.querySelectorAll("#worldRecoveryFill")
+    .forEach(el => el.style.width = `${v}%`);
+
+  // 週4 UI
+  const weekCount = weekTrainedDays.length;
+  if (weekCountText) weekCountText.textContent = String(Math.min(weekCount, WEEK_TARGET));
+  if (weekBarFill) {
+    const ratio = Math.min(weekCount, WEEK_TARGET) / WEEK_TARGET;
+    weekBarFill.style.width = `${Math.round(ratio * 100)}%`;
+  }
+  if (stabilityText) stabilityText.textContent = getStabilityLabel(weekCount);
+
+  // 継続安定度（★）
+  const risk = calcDropoutRiskApprox();
+  if (reliabilityStars) reliabilityStars.textContent = starsFromRisk(risk);
 }
 
 // ===== アバター更新 =====
@@ -465,16 +592,12 @@ function executeTraining(trainType) {
 
   // ストリーク更新
   const todayKey = getTodayKeyTokyo();
-  if (!lastTrainingDate) {
-    streakDays = 1;
-    lastTrainingDate = todayKey;
-  } else if (lastTrainingDate === todayKey) {
-    // 同日複数回は増えない
-  } else if (isYesterdayTokyo(lastTrainingDate, todayKey)) {
-    streakDays += 1;
-    lastTrainingDate = todayKey;
-  } else {
-    streakDays = 1;
+  
+  // 週4カウント更新（同日複数回は1回）
+  updateWeeklyOnTraining(todayKey);
+  
+  // 最終実施日（離脱リスクの gapDays には残す）
+  if (lastTrainingDate !== todayKey) {
     lastTrainingDate = todayKey;
   }
 
@@ -656,3 +779,4 @@ resetAllBtn.addEventListener("click", () => {
 
   alert("全プレイヤーを初期化しました。");
 });
+
