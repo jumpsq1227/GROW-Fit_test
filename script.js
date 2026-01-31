@@ -234,7 +234,7 @@ function updateWeeklyOnTraining(todayKey){
 }
 
 function getStabilityLabel(count){
-  if (count >= 5) return "状態：オーバーロード（やりすぎ注意）";
+  if (count >= 6) return "状態：オーバーロード（やりすぎ注意）";
   if (count >= 4) return "状態：安定ゾーン";
   if (count >= 2) return "状態：回復中";
   return "状態：要支援";
@@ -815,5 +815,6 @@ function bindEvents() {
     alert("全プレイヤーを初期化しました。");
   });
 }
+
 
 
