@@ -361,22 +361,107 @@ button:hover{
   cursor: not-allowed;
 }
 
+/* ===== 週4回UI（安定ゾーン） ===== */
+.weekly-box{
+  margin-top: 8px;
+  text-align: left;
+  font-size: 13px;
+}
 
+.weekly-title{
+  display:flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  opacity: 0.95;
+}
 
+.weekbar{
+  width: 100%;
+  height: 12px;
+  border: 2px solid var(--border);
+  background: rgba(0,0,0,0.35);
+  box-shadow: 0 0 0 2px var(--black) inset;
+}
 
+.weekbar-fill{
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(#3498db, #2e86c1);
+  transition: width 0.35s ease-out;
+}
 
+.stability-text{
+  margin-top: 6px;
+  font-size: 13px;
+  opacity: 0.95;
+}
 
+/* ===== 継続安定度（★） ===== */
+.reliability-row{
+  margin-top: 6px;
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+.reliability-stars{
+  letter-spacing: 1px;
+}
 
+/* ===== プレイヤー選択：背景が見えるストーリー枠 ===== */
+.story-teaser{
+  width: min(92vw, 420px);
+  margin: 10px auto 8px;
+  padding: 10px 12px;
+  border: 2px solid var(--border);
+  background: rgba(0,0,0,0.55);
+  box-shadow: var(--shadow);
+  text-align: left;
+  line-height: 1.5;
+}
+.story-teaser-title{
+  margin: 0 0 6px;
+  font-size: 13px;
+  opacity: 0.95;
+}
+.story-teaser-sub{
+  margin: 6px 0 0;
+  font-size: 12px;
+  opacity: 0.9;
+}
 
+/* ===== ストーリー画面 ===== */
+.story-screen{
+  background: url("images/bg_field.png") no-repeat center;
+  background-size: min(90vw, 400px);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 18px;
+}
 
+.story-panel{
+  width: min(92vw, 420px);
+  padding: 14px 14px;
+  border: 2px solid var(--border);
+  background: rgba(0,0,0,0.65);
+  box-shadow: var(--shadow);
+  text-align: left;
+}
 
+.story-title{
+  margin: 0 0 10px;
+  font-size: 18px;
+  text-shadow: var(--shadow);
+}
 
-
-
-
-
-
-
+.story-text{
+  margin: 0 0 12px;
+  font-size: 13px;
+  line-height: 1.7;
+  white-space: pre-line;
+}
 
 
 
