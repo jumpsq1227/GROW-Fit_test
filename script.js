@@ -508,7 +508,7 @@ function updateItemView() {
   useDrinkBtn.disabled = (superDrinkCount <= 0) || doubleNextTraining;
 
   if (doubleNextTraining) {
-    itemHintText.textContent = "【発動中】次回トレーニングの効果が2倍！";
+    itemHintText.textContent = "【発動中】トレーニング後の復興度2倍！";
   } else if (superDrinkCount > 0) {
     itemHintText.textContent = "使うと、トレーニング後の復興度が2倍。";
   } else {
@@ -815,6 +815,7 @@ function bindEvents() {
     alert("全プレイヤーを初期化しました。");
   });
 }
+
 
 
 
