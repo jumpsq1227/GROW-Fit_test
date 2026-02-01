@@ -59,9 +59,11 @@ const monsterList = [
 ];
 
 // SE
-const seLevelUp = new Audio("sounds/levelup.mp3");
-const seWin     = new Audio("sounds/win.mp3");
-const seLose    = new Audio("sounds/lose.mp3");
+const seLevelUp = new Audio("sound/levelup.mp3");
+const seWin     = new Audio("sound/win.mp3");
+const seLose    = new Audio("sound/lose.mp3");
+const seattack    = new Audio("sound/attack.mp3");
+const setonext    = new Audio("sound/tonext.mp3");
 
 // ジム城ビジュアル定義
 const gymStages = [
@@ -609,6 +611,7 @@ function battle() {
 
       saveStatus();
       updateItemView();
+      playSE(seattack);
       playSE(seWin);
 
       showResult(
@@ -629,6 +632,7 @@ function battle() {
     if (currentMonsterIndex < monsterList.length - 1) currentMonsterIndex++;
 
     saveStatus();
+    playSE(seattack);
     playSE(seWin);
 
     showResult(
@@ -740,6 +744,8 @@ function bindEvents() {
       return;
     }
     currentPlayer = playerSelect.value;
+    
+    playSE(setonext);
 
     loadStatus();
     updateStatusView();
@@ -754,7 +760,7 @@ function bindEvents() {
     switchScreen("story-screen");
     return;
   }
-
+     
   // 通常はメイン
   switchScreen("main-screen");
   maybeShowNewsBanner();
@@ -773,11 +779,13 @@ function bindEvents() {
   // training menu
   toggleBtn.addEventListener("click", () => {
     menu.classList.toggle("hidden");
+    playSE(setonext);
   });
 
   menu.addEventListener("click", (e) => {
     if (!e.target.dataset.train) return;
     const trainType = e.target.dataset.train;
+    playSE(setonext);
     executeTraining(trainType);
     menu.classList.add("hidden");
   });
@@ -815,6 +823,7 @@ function bindEvents() {
     alert("全プレイヤーを初期化しました。");
   });
 }
+
 
 
 
