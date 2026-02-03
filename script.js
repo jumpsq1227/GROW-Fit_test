@@ -676,24 +676,35 @@ function battle(){
     alert("技を選択してください");
     return;
   }
+
   const chosenType = skillSelect.value;
   if (!(chosenType in status)) return;
+
   const lv = status[chosenType];
   const skill = SKILLS[chosenType](lv);
+
   const monster = proteinSlimeReady
     ? proteinSlime
     : monsterList[currentMonsterIndex];
 
-  // 基本ダメージ
+  // ステータス合計
+  const totalStat =
+    status.run + status.chest + status.back + status.leg;
+
+  // 最大ステータス技か？
+  const isBestSkill = getMaxStatTypes().includes(chosenType);
+
+  // 基本ダメージ（従来式）
   let damage = Math.round(
-    (status.run + status.chest + status.back + status.leg - 1)
-    / monster.level * 100
+    (totalStat - 1) / monster.level * 100
   );
 
-  // 最大ステ技なら一撃補正
-  const isBestSkill = getMaxStatTypes().includes(chosenType);
-  if (isBestSkill) {
-    damage = Math.max(damage, 100); // 必ず倒せる
+  // ★ 条件付き一撃必殺
+  const canOneShot =
+    isBestSkill && totalStat >= monster.level;
+
+  if (canOneShot) {
+    damage = 100; // 必ず倒せる
   }
 
   // HP減少
@@ -897,6 +908,7 @@ window.startQuest = startQuest;
 window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
+
 
 
 
