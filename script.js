@@ -647,6 +647,31 @@ function getMaxStatTypes(){
   return types.filter(t => status[t] === maxLv);
 }
 
+function handleVictory(skill){
+  playSE(seWin);
+
+  // プロテインスライム処理
+  if (proteinSlimeReady) {
+    superDrinkCount += 1;
+    proteinSlimeReady = false;
+  } else {
+    // 通常モンスター進行
+    currentMonsterIndex = Math.min(
+      currentMonsterIndex + 1,
+      monsterList.length - 1
+    );
+  }
+
+  saveStatus();
+  updateItemView();
+
+  showResult(
+    `一撃必殺！<br>
+     <span class="heal">${skill.name}</span>！<br>
+     モンスターを倒した！`
+  );
+}
+
 function battle(){
   if (!skillSelect || !skillSelect.value) {
     alert("技を選択してください");
@@ -659,22 +684,28 @@ function battle(){
   const lv = status[chosenType];
   const skill = SKILLS[chosenType](lv);
 
-  const damage = Math.round((status.run + status.chest + status.back + status.leg - 1)
-                  / (proteinSlimeReady ? proteinSlime.level : monsterList[currentMonsterIndex].level) * 100);
+  const monster = proteinSlimeReady
+    ? proteinSlime
+    : monsterList[currentMonsterIndex];
 
+  // 基本ダメージ
+  let damage = Math.round(
+    (status.run + status.chest + status.back + status.leg - 1)
+    / monster.level * 100
+  );
+
+  // 最大ステ技なら一撃補正
+  const isBestSkill = getMaxStatTypes().includes(chosenType);
+  if (isBestSkill) {
+    damage = Math.max(damage, 100); // 必ず倒せる
+  }
+
+  // HP減少
   setMonsterHp(monsterHp - damage);
 
-  const isBestSkill = getMaxStatTypes().includes(chosenType);
-
   setTimeout(() => {
-    if (isBestSkill) {
-      setMonsterHp(0);
-      playSE(seWin);
-      showResult(
-        `一撃必殺！<br>
-         <span class="heal">${skill.name}</span>！<br>
-         モンスターを倒した！`
-);
+    if (monsterHp <= 0) {
+      handleVictory(skill);
     } else {
       playSE(seLose);
       showResult(
@@ -870,6 +901,7 @@ window.startQuest = startQuest;
 window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
+
 
 
 
