@@ -134,7 +134,7 @@ const avatarImage = document.getElementById("avatarImage");
 
 // world recovery (id重複対策で querySelectorAll を使う)
 const weekCountText = document.getElementById("weekCountText");
-const weekBarFill   = document.getElementById("weekBarFill");
+// const weekBarFill   = document.getElementById("weekBarFill");
 const stabilityText = document.getElementById("stabilityText");
 const reliabilityStars = document.getElementById("reliabilityStars");
 
@@ -473,16 +473,9 @@ function updateWorldView() {
     .forEach(el => el.textContent = `${v}%`);
   document.querySelectorAll("#worldRecoveryFill")
     .forEach(el => el.style.width = `${v}%`);
-
   const weekCount = weekTrainedDays.length;
-
   if (weekCountText) weekCountText.textContent = String(Math.min(weekCount, WEEK_TARGET));
-  if (weekBarFill) {
-    const ratio = Math.min(weekCount, WEEK_TARGET) / WEEK_TARGET;
-    weekBarFill.style.width = `${Math.round(ratio * 100)}%`;
-  }
   if (stabilityText) stabilityText.textContent = getStabilityLabel(weekCount);
-
   const risk = calcDropoutRiskApprox();
   if (reliabilityStars) reliabilityStars.textContent = starsFromRisk(risk);
 }
@@ -837,40 +830,46 @@ function bindEvents() {
   });
 
    
-  // reset all
-  resetAllBtn.addEventListener("click", () => {
-    const ok = confirm("全プレイヤーのステータスと進行状況を初期化します。よろしいですか？");
-    if (!ok) return;
-
-    players.forEach(name => localStorage.removeItem(`muscleRPG_${name}`));
-
-    currentPlayer = null;
-    status = { ...defaultStatus };
-    currentMonsterIndex = 0;
-    worldRecovery = 0;
-    lastTrainingDate = null;
-
-    superDrinkCount = 0;
-    doubleNextTraining = false;
-
-    proteinSlimeReady = false;
-    lastSlimeRollDate = null;
-    slimeCooldownUntil = null;
-
-    weekStartKey = getWeekStartKeyTokyo();
-    weekTrainedDays = [];
-    storySeen = false;
-
-    updateStatusView();
-    updateWorldView();
-    updateAvatarByTopStatus();
-    updateItemView();
-    playerNameText.textContent = "";
-
-    alert("全プレイヤーを初期化しました。");
-  });
+   // reset all
+   if (resetAllBtn) {
+     resetAllBtn.addEventListener("click", () => {
+       const ok = confirm("全プレイヤーのステータスと進行状況を初期化します。よろしいですか？");
+       if (!ok) return;
+   
+       players.forEach(name => localStorage.removeItem(`muscleRPG_${name}`));
+   
+       currentPlayer = null;
+       status = { ...defaultStatus };
+       currentMonsterIndex = 0;
+       worldRecovery = 0;
+       lastTrainingDate = null;
+   
+       superDrinkCount = 0;
+       doubleNextTraining = false;
+   
+       proteinSlimeReady = false;
+       lastSlimeRollDate = null;
+       slimeCooldownUntil = null;
+   
+       weekStartKey = getWeekStartKeyTokyo();
+       weekTrainedDays = [];
+       storySeen = false;
+   
+       updateStatusView();
+       updateWorldView();
+       updateAvatarByTopStatus();
+       updateItemView();
+       playerNameText.textContent = "";
+   
+       alert("全プレイヤーを初期化しました。");
+     });
+   }
 }
 
+window.startQuest = startQuest;
+window.backToMain = backToMain;
+window.visitGym = visitGym;
+window.backToPlayerSelect = backToPlayerSelect;
 
 
 
