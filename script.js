@@ -70,6 +70,7 @@ const seLevelUp = new Audio("sound/levelup.mp3");
 const seWin     = new Audio("sound/win.mp3");
 const seLose    = new Audio("sound/lose.mp3");
 const seattack    = new Audio("sound/attack.mp3");
+const seDamage   = new Audio("sound/damage.mp3");
 const setonext    = new Audio("sound/tonext.mp3");
 const seDrink   = new Audio("sound/drink.mp3");
 
@@ -673,7 +674,7 @@ function handleVictory(skill){
   updateItemView();
   updateWorldView(); // ←これが無いと復興バーが更新されない
    
-  // ✅ 表示文（スライムか通常かで分けると気持ちいい）
+  // 表示文
   if (gained > 0) {
     showResult(
       `一撃必殺！<br>
@@ -734,6 +735,7 @@ function battle(){
     if (monsterHp <= 0) {
       handleVictory(skill);
     } else {
+      playSE(seDamage);
       playSE(seLose);
       showResult(
         `${skill.name} を放った！<br>
@@ -929,6 +931,7 @@ window.startQuest = startQuest;
 window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
+
 
 
 
