@@ -71,6 +71,7 @@ const seWin     = new Audio("sound/win.mp3");
 const seLose    = new Audio("sound/lose.mp3");
 const seattack    = new Audio("sound/attack.mp3");
 const setonext    = new Audio("sound/tonext.mp3");
+const seDrink   = new Audio("sound/drink.mp3");
 
 // ジム城ビジュアル定義
 const gymStages = [
@@ -826,6 +827,7 @@ function bindEvents() {
         if (itemHintText) itemHintText.textContent = "すでに次回2倍が有効です。";
         return;
       }
+      playSE(seDrink);
       superDrinkCount -= 1;
       doubleNextTraining = true;
       saveStatus();
@@ -927,6 +929,7 @@ window.startQuest = startQuest;
 window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
+
 
 
 
