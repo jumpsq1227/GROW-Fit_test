@@ -703,6 +703,9 @@ function battle(){
   }, 450);
 }
 
+if (skillUseBtn) {
+  skillUseBtn.addEventListener("click", battle);
+}
 
 function getGymStageByRecovery(recovery) {
   return gymStages.find(stage => recovery >= stage.min && recovery <= stage.max);
@@ -880,6 +883,7 @@ function bindEvents() {
     alert("全プレイヤーを初期化しました。");
   });
 }
+
 
 
 
