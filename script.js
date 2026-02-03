@@ -49,8 +49,10 @@ const trainingInfo = {
 // モンスター一覧（通常進行）
 const monsterList = [
   { name: "スライム", level: 5, image: "images/monster/slime.png" },
+  { name: "スライムちょい強", level: 7, image: "images/monster/slime.png" },
   { name: "ゴースト", level: 9, image: "images/monster/ghost.png" },
   { name: "ハンバーガーゴーレム", level: 12, image: "images/monster/golem.png" },
+　{ name: "スライム強", level: 14, image: "images/monster/slime.png" },
   { name: "がいこつ戦士", level: 16, image: "images/monster/skeleton.png" },
   { name: "ぽっちゃりドラゴン", level: 20, image: "images/monster/dragon.png" },
   { name: "魔王", level: 28, image: "images/monster/maou.png" },
@@ -823,6 +825,7 @@ function bindEvents() {
     alert("全プレイヤーを初期化しました。");
   });
 }
+
 
 
 
