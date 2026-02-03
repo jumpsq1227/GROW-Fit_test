@@ -648,6 +648,7 @@ function getMaxStatTypes(){
 }
 
 function handleVictory(skill){
+  playSE(seattack);
   playSE(seWin);
 
   // プロテインスライム処理
@@ -661,10 +662,8 @@ function handleVictory(skill){
       monsterList.length - 1
     );
   }
-
   saveStatus();
   updateItemView();
-
   showResult(
     `一撃必殺！<br>
      <span class="heal">${skill.name}</span>！<br>
@@ -677,13 +676,10 @@ function battle(){
     alert("技を選択してください");
     return;
   }
-
   const chosenType = skillSelect.value;
   if (!(chosenType in status)) return;
-
   const lv = status[chosenType];
   const skill = SKILLS[chosenType](lv);
-
   const monster = proteinSlimeReady
     ? proteinSlime
     : monsterList[currentMonsterIndex];
@@ -901,6 +897,7 @@ window.startQuest = startQuest;
 window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
+
 
 
 
