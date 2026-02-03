@@ -66,7 +66,9 @@ const monsterList = [
 ];
 
 // SE
+const seopening = new Audio("sound/opening.mp3");
 const seLevelUp = new Audio("sound/levelup.mp3");
+const sebattle = new Audio("sound/battle.mp3");
 const seWin     = new Audio("sound/win.mp3");
 const seLose    = new Audio("sound/lose.mp3");
 const seattack    = new Audio("sound/attack.mp3");
@@ -693,6 +695,7 @@ function handleVictory(skill){
 }
 
 function battle(){
+  playSE(sebattle);
   if (!skillSelect || !skillSelect.value) {
     alert("技を選択してください");
     return;
@@ -858,6 +861,7 @@ function bindEvents() {
   // 新規開始のみストーリー
   if (isNewGame()) {
     switchScreen("story-screen");
+    playSE(seopening);
     return;
   }
      
@@ -931,6 +935,7 @@ window.startQuest = startQuest;
 window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
+
 
 
 
