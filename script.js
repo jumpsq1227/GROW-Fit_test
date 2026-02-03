@@ -695,7 +695,7 @@ function handleVictory(skill){
 }
 
 function battle(){
-  playSE(sebattle);
+  // playSE(sebattle);
   if (!skillSelect || !skillSelect.value) {
     alert("技を選択してください");
     return;
@@ -935,6 +935,7 @@ window.startQuest = startQuest;
 window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
+
 
 
 
