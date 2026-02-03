@@ -703,10 +703,6 @@ function battle(){
   }, 450);
 }
 
-if (skillUseBtn) {
-  skillUseBtn.addEventListener("click", battle);
-}
-
 function getGymStageByRecovery(recovery) {
   return gymStages.find(stage => recovery >= stage.min && recovery <= stage.max);
 }
@@ -850,6 +846,8 @@ function bindEvents() {
     menu.classList.add("hidden");
   });
 
+  skillUseBtn.addEventListener("click", battle)
+   
   // reset all
   resetAllBtn.addEventListener("click", () => {
     const ok = confirm("全プレイヤーのステータスと進行状況を初期化します。よろしいですか？");
@@ -883,6 +881,7 @@ function bindEvents() {
     alert("全プレイヤーを初期化しました。");
   });
 }
+
 
 
 
