@@ -580,8 +580,9 @@ function executeTraining(trainType) {
   updateAvatarByTopStatus(trainType);
 
   resultText.innerHTML =
-    `今日もお疲れ様！\n${info.label} がパンプアップ！<br>
-     <span class="heal">自販機からプロテイン2本を購入\nジムが${gained}%復興した</span>`;
+    `今日もお疲れ様！\n${info.label} がレベルアップ！<br>
+    自販機からプロテイン2本を購入<br>
+     <span class="heal">ジムが${gained}%復興した</span>`;
 
   playSE(seLevelUp);
 
@@ -640,7 +641,8 @@ function battle() {
     showResult(
       `やったー！<br>
        ${monster.name}を<span class="heal">${muscleName}</span>で倒した！<br>
-       <span class="heal">プロテイン3本をドロップ\nジムが3%復興した</span>`
+       プロテイン3本をドロップ<br>
+       <span class="heal">ジムが3%復興した</span>`
     );
 
   } else {
@@ -825,6 +827,7 @@ function bindEvents() {
     alert("全プレイヤーを初期化しました。");
   });
 }
+
 
 
 
