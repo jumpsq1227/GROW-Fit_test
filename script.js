@@ -32,12 +32,25 @@ const SLIME = {
 // 表示用ラベル
 const muscleLabel = { run: "体力", chest: "胸筋", back: "背筋", leg: "脚力" };
 
-// トレーニング定義（walk系は削除）
+// トレーニング定義
 const trainingInfo = {
   run:   { label: "体力", image: "images/run.png" },
   chest: { label: "胸筋", image: "images/chest.png" },
   back:  { label: "背筋", image: "images/back.png" },
   leg:   { label: "脚力", image: "images/leg.png" }
+};
+
+// 技関係
+const monsterHpText = document.getElementById("monsterHpText");
+const monsterHpFill = document.getElementById("monsterHpFill");
+const skillSelect = document.getElementById("skillSelect");
+const skillUseBtn = document.getElementById("skillUseBtn");
+
+const SKILLS = {
+  run:  (lv) => ({ key:"run",  name: `剣技Lv${lv}`,  dmg: 30 + lv*2 }),
+  chest:(lv) => ({ key:"chest",name:`拳技Lv${lv}`,    dmg: 30 + lv*2 }),
+  back: (lv) => ({ key:"back", name:`背負投げLv${lv}`,  dmg: 30 + lv*2 }),
+  leg:  (lv) => ({ key:"leg",  name:`蹴り技Lv${lv}`,dmg: 30 + lv*2 }),
 };
 
 // モンスター一覧（通常進行）
@@ -588,62 +601,108 @@ function executeTraining(trainType) {
   maybeShowNewsBanner();
 }
 
+function updateSkillSelect(){
+  if (!skillSelect) return;
+  skillSelect.innerHTML = "";
+
+  const types = ["run","chest","back","leg"];
+  for (const t of types){
+    const lv = status[t];
+    const s = SKILLS[t](lv);
+
+    const opt = document.createElement("option");
+    opt.value = t;                 // 属性キー
+    opt.textContent = s.name;      // 表示名
+    skillSelect.appendChild(opt);
+  }
+}
+
+let monsterHp = 100; // 0〜100（割合管理でOK）
+
+function setMonsterHp(pct){
+  monsterHp = Math.max(0, Math.min(100, pct));
+  if (monsterHpText) monsterHpText.textContent = `${monsterHp}%`;
+  if (monsterHpFill) monsterHpFill.style.width = `${monsterHp}%`;
+}
+
 function startQuest() {
   const monster = proteinSlimeReady ? proteinSlime : monsterList[currentMonsterIndex];
   monsterName.textContent = `${monster.name} Lv ${monster.level}`;
   monsterImage.src = monster.image;
+  setMonsterHp(100);
+  updateSkillSelect();
   switchScreen("quest-screen");
 }
 
-function battle() {
-  const heroLv = status.run + status.chest + status.back + status.leg;
-  const monster = proteinSlimeReady ? proteinSlime : monsterList[currentMonsterIndex];
+function getMaxStatTypes(){
+  const types = ["run","chest","back","leg"];
+  let maxLv = -Infinity;
+  for (const t of types) maxLv = Math.max(maxLv, status[t]);
+  return types.filter(t => status[t] === maxLv);
+}
 
-  if (heroLv >= monster.level) {
+function battle(){
+  if (!skillSelect) return;
 
-    // プロテインスライム勝利：アイテム付与
-    if (monster.special === "protein") {
-      proteinSlimeReady = false;
-      superDrinkCount += 1;
+  const chosenType = skillSelect.value; // "run/chest/back/leg"
+  const lv = status[chosenType];
+  const skill = SKILLS[chosenType](lv);
 
-      saveStatus();
-      updateItemView();
-      playSE(seattack);
+  // まず“ダメージ演出”としてHPを減らす（勝ちでも負けでも）
+  const afterHp = Math.max(0, monsterHp - Math.min(100, Math.round(skill.dmg)));
+  setMonsterHp(afterHp);
+
+  const maxTypes = getMaxStatTypes();
+  const isBestSkill = maxTypes.includes(chosenType);
+
+  // ちょい演出のため遅延（HP減ったのが見える）
+  setTimeout(() => {
+    if (isBestSkill) {
+      // 一撃勝利（HPを0にして勝利リザルトへ）
+      setMonsterHp(0);
       playSE(seWin);
 
+      // プロテインスライム勝利処理も既存を活かすならここで分岐
+      const monster = proteinSlimeReady ? proteinSlime : monsterList[currentMonsterIndex];
+      if (monster.special === "protein") {
+        proteinSlimeReady = false;
+        superDrinkCount += 1;
+        saveStatus();
+        updateItemView();
+        showResult(
+          `一撃必殺！<br>
+           <span class="heal">${skill.name}</span>！<br>
+           <span class="heal">プロテインスライム</span>を倒した！<br>
+           <span class="heal">超回復スポドリ</span>を手に入れた！`
+        );
+        return;
+      }
+
+      // 通常勝利（既存ロジック簡略）
+      worldRecovery = Math.min(100, worldRecovery + 3);
+      if (currentMonsterIndex < monsterList.length - 1) currentMonsterIndex++;
+      saveStatus();
+      updateWorldView();
+
       showResult(
-        `やったー！<br>
-         <span class="heal">プロテインスライム</span>を倒した！<br>
-         <span class="heal">超回復スポドリ</span>を手に入れた！<br>
-         <span class="heal">（使用：次回トレのジム復興2倍）</span>`
+        `一撃必殺！<br>
+         <span class="heal">${skill.name}</span>！<br>
+         モンスターを倒した！<br>
+         <span class="heal">ジムが3%復興した</span>`
       );
-      return;
+    } else {
+      // それ以外は即負け
+      playSE(seLose);
+      showResult(
+        `あなたは<span class="heal">${skill.name}</span>を放った！<br>
+         モンスターにダメージ！<br>
+         …しかし隙を突かれた！<br>
+         <span class="heal">一撃で倒されてしまった…</span>`
+      );
     }
-
-    // 通常勝利：復興+3＆次へ
-    worldRecovery = Math.min(100, worldRecovery + 3);
-    updateWorldView();
-
-    const topMuscle = getTopMuscle();
-    const muscleName = muscleLabel[topMuscle];
-    if (currentMonsterIndex < monsterList.length - 1) currentMonsterIndex++;
-
-    saveStatus();
-    playSE(seattack);
-    playSE(seWin);
-
-    showResult(
-      `やったー！<br>
-       ${monster.name}を<span class="heal">${muscleName}</span>で倒した！<br>
-       プロテイン3本をドロップ<br>
-       <span class="heal">ジムが3%復興した</span>`
-    );
-
-  } else {
-    playSE(seLose);
-    showResult("負けてしまった…😵<br> パンプアップが足りないみたいだ！");
-  }
+  }, 450);
 }
+
 
 function getGymStageByRecovery(recovery) {
   return gymStages.find(stage => recovery >= stage.min && recovery <= stage.max);
@@ -821,6 +880,7 @@ function bindEvents() {
     alert("全プレイヤーを初期化しました。");
   });
 }
+
 
 
 
