@@ -43,8 +43,6 @@ const trainingInfo = {
 // 技関係
 const monsterHpText = document.getElementById("monsterHpText");
 const monsterHpFill = document.getElementById("monsterHpFill");
-const skillSelect = document.getElementById("skillSelect");
-const skillUseBtn = document.getElementById("skillUseBtn");
 
 const SKILLS = {
   run:  (lv) => ({ key:"run",  name: `剣技Lv${lv}`,  dmg: 30 + lv*2 }),
@@ -601,6 +599,18 @@ function executeTraining(trainType) {
   maybeShowNewsBanner();
 }
 
+let skillSelect;
+let skillUseBtn;
+
+function bindQuestDom(){
+  skillSelect = document.getElementById("skillSelect");
+  skillUseBtn = document.getElementById("skillUseBtn");
+
+  if (skillUseBtn) {
+    skillUseBtn.onclick = battle;
+  }
+}
+
 function updateSkillSelect(){
   if (!skillSelect) return;
   skillSelect.innerHTML = "";
@@ -631,8 +641,10 @@ function startQuest() {
   monsterImage.src = monster.image;
   setMonsterHp(100);
   updateSkillSelect();
+  bindQuestDom();   // ★ここ重要
   switchScreen("quest-screen");
 }
+
 
 function getMaxStatTypes(){
   const types = ["run","chest","back","leg"];
@@ -642,65 +654,38 @@ function getMaxStatTypes(){
 }
 
 function battle(){
-  if (!skillSelect) return;
+  if (!skillSelect || !skillSelect.value) {
+    alert("技を選択してください");
+    return;
+  }
 
-  const chosenType = skillSelect.value; // "run/chest/back/leg"
+  const chosenType = skillSelect.value;
+  if (!(chosenType in status)) return;
+
   const lv = status[chosenType];
   const skill = SKILLS[chosenType](lv);
 
-  // まず“ダメージ演出”としてHPを減らす（勝ちでも負けでも）
-  const afterHp = Math.max(0, monsterHp - Math.min(100, Math.round(skill.dmg)));
-  setMonsterHp(afterHp);
+  const damage = Math.round((status.run + status.chest + status.back + status.leg - 1)
+                  / (proteinSlimeReady ? proteinSlime.level : monsterList[currentMonsterIndex].level) * 100);
 
-  const maxTypes = getMaxStatTypes();
-  const isBestSkill = maxTypes.includes(chosenType);
+  setMonsterHp(monsterHp - damage);
 
-  // ちょい演出のため遅延（HP減ったのが見える）
+  const isBestSkill = getMaxStatTypes().includes(chosenType);
+
   setTimeout(() => {
     if (isBestSkill) {
-      // 一撃勝利（HPを0にして勝利リザルトへ）
       setMonsterHp(0);
       playSE(seWin);
-
-      // プロテインスライム勝利処理も既存を活かすならここで分岐
-      const monster = proteinSlimeReady ? proteinSlime : monsterList[currentMonsterIndex];
-      if (monster.special === "protein") {
-        proteinSlimeReady = false;
-        superDrinkCount += 1;
-        saveStatus();
-        updateItemView();
-        showResult(
-          `一撃必殺！<br>
-           <span class="heal">${skill.name}</span>！<br>
-           <span class="heal">プロテインスライム</span>を倒した！<br>
-           <span class="heal">超回復スポドリ</span>を手に入れた！`
-        );
-        return;
-      }
-
-      // 通常勝利（既存ロジック簡略）
-      worldRecovery = Math.min(100, worldRecovery + 3);
-      if (currentMonsterIndex < monsterList.length - 1) currentMonsterIndex++;
-      saveStatus();
-      updateWorldView();
-
-      showResult(
-        `一撃必殺！<br>
-         <span class="heal">${skill.name}</span>！<br>
-         モンスターを倒した！<br>
-         <span class="heal">ジムが3%復興した</span>`
-      );
+      handleVictory(skill);
     } else {
-      // それ以外は即負け
       playSE(seLose);
       showResult(
-        `あなたは<span class="heal">${skill.name}</span>を放った！<br>
-         モンスターにダメージ！<br>
-         …しかし隙を突かれた！<br>
-         <span class="heal">一撃で倒されてしまった…</span>`
+        `${skill.name} を放った！<br>
+         しかし反撃を受けた…<br>
+         <span class="heal">敗北した</span>`
       );
     }
-  }, 450);
+  }, 400);
 }
 
 function getGymStageByRecovery(recovery) {
@@ -846,7 +831,7 @@ function bindEvents() {
     menu.classList.add("hidden");
   });
 
-  skillUseBtn.addEventListener("click", battle)
+  skillUseBtn.onclick = battle;
    
   // reset all
   resetAllBtn.addEventListener("click", () => {
@@ -881,6 +866,7 @@ function bindEvents() {
     alert("全プレイヤーを初期化しました。");
   });
 }
+
 
 
 
