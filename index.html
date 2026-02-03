@@ -140,7 +140,22 @@
 <div id="quest-screen" class="screen hidden">
   <h2 id="monsterName"></h2>
   <img id="monsterImage" class="monster">
-  <button onclick="battle()">たたかう</button>
+
+  <!-- モンスターHP -->
+  <div class="monster-hp">
+    <div class="monster-hp-label">
+      モンスターHP：<span id="monsterHpText">100%</span>
+    </div>
+    <div class="hpbar">
+      <div class="hpbar-fill" id="monsterHpFill" style="width:100%"></div>
+    </div>
+  </div>
+
+  <!-- 技選択 -->
+  <div class="skill-box">
+    <select id="skillSelect"></select>
+    <button id="skillUseBtn">たたかう</button>
+  </div>
 </div>
 
 <!-- ===== リザルト画面 ===== -->
@@ -166,6 +181,7 @@
 <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
