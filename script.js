@@ -57,7 +57,7 @@ const monsterList = [
   { name: "スライムちょい強", level: 7, image: "images/monster/slime.png" },
   { name: "ゴースト", level: 9, image: "images/monster/ghost.png" },
   { name: "ハンバーガーゴーレム", level: 12, image: "images/monster/golem.png" },
-　{ name: "スライム強", level: 14, image: "images/monster/slime.png" },
+  { name: "スライム強", level: 14, image: "images/monster/slime.png" },
   { name: "がいこつ戦士", level: 16, image: "images/monster/skeleton.png" },
   { name: "ぽっちゃりドラゴン", level: 20, image: "images/monster/dragon.png" },
   { name: "魔王", level: 28, image: "images/monster/maou.png" },
@@ -639,10 +639,11 @@ function startQuest() {
   const monster = proteinSlimeReady ? proteinSlime : monsterList[currentMonsterIndex];
   monsterName.textContent = `${monster.name} Lv ${monster.level}`;
   monsterImage.src = monster.image;
-  setMonsterHp(100);
+  bindQuestDom();
   updateSkillSelect();
-  bindQuestDom();   // ★ここ重要
+  setMonsterHp(100);
   switchScreen("quest-screen");
+
 }
 
 
@@ -676,7 +677,11 @@ function battle(){
     if (isBestSkill) {
       setMonsterHp(0);
       playSE(seWin);
-      handleVictory(skill);
+      showResult(
+        `一撃必殺！<br>
+         <span class="heal">${skill.name}</span>！<br>
+         モンスターを倒した！`
+);
     } else {
       playSE(seLose);
       showResult(
@@ -831,7 +836,6 @@ function bindEvents() {
     menu.classList.add("hidden");
   });
 
-  skillUseBtn.onclick = battle;
    
   // reset all
   resetAllBtn.addEventListener("click", () => {
@@ -866,6 +870,7 @@ function bindEvents() {
     alert("全プレイヤーを初期化しました。");
   });
 }
+
 
 
 
