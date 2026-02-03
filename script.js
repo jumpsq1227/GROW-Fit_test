@@ -651,12 +651,18 @@ function handleVictory(skill){
   playSE(seattack);
   playSE(seWin);
 
+  const before = worldRecovery;
+  let gained = 0;
+   
   // プロテインスライム処理
   if (proteinSlimeReady) {
     superDrinkCount += 1;
     proteinSlimeReady = false;
   } else {
-    // 通常モンスター進行
+    // ✅ 通常モンスター勝利：ジム復興度を進める
+    worldRecovery = Math.min(100, worldRecovery + 3);
+    gained = worldRecovery - before;
+   
     currentMonsterIndex = Math.min(
       currentMonsterIndex + 1,
       monsterList.length - 1
@@ -664,11 +670,24 @@ function handleVictory(skill){
   }
   saveStatus();
   updateItemView();
-  showResult(
-    `一撃必殺！<br>
-     <span class="heal">${skill.name}</span>！<br>
-     モンスターを倒した！`
-  );
+  updateWorldView(); // ←これが無いと復興バーが更新されない
+   
+  // ✅ 表示文（スライムか通常かで分けると気持ちいい）
+  if (gained > 0) {
+    showResult(
+      `一撃必殺！<br>
+       <span class="heal">${skill.name}</span>！<br>
+       モンスターを倒した！<br>
+       <span class="heal">ジムが${gained}%復興した</span>`
+    );
+  } else {
+    showResult(
+      `会心の一撃！<br>
+       <span class="heal">${skill.name}</span>！<br>
+       <span class="heal">プロテインスライム</span>を倒した！<br>
+       <span class="heal">超回復スポドリ</span>を手に入れた！`
+    );
+  }
 }
 
 function battle(){
@@ -908,6 +927,7 @@ window.startQuest = startQuest;
 window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
+
 
 
 
