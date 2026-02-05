@@ -883,6 +883,7 @@ function bindEvents() {
        
       storySeen = true;
       saveStatus();
+      updateAvatarByTopStatus();
       switchScreen("main-screen");
       maybeShowNewsBanner();
     });
@@ -943,6 +944,7 @@ window.startQuest = startQuest;
 window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
+
 
 
 
