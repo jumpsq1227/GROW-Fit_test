@@ -661,8 +661,8 @@ function executeTraining(trainType) {
   maybeShowNewsBanner();
 }
 
-let skillSelect;
-let skillUseBtn;
+// let skillSelect;
+// let skillUseBtn;
 
 function bindQuestDom(){
   skillSelect = document.getElementById("skillSelect");
@@ -1004,6 +1004,7 @@ window.startQuest = startQuest;
 window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
+
 
 
 
