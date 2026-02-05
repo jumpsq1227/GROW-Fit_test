@@ -70,14 +70,6 @@ const CHARACTER_CONFIG = {
 // 表示用ラベル
 const muscleLabel = { run: "体力", chest: "胸筋", back: "背筋", leg: "脚力" };
 
-// // トレーニング定義
-// const trainingInfo = {
-//   run:   { label: "体力", image: "images/run.png" },
-//   chest: { label: "胸筋", image: "images/chest.png" },
-//   back:  { label: "背筋", image: "images/back.png" },
-//   leg:   { label: "脚力", image: "images/leg.png" }
-// };
-
 // トレーニング定義
 const trainingInfo = {
   run:   { label: "体力" },
@@ -124,6 +116,7 @@ const seattack    = new Audio("sound/attack.mp3");
 const seDamage   = new Audio("sound/damage.mp3");
 const setonext    = new Audio("sound/tonext.mp3");
 const seDrink   = new Audio("sound/drink.mp3");
+const seMagic   = new Audio("sound/magic.mp3");
 
 // ジム城ビジュアル定義
 const gymStages = [
@@ -280,18 +273,6 @@ function playSE(se) {
     se.play();
   } catch (e) {}
 }
-
-// function playCharacterSE(type) {
-//   const path = CHARACTER_CONFIG[avatarType].se[type];
-//   if (!path) return;
-
-//   const se = new Audio(path);
-//   try {
-//     se.currentTime = 0;
-//     se.play();
-//   } catch {}
-// }
-
 
 /* =========================================================
    6) 週4カウント・表示系ヘルパ
@@ -1026,6 +1007,7 @@ window.startQuest = startQuest;
 window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
+
 
 
 
