@@ -89,6 +89,7 @@ const gymStages = [
    2) 状態（プレイヤーごとのセーブ対象）
 ========================================================= */
 let currentPlayer = null;
+let avatarType = "male"; // "male" or "female"
 
 let status = { ...defaultStatus };
 let worldRecovery = 0;           // 0〜100
@@ -400,6 +401,7 @@ function maybeShowNewsBanner() {
 ========================================================= */
 function saveStatus() {
   const saveData = {
+    avatarType,
     status,
     monsterIndex: currentMonsterIndex,
     weeklyBonusGranted: weeklyBonusGranted,
@@ -440,6 +442,7 @@ function loadStatus() {
     weekStartKey = parsed.weekStartKey ?? getWeekStartKeyTokyo();
     weekTrainedDays = parsed.weekTrainedDays ?? [];
     storySeen = parsed.storySeen ?? false;
+    avatarType = parsed.avatarType ?? "male";
   } else {
     status = { ...defaultStatus };
     currentMonsterIndex = 0;
@@ -485,6 +488,8 @@ function updateWorldView() {
 }
 
 function updateAvatarByTopStatus(preferType = null) {
+  if (!avatarImage) return;
+   
   const types = ["run", "chest", "back", "leg"];
   let maxLv = -Infinity;
   for (const t of types) if (status[t] > maxLv) maxLv = status[t];
@@ -494,10 +499,10 @@ function updateAvatarByTopStatus(preferType = null) {
   if (preferType && topTypes.includes(preferType)) chosen = preferType;
 
   const lv = status[chosen];
-  avatarImage.src = `images/player/${chosen}_Lv${lv}.png`;
+  avatarImage.src = `images/player/${avatarType}/${chosen}_Lv${lv}.png`;
   avatarImage.onerror = () => {
     avatarImage.onerror = null;
-    avatarImage.src = `images/player/${chosen}_LvMAX.png`;
+    avatarImage.src = `images/player/${avatarType}/${chosen}_LvMAX.png`;
   };
 }
 
@@ -871,6 +876,11 @@ function bindEvents() {
   // story next
   if (storyNextBtn) {
     storyNextBtn.addEventListener("click", () => {
+      // ★アバター選択を取得
+      const selected = document.querySelector('input[name="avatarType"]:checked');
+      if (selected) avatarType = selected.value;
+      else avatarType = "male";
+       
       storySeen = true;
       saveStatus();
       switchScreen("main-screen");
@@ -933,6 +943,7 @@ window.startQuest = startQuest;
 window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
+
 
 
 
