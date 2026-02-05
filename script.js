@@ -583,7 +583,7 @@ function executeTraining(trainType) {
 
   resultText.innerHTML =
     `今日もお疲れ様！\n${info.label} がレベルアップ！<br>
-    自販機からプロテイン2本を購入<br>
+    プロテイン2本を入手<br>
      <span class="heal">ジムが${gained}%復興した</span>`;
 
   playSE(seLevelUp);
@@ -680,8 +680,7 @@ function handleVictory(skill){
   if (gained > 0) {
     showResult(
       `一撃必殺！<br>
-       <span class="heal">${skill.name}</span>！<br>
-       モンスターを倒した！<br>
+       <span class="heal">${skill.name}</span>で倒した！<br>
        <span class="heal">ジムが${gained}%復興した</span>`
     );
   } else {
@@ -742,8 +741,7 @@ function battle(){
       playSE(seLose);
       showResult(
         `${skill.name} を放った！<br>
-         しかし反撃を受けた…<br>
-         <span class="heal">敗北した</span>`
+         <span class="heal">しかし反撃を受け、敗北した…</span>`
       );
     }
   }, 400);
@@ -935,6 +933,7 @@ window.startQuest = startQuest;
 window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
+
 
 
 
