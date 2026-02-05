@@ -461,6 +461,7 @@ function maybeShowNewsBanner() {
    10) 保存 / 読み込み
 ========================================================= */
 function saveStatus() {
+  if (!currentPlayer) return; // ★保険
   const saveData = {
     avatarType,
     status,
@@ -520,6 +521,7 @@ function loadStatus() {
     weekStartKey = getWeekStartKeyTokyo();
     weekTrainedDays = [];
     storySeen = false;
+    avatarType = "male";
   }
 }
 
@@ -1024,6 +1026,7 @@ window.startQuest = startQuest;
 window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
+
 
 
 
