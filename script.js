@@ -39,8 +39,13 @@ const CHARACTER_CONFIG = {
       lose: "sound/male/lose.mp3",
     },
     trainingStyle: "power", // 表現タイプ
+    skills: {
+      run:   (lv) => `剣技Lv${lv}`,
+      chest: (lv) => `拳技Lv${lv}`,
+      back:  (lv) => `背負投げLv${lv}`,
+      leg:   (lv) => `蹴り技Lv${lv}`,
+    },
   },
-
   female: {
     name: "女の子",
     se: {
@@ -50,8 +55,13 @@ const CHARACTER_CONFIG = {
       lose: "sound/female/lose.mp3",
     },
     trainingStyle: "magic",
+    skills: {
+      run:   (lv) => `風魔法Lv${lv}`,
+      chest: (lv) => `炎魔法Lv${lv}`,
+      back:  (lv) => `氷魔法Lv${lv}`,
+      leg:   (lv) => `重力魔法Lv${lv}`,
+    },
   },
-
   // 将来追加例
   // monk: { ... }
 };
@@ -81,12 +91,14 @@ const trainingInfo = {
 const monsterHpText = document.getElementById("monsterHpText");
 const monsterHpFill = document.getElementById("monsterHpFill");
 
-const SKILLS = {
-  run:  (lv) => ({ key:"run",  name: `剣技Lv${lv}`,  dmg: 30 + lv*2 }),
-  chest:(lv) => ({ key:"chest",name:`拳技Lv${lv}`,    dmg: 30 + lv*2 }),
-  back: (lv) => ({ key:"back", name:`背負投げLv${lv}`,  dmg: 30 + lv*2 }),
-  leg:  (lv) => ({ key:"leg",  name:`蹴り技Lv${lv}`,dmg: 30 + lv*2 }),
-};
+// const SKILLS = {
+//   run:  (lv) => ({ key:"run",  name: `剣技Lv${lv}`,  dmg: 30 + lv*2 }),
+//   chest:(lv) => ({ key:"chest",name:`拳技Lv${lv}`,    dmg: 30 + lv*2 }),
+//   back: (lv) => ({ key:"back", name:`背負投げLv${lv}`,  dmg: 30 + lv*2 }),
+//   leg:  (lv) => ({ key:"leg",  name:`蹴り技Lv${lv}`,dmg: 30 + lv*2 }),
+// };
+
+const SKILL_DAMAGE = (lv) => 30 + lv * 2;
 
 // モンスター一覧（通常進行）
 const monsterList = [
@@ -261,7 +273,7 @@ function diffDaysTokyo(fromKey, toKey) {
 function clamp(x, lo, hi) { return Math.max(lo, Math.min(hi, x)); }
 function sigmoid(x) { return 1 / (1 + Math.exp(-x)); }
 
-SE
+//SE
 function playSE(se) {
   try {
     se.currentTime = 0;
@@ -514,6 +526,12 @@ function loadStatus() {
 /* =========================================================
    11) UI更新
 ========================================================= */
+function getSkill(type, lv) {
+  const cfg = CHARACTER_CONFIG[avatarType] ?? CHARACTER_CONFIG.male;
+  const nameFn = cfg.skills?.[type] ?? ((x) => `${type}Lv${x}`);
+  return { key: type, name: nameFn(lv), dmg: SKILL_DAMAGE(lv) };
+}
+
 function updateStatusView() {
   HPLv.textContent = status.run;
   chestLv.textContent = status.chest;
@@ -661,8 +679,8 @@ function executeTraining(trainType) {
   maybeShowNewsBanner();
 }
 
-// let skillSelect;
-// let skillUseBtn;
+let skillSelect = null;
+let skillUseBtn = null;
 
 function bindQuestDom(){
   skillSelect = document.getElementById("skillSelect");
@@ -680,7 +698,8 @@ function updateSkillSelect(){
   const types = ["run","chest","back","leg"];
   for (const t of types){
     const lv = status[t];
-    const s = SKILLS[t](lv);
+    // const s = SKILLS[t](lv)
+    const s = getSkill(t, lv);
 
     const opt = document.createElement("option");
     opt.value = t;                 // 属性キー
@@ -769,7 +788,8 @@ function battle(){
   if (!(chosenType in status)) return;
 
   const lv = status[chosenType];
-  const skill = SKILLS[chosenType](lv);
+  // const skill = SKILLS[chosenType](lv);
+  const skill = getSkill(chosenType, lv);
 
   const monster = proteinSlimeReady
     ? proteinSlime
@@ -1004,6 +1024,7 @@ window.startQuest = startQuest;
 window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
+
 
 
 
