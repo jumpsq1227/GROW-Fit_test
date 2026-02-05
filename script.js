@@ -29,16 +29,53 @@ const SLIME = {
   cooldownDays: 2 // 連日出現抑制
 };
 
+const CHARACTER_CONFIG = {
+  male: {
+    name: "男の子",
+    se: {
+      train: "sound/male/train.mp3",
+      attack: "sound/male/attack.mp3",
+      win: "sound/male/win.mp3",
+      lose: "sound/male/lose.mp3",
+    },
+    trainingStyle: "power", // 表現タイプ
+  },
+
+  female: {
+    name: "女の子",
+    se: {
+      train: "sound/female/train.mp3",
+      attack: "sound/female/attack.mp3",
+      win: "sound/female/win.mp3",
+      lose: "sound/female/lose.mp3",
+    },
+    trainingStyle: "magic",
+  },
+
+  // 将来追加例
+  // monk: { ... }
+};
+
+
 // 表示用ラベル
 const muscleLabel = { run: "体力", chest: "胸筋", back: "背筋", leg: "脚力" };
 
+// // トレーニング定義
+// const trainingInfo = {
+//   run:   { label: "体力", image: "images/run.png" },
+//   chest: { label: "胸筋", image: "images/chest.png" },
+//   back:  { label: "背筋", image: "images/back.png" },
+//   leg:   { label: "脚力", image: "images/leg.png" }
+// };
+
 // トレーニング定義
 const trainingInfo = {
-  run:   { label: "体力", image: "images/run.png" },
-  chest: { label: "胸筋", image: "images/chest.png" },
-  back:  { label: "背筋", image: "images/back.png" },
-  leg:   { label: "脚力", image: "images/leg.png" }
+  run:   { label: "体力" },
+  chest: { label: "胸筋" },
+  back:  { label: "背筋" },
+  leg:   { label: "脚力" }
 };
+
 
 // 技関係
 const monsterHpText = document.getElementById("monsterHpText");
@@ -224,13 +261,25 @@ function diffDaysTokyo(fromKey, toKey) {
 function clamp(x, lo, hi) { return Math.max(lo, Math.min(hi, x)); }
 function sigmoid(x) { return 1 / (1 + Math.exp(-x)); }
 
-// SE
+SE
 function playSE(se) {
   try {
     se.currentTime = 0;
     se.play();
   } catch (e) {}
 }
+
+// function playCharacterSE(type) {
+//   const path = CHARACTER_CONFIG[avatarType].se[type];
+//   if (!path) return;
+
+//   const se = new Audio(path);
+//   try {
+//     se.currentTime = 0;
+//     se.play();
+//   } catch {}
+// }
+
 
 /* =========================================================
    6) 週4カウント・表示系ヘルパ
@@ -545,7 +594,12 @@ function isNewGame(){
   return allLv1 && !storySeen;
 }
 
-// トレーニング実行（walk削除でシンプル化）
+// トレーニング実行
+function getTrainingImage(trainType) {
+  const style = CHARACTER_CONFIG[avatarType].trainingStyle;
+  return `images/training/${style}/${trainType}.png`;
+}
+
 function executeTraining(trainType) {
   if (!(trainType in status)) return;
 
@@ -594,7 +648,13 @@ function executeTraining(trainType) {
   playSE(seLevelUp);
 
   const resultImage = document.getElementById("resultImage");
-  resultImage.src = info.image;
+  // resultImage.src = info.image;
+
+  // 2/5追加分
+  resultImage.src = getTrainingImage(trainType);
+  resultImage.onerror = () => {
+    resultImage.src = `images/training/power/${trainType}.png`;
+  };
   resultImage.classList.remove("hidden");
 
   switchScreen("result-screen");
@@ -944,6 +1004,7 @@ window.startQuest = startQuest;
 window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
+
 
 
 
