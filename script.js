@@ -436,7 +436,8 @@ function calcDropoutRiskForPlayerData(p) {
 
 function maybeShowNewsBanner() {
   if (!newsBanner) return;
-  if (Math.random() > 0.55) return;
+  //コメントアウトで、フェイク近況バナーを「必ず出す」ようにする
+  // if (Math.random() > 0.55) return;
 
   const others = players.filter(n => n !== currentPlayer);
   const candidates = [];
@@ -1026,6 +1027,7 @@ window.startQuest = startQuest;
 window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
+
 
 
 
