@@ -824,6 +824,7 @@ function battle(){
     } else {
       // ★反撃演出
       animateMonster("counter");
+      playSE(seDamage);  
       playSE(seLose);
       showResult(
         `${skill.name} を放った！<br>
@@ -1025,6 +1026,7 @@ window.startQuest = startQuest;
 window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
+
 
 
 
