@@ -184,6 +184,13 @@ button:hover{
   background-size: min(90vw, 400px);
 }
 
+.story-teaser{
+  width: min(92vw, 420px);
+  padding: 14px;
+  border: 2px solid var(--border);
+  background: rgba(0,0,0,0.65);
+}
+
 #resetAllBtn{
   margin-top: auto;
   margin-bottom: 18px;
@@ -273,5 +280,6 @@ button:hover{
    image-rendering: pixelated;
    display: block;
 }
+
 
 
