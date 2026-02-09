@@ -743,7 +743,7 @@ function handleVictory(skill){
     superDrinkCount += 1;
     proteinSlimeReady = false;
   } else {
-    // ✅ 通常モンスター勝利：ジム復興度を進める
+    // 通常モンスター勝利：ジム復興度を進める
     worldRecovery = Math.min(100, worldRecovery + 3);
     gained = worldRecovery - before;
    
@@ -1024,6 +1024,7 @@ window.startQuest = startQuest;
 window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
+
 
 
 
