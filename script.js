@@ -281,9 +281,11 @@ function animateMonster(type) {
   void monsterImage.offsetWidth;
   if (type === "hit") {
     monsterImage.classList.add("monster-hit");
+    playSE(seattack);
   }
   if (type === "counter") {
     monsterImage.classList.add("monster-counter");
+    playSE(seDamage);
   }
 }
 
@@ -822,7 +824,6 @@ function battle(){
     } else {
       // ★反撃演出
       animateMonster("counter");
-      playSE(seDamage);
       playSE(seLose);
       showResult(
         `${skill.name} を放った！<br>
@@ -1024,6 +1025,7 @@ window.startQuest = startQuest;
 window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
+
 
 
 
