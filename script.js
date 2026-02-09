@@ -448,7 +448,10 @@ function maybeShowNewsBanner() {
     const risk = calcDropoutRiskForPlayerData(data);
     if (risk >= 0.45) candidates.push({ name: n, risk });
   }
-  if (candidates.length === 0) return;
+   if (candidates.length === 0) {
+     setBanner("【テスト】フェイク近況バナー強制表示！");
+     return;
+   }
 
   candidates.sort((a, b) => b.risk - a.risk);
   setBanner(makeFakeActivityText(candidates[0].name));
@@ -1027,6 +1030,7 @@ window.startQuest = startQuest;
 window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
+
 
 
 
