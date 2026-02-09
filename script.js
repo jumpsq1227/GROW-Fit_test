@@ -31,7 +31,7 @@ const SLIME = {
 
 const CHARACTER_CONFIG = {
   male: {
-    name: "男の子",
+    name: "勇者",
     se: {
       train: "sound/male/train.mp3",
       attack: "sound/male/attack.mp3",
@@ -47,7 +47,7 @@ const CHARACTER_CONFIG = {
     },
   },
   female: {
-    name: "女の子",
+    name: "魔法使い",
     se: {
       train: "sound/female/train.mp3",
       attack: "sound/female/attack.mp3",
@@ -1024,6 +1024,7 @@ window.startQuest = startQuest;
 window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
+
 
 
 
