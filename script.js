@@ -449,7 +449,7 @@ function maybeShowNewsBanner() {
     if (risk >= 0.45) candidates.push({ name: n, risk });
   }
    if (candidates.length === 0) {
-     setBanner("別のジムのおがわは、ウォーキングを実行したようだ。");
+     setBanner("おがわは、ウォーキングを実行したようだ。");
      return;
    }
 
@@ -663,7 +663,7 @@ function executeTraining(trainType) {
   resultText.innerHTML =
     `今日もお疲れ様！\n${info.label} がレベルアップ！<br>
     プロテイン2本を入手<br>
-     <span class="heal">ジムが${gained}%復興した</span>`;
+    <span class="recovery-text">ジムが${gained}%復興した</span>`;
 
   playSE(seLevelUp);
 
@@ -767,7 +767,7 @@ function handleVictory(skill){
     showResult(
       `一撃必殺！<br>
        <span class="heal">${skill.name}</span>で倒した！<br>
-       <span class="heal">ジムが${gained}%復興した</span>`
+       <span class="recovery-text">ジムが${gained}%復興した</span>`
     );
   } else {
     showResult(
@@ -1030,6 +1030,7 @@ window.startQuest = startQuest;
 window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
+
 
 
 
