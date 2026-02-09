@@ -156,6 +156,14 @@ button:hover{
   transition: width 0.35s;
 }
 
+.recovery-text {
+  color: #00aa66;
+  font-weight: bold;
+  text-shadow:
+    1px 1px 0 #003322,
+    -1px 1px 0 #003322;
+}
+
 /* ---- Reliability ---- */
 .reliability-row{
   display:flex;
@@ -286,6 +294,7 @@ button:hover{
    image-rendering: pixelated;
    display: block;
 }
+
 
 
 
