@@ -227,6 +227,31 @@ button:hover{
   opacity: 0.95;
 }
 
+/* ===== モンスター演出 ===== */
+
+/* 被弾：少し縮む */
+.monster-hit {
+  animation: monsterHit 0.25s ease-out;
+}
+
+@keyframes monsterHit {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+/* 反撃：少し大きくなる（威圧） */
+.monster-counter {
+  animation: monsterCounter 0.35s ease-out;
+}
+
+@keyframes monsterCounter {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+
 .skill-box{
   width: min(92vw, 320px);
   margin: 10px auto;
@@ -248,4 +273,5 @@ button:hover{
    image-rendering: pixelated;
    display: block;
 }
+
 
