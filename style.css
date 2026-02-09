@@ -95,6 +95,12 @@ button:hover{
   image-rendering: pixelated;
   filter: drop-shadow(2px 2px 0 var(--black));
 }
+.avatar-choice {
+  display: flex;
+  gap: 12px;           /* カード間の余白 */
+  justify-content: center;
+  margin-top: 12px;
+}
 
 /* ---- Item ---- */
 .item-chip{
@@ -280,6 +286,7 @@ button:hover{
    image-rendering: pixelated;
    display: block;
 }
+
 
 
 
