@@ -273,6 +273,20 @@ function playSE(se) {
   } catch (e) {}
 }
 
+//バトル時のアニメーション
+function animateMonster(type) {
+  if (!monsterImage) return;
+  monsterImage.classList.remove("monster-hit", "monster-counter");
+  // 強制リフロー（同じアニメを連続再生できるように）
+  void monsterImage.offsetWidth;
+  if (type === "hit") {
+    monsterImage.classList.add("monster-hit");
+  }
+  if (type === "counter") {
+    monsterImage.classList.add("monster-counter");
+  }
+}
+
 /* =========================================================
    6) 週4カウント・表示系ヘルパ
 ========================================================= */
@@ -799,11 +813,15 @@ function battle(){
 
   // HP減少
   setMonsterHp(monsterHp - damage);
+  // ★攻撃ヒット演出
+  animateMonster("hit");
 
   setTimeout(() => {
     if (monsterHp <= 0) {
       handleVictory(skill);
     } else {
+      // ★反撃演出
+      animateMonster("counter");
       playSE(seDamage);
       playSE(seLose);
       showResult(
@@ -1006,6 +1024,7 @@ window.startQuest = startQuest;
 window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
+
 
 
 
