@@ -449,7 +449,7 @@ function maybeShowNewsBanner() {
     if (risk >= 0.45) candidates.push({ name: n, risk });
   }
    if (candidates.length === 0) {
-     setBanner("おがわは、ウォーキングを実行したようだ。");
+     setBanner("おがわは、胸トレを実行したようだ。");
      return;
    }
 
@@ -1030,6 +1030,7 @@ window.startQuest = startQuest;
 window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
+
 
 
 
