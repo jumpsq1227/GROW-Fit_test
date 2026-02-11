@@ -449,7 +449,7 @@ function maybeShowNewsBanner() {
     if (risk >= 0.45) candidates.push({ name: n, risk });
   }
    if (candidates.length === 0) {
-     setBanner("おがわは、胸トレを実行したようだ。");
+     setBanner("マッスリーヌ姫「ありがとう。また世界を救ってくれたようね。」");
      return;
    }
 
@@ -1030,6 +1030,7 @@ window.startQuest = startQuest;
 window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
+
 
 
 
