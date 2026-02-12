@@ -2,7 +2,7 @@
    1) 定数・設定
 ========================================================= */
 // プレイヤー管理
-const players = ["おがわ", "いまえだ", "わたなべ"];
+const players = ["おがわ", "いまえだ", "わたなべ","いで"];
 
 // 初期ステータス
 const defaultStatus = { run: 1, chest: 1, back: 1, leg: 1 };
@@ -1030,6 +1030,7 @@ window.startQuest = startQuest;
 window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
+
 
 
 
