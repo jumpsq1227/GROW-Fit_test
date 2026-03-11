@@ -419,10 +419,15 @@ function drawGacha() {
     resultImage.src = picked.image;
     resultImage.onerror = () => {
       resultImage.onerror = null;
-      resultImage.src = "images/support/default.png"; // 予備画像があれば
+      resultImage.src = "images/support/default.png";
     };
     resultImage.classList.remove("hidden");
   }
+  setBanner(
+    `応援しています！ <span class="heal">${picked.rarity}</span> ${picked.name}`,
+    picked.image
+  );
+
   playSE(seGacha)
   showResult(
     `ガチャを回した！<br>
@@ -475,11 +480,30 @@ function makeFakeActivityText() {
   return `トレーニーおがわは${when}${a}を実行したようだ。`;
 }
 
-function setBanner(text) {
+function setBanner(text, image = null) {
   if (!newsBanner) return;
-  newsBanner.textContent = text;
+  const bannerText = document.getElementById("newsBannerText");
+  const bannerImage = document.getElementById("newsBannerImage");
+  if (bannerText) {
+    bannerText.innerHTML = text;
+  }
+  if (bannerImage) {
+    if (image) {
+      bannerImage.src = image;
+      bannerImage.classList.remove("hidden");
+      bannerImage.onerror = () => {
+        bannerImage.onerror = null;
+        bannerImage.classList.add("hidden");
+      };
+    } else {
+      bannerImage.classList.add("hidden");
+      bannerImage.removeAttribute("src");
+    }
+  }
   newsBanner.classList.remove("hidden");
-  setTimeout(() => newsBanner.classList.add("hidden"), 8000);
+  setTimeout(() => {
+    newsBanner.classList.add("hidden");
+  }, 8000);
 }
 
 function loadPlayerData(name) {
@@ -1150,6 +1174,7 @@ window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
 window.runTournamentBattle = runTournamentBattle;
+
 
 
 
