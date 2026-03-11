@@ -94,19 +94,19 @@
       <img src="images/base.png" class="avatar" id="avatarImage">
       <!-- 右上チップ（常時表示） -->
       <button id="itemToggleBtn" class="item-chip" type="button" aria-label="アイテムを開く">
-        🥤×0
+        🎫×0
       </button>
       <!-- 小ポップ（押したら開く） -->
       <div id="itemMenu" class="item-pop hidden" role="dialog" aria-label="アイテム">
         <div class="item-row">
-          <span>超回復スポドリ</span>
+          <span>応援キャラチケット</span>
           <span class="item-count">×<span id="drinkCountText">0</span></span>
         </div>
         <div id="itemHintText" class="item-hint">
-          プロテインスライムを倒すとスポドリを入手できます。
+          プロテインスライムを倒すとガチャチケットを入手できます。
         </div>
         <button id="useDrinkBtn" class="item-use" type="button">
-          使う（次回復興2倍）
+          ガチャを引く
         </button>
       </div>
     </div>
@@ -126,11 +126,12 @@
       <button data-train="leg">脚トレ</button>
       <!-- <button data-train="walk">ウォーキング</button> -->
     </div>
-
     <button class="btn-quest" onclick="startQuest()">
       魔王軍とたたかう ▶
     </button>
-    
+    <button class="btn-tournament" onclick="runTournamentBattle()">
+      天下一武●会 ▶
+    </button>
   </div>
 
   <button class="visit-gym-btn" onclick="visitGym()">
@@ -191,65 +192,3 @@
 <script src="script.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
