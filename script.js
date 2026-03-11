@@ -83,13 +83,6 @@ const trainingInfo = {
 const monsterHpText = document.getElementById("monsterHpText");
 const monsterHpFill = document.getElementById("monsterHpFill");
 
-// const SKILLS = {
-//   run:  (lv) => ({ key:"run",  name: `剣技Lv${lv}`,  dmg: 30 + lv*2 }),
-//   chest:(lv) => ({ key:"chest",name:`拳技Lv${lv}`,    dmg: 30 + lv*2 }),
-//   back: (lv) => ({ key:"back", name:`背負投げLv${lv}`,  dmg: 30 + lv*2 }),
-//   leg:  (lv) => ({ key:"leg",  name:`蹴り技Lv${lv}`,dmg: 30 + lv*2 }),
-// };
-
 const SKILL_DAMAGE = (lv) => 30 + lv * 2;
 
 // モンスター一覧（通常進行）
@@ -129,6 +122,7 @@ const seDamage   = new Audio("sound/damage.mp3");
 const setonext    = new Audio("sound/tonext.mp3");
 const seDrink   = new Audio("sound/drink.mp3");
 const seMagic   = new Audio("sound/magic.mp3");
+const seGacha   = new Audio("sound/gacha.mp3");
 
 // ジム城ビジュアル定義
 const gymStages = [
@@ -429,6 +423,7 @@ function drawGacha() {
     };
     resultImage.classList.remove("hidden");
   }
+  playSE(seGacha)
   showResult(
     `ガチャを回した！<br>
      <span class="heal">${picked.rarity}</span><br>
@@ -1155,6 +1150,7 @@ window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
 window.runTournamentBattle = runTournamentBattle;
+
 
 
 
