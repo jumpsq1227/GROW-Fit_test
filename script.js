@@ -106,14 +106,16 @@ const monsterList = [
 ];
 
 const SUPPORT_CHARACTERS = [
-  { name: "マッスリーヌ姫", rarity: "SSR", image: "images/support/hime.png" },
-  { name: "ただの村人", rarity: "R", image: "images/support/murabitoA.png" },
-  { name: "ただの村人", rarity: "R", image: "images/support/murabitoA.png" },
-  { name: "ただの村人", rarity: "R", image: "images/support/murabitoA.png" },
-  { name: "ただの村人", rarity: "R", image: "images/support/murabitoA.png" },
-  { name: "ただの村人", rarity: "R", image: "images/support/murabitoA.png" },
-  { name: "村の子供たち", rarity: "R", image: "images/support/murabitoB.png" },
-  { name: "村の子供たち", rarity: "R", image: "images/support/murabitoB.png" },
+  { name: "マッスリーヌ姫", rarity: "LR", image: "images/support/hime.png" },
+  { name: "忍者ガール", rarity: "SSR", image: "images/support/ninja.png" },
+  { name: "小人族4姉妹", rarity: "SSR", image: "images/support/sisters.png" },
+  { name: "エルフ姫", rarity: "SSR", image: "images/support/elf.png" },
+  { name: "魔法使い", rarity: "SSR", image: "images/support/shortcut.png" },
+  { name: "ただの村人", rarity: "R", image: "images/support/ojisan.png" },
+  { name: "ただの村人", rarity: "R", image: "images/support/ojisan.png" },
+  { name: "ただの村人", rarity: "R", image: "images/support/ojisan.png" },
+  { name: "ただの村人", rarity: "R", image: "images/support/ojisan.png" },
+  { name: "ただの村人", rarity: "R", image: "images/support/ojisan.png" },
 ];
 
 // SE
@@ -1153,4 +1155,5 @@ window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
 window.runTournamentBattle = runTournamentBattle;
+
 
