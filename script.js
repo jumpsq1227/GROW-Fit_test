@@ -160,7 +160,7 @@ let storySeen = false;
 // アイテム
 // let superDrinkCount = 0;
 // let doubleNextTraining = false;
-let gachaTicketCount = 0;
+let gachaTicketCount = 4;
 
 // プロテインスライム抽選状態
 let proteinSlimeReady = false;
@@ -1155,5 +1155,6 @@ window.backToMain = backToMain;
 window.visitGym = visitGym;
 window.backToPlayerSelect = backToPlayerSelect;
 window.runTournamentBattle = runTournamentBattle;
+
 
 
