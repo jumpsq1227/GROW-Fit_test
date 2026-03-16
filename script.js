@@ -615,7 +615,7 @@ function loadStatus() {
     lastTrainingDate = null;
 
     // superDrinkCount = 1;
-    gachaTicketCount = 1;
+    gachaTicketCount = 5;
     // doubleNextTraining = false;
 
     proteinSlimeReady = false;
